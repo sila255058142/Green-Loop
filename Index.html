@@ -7,84 +7,94 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
 <style>
-      :root{
-        --gl-green:#1e8e5a;
-        --gl-green-dark:#166847;
-        --gl-green-light:#e8f6ee;
-        --gl-plastic:#0d7bb5;
-    }
-    body{ background:#f5f7f6; font-family:'Segoe UI',sans-serif; }   
+  :root {
+    --gl-green: #1e8e5a;
+    --gl-green-dark: #166847;
+    --gl-green-light: #e8f6ee;
+    --gl-plastic: #0d7bb5;
+  }
+  body { background: #f5f7f6; font-family: 'Segoe UI', sans-serif; }
 
-    /* Navbar */
-    .gl-navbar{ background:var(--gl-green-dark); }
-    .gl-navbar .navbar-brand{ color:#fff; font-weight:700; }
-    .gl-navbar .form-control{ border-radius:999px 0 0 999px; }
-    .gl-navbar .btn-search{ border-radius:0 999px 999px 0; background:#fff; color:var(--gl-green-dark); }
-    .gl-navbar .nav-link{ color:#e8f6ee !important; font-weight:500; }
-    .gl-navbar .nav-link:hover{ color:#fff !important; }
+  /* Navbar Styles */
+  .gl-navbar { background: var(--gl-green-dark); }
+  .gl-navbar .navbar-brand { color: #fff; font-weight: 700; }
+  .gl-navbar .form-control { border-radius: 999px 0 0 999px; }
+  .gl-navbar .btn-search { border-radius: 0 999px 999px 0; background: #fff; color: var(--gl-green-dark); }
+  .gl-navbar .nav-link { color: #e8f6ee !important; font-weight: 500; transition: color 0.2s; }
+  .gl-navbar .nav-link:hover { color: #fff !important; text-decoration: underline; }
 
-    /* Banner: Top */
-    .banner-top{
-        border-radius:16px; overflow:hidden; min-height:220px;
-        background:linear-gradient(120deg,var(--gl-green) 0%,var(--gl-green-dark) 100%);
-        display:flex; align-items:center; padding:2.5rem; color:#fff; position:relative;
-    }
-    .banner-top .badge-slot{
-        position:absolute; top:.8rem; right:.8rem; background:rgba(0,0,0,.25);
-        font-size:.7rem; padding:.3rem .7rem; border-radius:999px;
-    }
+  /* Banners */
+  .banner-top {
+    border-radius: 16px; overflow: hidden; min-height: 220px;
+    background: linear-gradient(120deg, var(--gl-green) 0%, var(--gl-green-dark) 100%);
+    display: flex; align-items: center; padding: 2.5rem; color: #fff; position: relative;
+  }
+  .banner-top .badge-slot, .banner-middle .badge-slot, .banner-side .badge-slot {
+    position: absolute; top: .8rem; right: .8rem; background: rgba(0,0,0,.25);
+    font-size: .7rem; padding: .3rem .7rem; border-radius: 999px;
+  }
+  .banner-middle {
+    border-radius: 16px; overflow: hidden; min-height: 160px; background: var(--gl-plastic);
+    display: flex; align-items: center; padding: 2rem; color: #fff; position: relative;
+  }
+  .banner-side {
+    border-radius: 16px; overflow: hidden; min-height: 340px;
+    background: linear-gradient(160deg, #2fae74 0%, var(--gl-green-dark) 100%);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 1.5rem; color: #fff; text-align: center; position: relative;
+  }
 
-    /* Section titles */
-    .section-title{ font-weight:700; }
-    .section-sub{ color:#868e96; font-size:.9rem; }
+  /* Quick Categories & Hover Effects */
+  .quick-cat {
+    background: #fff; border-radius: 14px; padding: 1.2rem .5rem; text-align: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,.04); transition: all 0.2s ease; text-decoration: none; color: #333; display: block;
+  }
+  .quick-cat:hover { transform: translateY(-4px); box-shadow: 0 6px 18px rgba(0,0,0,.12); color: var(--gl-green-dark); }
+  .quick-cat i { font-size: 1.6rem; color: var(--gl-green); }
 
-    /* Category quick pills */
-    .quick-cat{
-        background:#fff; border-radius:14px; padding:1.2rem .5rem; text-align:center;
-        box-shadow:0 2px 10px rgba(0,0,0,.04); transition:.15s; text-decoration:none; color:#333; display:block;
-    }
-    .quick-cat:hover{ transform:translateY(-3px); box-shadow:0 6px 18px rgba(0,0,0,.08); color:var(--gl-green-dark); }
-    .quick-cat i{ font-size:1.6rem; color:var(--gl-green); }
+  /* Product & Articles Cards Hover */
+  .product-card {
+    border: none; border-radius: 14px; overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,.05); transition: all 0.2s ease; background: #fff;
+  }
+  .product-card:hover { transform: translateY(-5px); box-shadow: 0 8px 24px rgba(0,0,0,.15); }
+  .product-img { height: 150px; object-fit: cover; width: 100%; background: #e9ecef; display: block; }
+  .green-score-badge {
+    position: absolute; top: .6rem; left: .6rem; background: var(--gl-green); color: #fff;
+    font-size: .75rem; font-weight: 700; padding: .2rem .55rem; border-radius: 999px; z-index: 2;
+  }
+  .price-tag { color: var(--gl-green-dark); font-weight: 700; font-size: 1rem; }
 
-    /* Product cards (reused style) */
-    .product-card{ border:none; border-radius:14px; overflow:hidden; box-shadow:0 2px 12px rgba(0,0,0,.05); transition:.15s; }
-    .product-card:hover{ transform:translateY(-4px); box-shadow:0 8px 24px rgba(0,0,0,.1); }
-    .product-img{ height:150px; object-fit:cover; width:100%; background:#e9ecef; }
-    .green-score-badge{
-        position:absolute; top:.6rem; left:.6rem; background:var(--gl-green); color:#fff;
-        font-size:.7rem; font-weight:700; padding:.2rem .55rem; border-radius:999px;
-    }
-    .price-tag{ color:var(--gl-green-dark); font-weight:700; }
+  .article-card {
+    border: none; border-radius: 14px; overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05); transition: all 0.2s ease; cursor: pointer; background: #fff;
+  }
+  .article-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,.12); }
 
-    /* Banner: Middle */
-    .banner-middle{
-        border-radius:16px; overflow:hidden; min-height:160px; background:var(--gl-plastic);
-        display:flex; align-items:center; padding:2rem; color:#fff; position:relative;
-    }
+  /* Layout Helper Classes */
+  .impact-number { font-size: 1.8rem; font-weight: 800; color: var(--gl-green-dark); }
+  .step-circle {
+    width: 52px; height: 52px; border-radius: 50%; background: var(--gl-green-light); color: var(--gl-green-dark);
+    display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.2rem; margin: 0 auto 1rem;
+  }
 
-    /* Banner: Side */
-    .banner-side{
-        border-radius:16px; overflow:hidden; min-height:340px;
-        background:linear-gradient(160deg,#2fae74 0%, var(--gl-green-dark) 100%);
-        display:flex; flex-direction:column; align-items:center; justify-content:center;
-        padding:1.5rem; color:#fff; text-align:center; position:relative;
-    }
+  /* PURE JS MODAL (ทำงานแม่นยำ ไม่บั๊ก) */
+  .custom-modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.6); display: none; align-items: center; justify-content: center; z-index: 9999;
+  }
+  .custom-modal-box {
+    background: #fff; border-radius: 16px; padding: 2rem; width: 90%; max-width: 400px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3); animation: popIn 0.2s ease-out;
+  }
+  @keyframes popIn {
+    from { transform: scale(0.85); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
 
-    /* Impact stats */
-    .impact-card{
-        background:#fff; border-radius:14px; padding:1.5rem; text-align:center; box-shadow:0 2px 10px rgba(0,0,0,.04);
-    }
-    .impact-number{ font-size:1.8rem; font-weight:800; color:var(--gl-green-dark); }
-
-    /* How it works */
-    .step-circle{
-        width:52px; height:52px; border-radius:50%; background:var(--gl-green-light); color:var(--gl-green-dark);
-        display:flex; align-items:center; justify-content:center; font-weight:700; font-size:1.2rem; margin:0 auto 1rem;
-    }
-
-    footer{ background:#12291f; color:#c9d8cf; }
-    footer a{ color:#c9d8cf; text-decoration:none; }
-    footer a:hover{ color:#fff; }
+  footer { background: #12291f; color: #c9d8cf; }
+  footer a { color: #c9d8cf; text-decoration: none; }
+  footer a:hover { color: #fff; }
 </style>
 </head>
 <body>
@@ -92,122 +102,159 @@
 <!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg gl-navbar py-3">
   <div class="container">
-    <a class="navbar-brand" href="index.html"><i class="bi bi-recycle"></i> GreenLoop</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navMain">
-      <form class="d-flex flex-grow-1 mx-lg-4 my-3 my-lg-0" style="max-width:480px;">
-        <input class="form-control" type="search" placeholder="ค้นหาสินค้ามือสอง...">
-        <button class="btn btn-search" type="submit"><i class="bi bi-search"></i></button>
-      </form>
-      <ul class="navbar-nav me-auto">
-        <li class="nav-item"><a class="nav-link" href="marketplace.html">Market</a></li>
-        <li class="nav-item"><a class="nav-link" href="sell.html">For Sale!!!</a></li>
-        <li class="nav-item"><a class="nav-link" href="recycle-request.html">Recycle</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">Green Points</a></li>
+    <a class="navbar-brand" href="#"><i class="bi bi-recycle"></i> GreenLoop</a>
+
+    <form class="d-flex flex-grow-1 mx-lg-4 my-2 my-lg-0" style="max-width:400px;">
+      <input class="form-control" type="search" placeholder="ค้นหาสินค้ามือสอง...">
+      <button class="btn btn-search" type="submit"><i class="bi bi-search"></i></button>
+    </form>
+
+    <!-- GUEST NAV MENU -->
+    <div id="guestNav" class="d-flex gap-3 text-white ms-auto">
+      <a href="#" onclick="openModal()" class="text-white text-decoration-none fw-bold"><i class="bi bi-box-arrow-in-right"></i> Login</a>
+      <a href="#" onclick="openModal()" class="text-white text-decoration-none fw-bold"><i class="bi bi-person-plus"></i> Sign Up</a>
+    </div>
+
+    <!-- USER NAV MENU -->
+    <div id="userNav" class="d-none d-flex align-items-center gap-3 text-white ms-auto">
+      <ul class="navbar-nav me-3 d-none d-lg-flex">
+        <li class="nav-item"><a class="nav-link" href="Marketplace.html">Market</a></li>
+        <li class="nav-item"><a class="nav-link" href="Sell.html">ลงขายสินค้า</a></li>
+        <li class="nav-item"><a class="nav-link" href="Recycle.html">Recycle</a></li>
+        <li class="nav-item"><a class="nav-link" href="GreenPoints.html">Green Points</a></li>
       </ul>
-      <div class="d-flex align-items-center gap-3 text-white">
-        <a href="login.html" class="text-white text-decoration-none"><i class="bi bi-box-arrow-in-right"></i> Login</a>
-        <a href="#" class="text-white text-decoration-none"><i class="bi bi-wallet2"></i> ฿1,250</a>
-        <a href="#" class="text-white text-decoration-none"><i class="bi bi-person-circle fs-4"></i></a>
-      </div>
+      <span class="small fw-bold"><i class="bi bi-wallet2"></i> ฿1,250</span>
+      <i class="bi bi-person-circle fs-4"></i>
+      <button type="button" onclick="logout()" class="btn btn-outline-light btn-sm ms-2">Logout</button>
     </div>
   </div>
 </nav>
 
-<div class="container py-4">
-
-  <!-- ============ TOP BANNER (1) ============ -->
-  <div class="banner-top mb-5 mx-3">
-    <span class="badge-slot"><i class="bi bi-megaphone"></i> Banner ตำแหน่ง Top</span>
+<!-- A. GUEST VIEW -->
+<div id="guestContent" class="container py-4">
+  <div class="banner-top mb-5">
     <div>
-      <h2 class="fw-bold mb-2">ซื้อ-ขาย-รีไซเคิล ครบในที่เดียว</h2>
-      <p class="mb-3 opacity-75">ส่งต่อของมือสอง ลดขยะอิเล็กทรอนิกส์และพลาสติก พร้อมสะสม Green Point</p>
-      <a href="recycle-request.html" class="btn btn-light fw-semibold text-success"><i class="bi bi-recycle"></i> เริ่มรีไซเคิลเลย</a>
+      <h2 class="fw-bold mb-2">ยินดีต้อนรับสู่ GreenLoop</h2>
+      <p class="mb-3 opacity-75">แพลตฟอร์มซื้อ-ขาย และรีไซเคิลเพื่อสิ่งแวดล้อม อ่านบทความน่ารู้เกี่ยวกับการจัดการขยะได้เลย</p>
+      <button onclick="openModal()" class="btn btn-light fw-semibold text-success shadow-sm">
+        <i class="bi bi-box-arrow-in-right"></i> เข้าสู่ระบบเพื่อเริ่มใช้งาน
+      </button>
     </div>
   </div>
 
-  <!-- ============ QUICK CATEGORIES ============ -->
-  <div class="row g-3 mb-5 mx-3">
-    <div class="col-12 col-sm-4 col-md-2"><a href="marketplace.html?category=mobile-phones" class="quick-cat"><i class="bi bi-phone"></i><div class="small mt-2">โทรศัพท์</div></a></div>
-    <div class="col-12 col-sm-4 col-md-2"><a href="marketplace.html?category=notebooks" class="quick-cat"><i class="bi bi-laptop"></i><div class="small mt-2">Notebook</div></a></div>
-    <div class="col-12 col-sm-4 col-md-2"><a href="marketplace.html?category=tablets" class="quick-cat"><i class="bi bi-tablet"></i><div class="small mt-2">Tablet</div></a></div>
-    <div class="col-12 col-sm-4 col-md-2"><a href="marketplace.html?category=cameras" class="quick-cat"><i class="bi bi-camera"></i><div class="small mt-2">กล้อง</div></a></div>
-    <div class="col-12 col-sm-4 col-md-2"><a href="recycle-request.html" class="quick-cat"><i class="bi bi-cpu"></i><div class="small mt-2">E-Waste</div></a></div>
-    <div class="col-12 col-sm-4 col-md-2"><a href="recycle-request.html" class="quick-cat"><i class="bi bi-droplet-half"></i><div class="small mt-2">พลาสติก</div></a></div>
+  <h4 class="fw-bold mb-3">บทความน่าสนใจ</h4>
+  <div class="row g-4 mb-5">
+    <div class="col-md-4">
+      <div class="card article-card h-100 p-3" onclick="openModal()">
+        <span class="badge bg-success mb-2 w-auto align-self-start">E-Waste</span>
+        <h5 class="fw-bold">ขยะอิเล็กทรอนิกส์ไปไหนต่อ?</h5>
+        <p class="text-muted small">ขั้นตอนการรีไซเคิลมือถือและคอมพิวเตอร์อย่างปลอดภัย...</p>
+        <span class="text-success small fw-bold mt-auto">อ่านต่อ <i class="bi bi-arrow-right"></i></span>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card article-card h-100 p-3" onclick="openModal()">
+        <span class="badge bg-primary mb-2 w-auto align-self-start">พลาสติก</span>
+        <h5 class="fw-bold">คัดแยกพลาสติกยังไงให้ได้ราคา</h5>
+        <p class="text-muted small">เทคนิคแยกประเภทพลาสติก PET/HDPE ก่อนส่งรีไซเคิล...</p>
+        <span class="text-success small fw-bold mt-auto">อ่านต่อ <i class="bi bi-arrow-right"></i></span>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card article-card h-100 p-3" onclick="openModal()">
+        <span class="badge bg-warning text-dark mb-2 w-auto align-self-start">Green Points</span>
+        <h5 class="fw-bold">วิธีสะสมแต้มแลกส่วนลด</h5>
+        <p class="text-muted small">เปลี่ยนขยะให้เป็นแต้มสะสมแลกซื้อของจากพาร์ตเนอร์...</p>
+        <span class="text-success small fw-bold mt-auto">อ่านต่อ <i class="bi bi-arrow-right"></i></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- B. USER VIEW -->
+<div id="userContent" class="container py-4 d-none">
+  <!-- TOP BANNER -->
+  <div class="banner-top mb-5">
+    <span class="badge-slot"><i class="bi bi-megaphone"></i> Banner Top</span>
+    <div>
+      <h2 class="fw-bold mb-2">ซื้อ-ขาย-รีไซเคิล ครบในที่เดียว</h2>
+      <p class="mb-3 opacity-75">ส่งต่อของมือสอง ลดขยะอิเล็กทรอนิกส์และพลาสติก พร้อมสะสม Green Point</p>
+      <a href="#" class="btn btn-light fw-semibold text-success shadow-sm"><i class="bi bi-recycle"></i> เริ่มรีไซเคิลเลย</a>
+    </div>
   </div>
 
-  <div class="row g-4 mx-3">
-    <!-- ============ MAIN COLUMN ============ -->
-    <div class="col-lg-9">
+  <!-- QUICK CATEGORIES -->
+  <div class="row g-3 mb-5">
+    <div class="col-4 col-md-2"><a href="#" class="quick-cat"><i class="bi bi-phone"></i><div class="small mt-2">โทรศัพท์</div></a></div>
+    <div class="col-4 col-md-2"><a href="#" class="quick-cat"><i class="bi bi-laptop"></i><div class="small mt-2">Notebook</div></a></div>
+    <div class="col-4 col-md-2"><a href="#" class="quick-cat"><i class="bi bi-tablet"></i><div class="small mt-2">Tablet</div></a></div>
+    <div class="col-4 col-md-2"><a href="#" class="quick-cat"><i class="bi bi-camera"></i><div class="small mt-2">กล้อง</div></a></div>
+    <div class="col-4 col-md-2"><a href="#" class="quick-cat"><i class="bi bi-cpu"></i><div class="small mt-2">E-Waste</div></a></div>
+    <div class="col-4 col-md-2"><a href="#" class="quick-cat"><i class="bi bi-droplet-half"></i><div class="small mt-2">พลาสติก</div></a></div>
+  </div>
 
-      <!-- Featured products -->
+  <div class="row g-4">
+    <!-- MAIN COLUMN -->
+    <div class="col-lg-9">
       <div class="d-flex justify-content-between align-items-center mb-3">
         <div>
-          <h5 class="section-title mb-0">สินค้าแนะนำ</h5>
-          <span class="section-sub">อัปเดตล่าสุดจากผู้ขายในระบบ</span>
+          <h5 class="fw-bold mb-0">สินค้าแนะนำ</h5>
+          <span class="text-muted small">อัปเดตล่าสุดจากผู้ขายในระบบ</span>
         </div>
-        <a href="marketplace.html" class="btn btn-outline-success btn-sm">ดูทั้งหมด <i class="bi bi-arrow-right"></i></a>
+        <a href="#" class="btn btn-outline-success btn-sm">ดูทั้งหมด <i class="bi bi-arrow-right"></i></a>
       </div>
       <div class="row g-3 mb-5" id="featuredGrid"></div>
 
-      <!-- ============ MIDDLE BANNER (2) ============ -->
+      <!-- MIDDLE BANNER -->
       <div class="banner-middle mb-5">
-        <span class="badge-slot" style="position:absolute;top:.6rem;right:.6rem;background:rgba(0,0,0,.25);font-size:.7rem;padding:.3rem .7rem;border-radius:999px;"><i class="bi bi-megaphone"></i> Banner ตำแหน่ง Middle</span>
+        <span class="badge-slot"><i class="bi bi-megaphone"></i> Banner Middle</span>
         <div>
           <h5 class="fw-bold mb-1">โปรโมชั่นพาร์ตเนอร์ประจำเดือน</h5>
           <p class="mb-0 opacity-75 small">แลก Green Point เป็นคูปองส่วนลดจากร้านค้าพาร์ตเนอร์</p>
         </div>
       </div>
 
-      <!-- Recycle categories -->
+      <!-- RECYCLE CATEGORIES -->
       <div class="d-flex justify-content-between align-items-center mb-3">
         <div>
-          <h5 class="section-title mb-0">รายการรับรีไซเคิลยอดนิยม</h5>
-          <span class="section-sub">แจ้งความประสงค์ได้ทั้ง E-Waste และพลาสติก</span>
+          <h5 class="fw-bold mb-0">รายการรับรีไซเคิลยอดนิยม</h5>
+          <span class="text-muted small">แจ้งความประสงค์ได้ทั้ง E-Waste และพลาสติก</span>
         </div>
-        <a href="recycle-request.html" class="btn btn-outline-success btn-sm">แจ้งรีไซเคิล <i class="bi bi-arrow-right"></i></a>
+        <a href="#" class="btn btn-outline-success btn-sm">แจ้งรีไซเคิล <i class="bi bi-arrow-right"></i></a>
       </div>
       <div class="row g-3 mb-5" id="recycleGrid"></div>
-
     </div>
 
-    <!-- ============ SIDE COLUMN ============ -->
+    <!-- SIDE COLUMN -->
     <div class="col-lg-3">
-
-      <!-- ============ SIDE BANNER (3) ============ -->
       <div class="banner-side mb-4">
-        <span class="badge-slot"><i class="bi bi-megaphone"></i> Banner ด้านข้าง</span>
+        <span class="badge-slot"><i class="bi bi-megaphone"></i> Banner Side</span>
         <i class="bi bi-tree fs-1 mb-2"></i>
         <h6 class="fw-bold">อัปเกรดเป็น Green Hero</h6>
         <p class="small opacity-75 mb-3">ปลดล็อกสิทธิพิเศษ ส่วนลดค่าธรรมเนียม และของรางวัลพิเศษ</p>
         <a href="#" class="btn btn-light btn-sm fw-semibold text-success">ดูรายละเอียด</a>
       </div>
 
-      <!-- Impact stats -->
-      <div class="card border-0 shadow-sm p-3 mb-4">
-        <h6 class="fw-bold mb-3"><i class="bi bi-globe-asia-australia text-success"></i> Green Impact รวมทั้งระบบ</h6>
+      <div class="card border-0 shadow-sm p-3 mb-4 bg-white">
+        <h6 class="fw-bold mb-3"><i class="bi bi-globe-asia-australia text-success"></i> Green Impact รวม</h6>
         <div class="row g-2 text-center">
-          <div class="col-6"><div class="impact-number">3.2 <small class="fs-6">ตัน</small></div><div class="small text-muted">E-Waste รีไซเคิลแล้ว</div></div>
-          <div class="col-6"><div class="impact-number">5.8 <small class="fs-6">ตัน</small></div><div class="small text-muted">พลาสติกรีไซเคิลแล้ว</div></div>
+          <div class="col-6"><div class="impact-number">3.2 <small class="fs-6">ตัน</small></div><div class="small text-muted">E-Waste</div></div>
+          <div class="col-6"><div class="impact-number">5.8 <small class="fs-6">ตัน</small></div><div class="small text-muted">พลาสติก</div></div>
         </div>
       </div>
 
-      <!-- My green points widget -->
-      <div class="card border-0 shadow-sm p-3">
+      <div class="card border-0 shadow-sm p-3 bg-white">
         <h6 class="fw-bold mb-2"><i class="bi bi-award text-success"></i> Green Point ของฉัน</h6>
         <div class="impact-number mb-1">1,240 <small class="fs-6 text-muted">คะแนน</small></div>
         <a href="#" class="btn btn-success btn-sm w-100 mt-2">แลกของรางวัล</a>
       </div>
-
     </div>
   </div>
 
-  <!-- How it works -->
+  <!-- HOW IT WORKS -->
   <div class="text-center my-5">
-    <h5 class="section-title">GreenLoop ทำงานอย่างไร</h5>
-    <span class="section-sub">3 ขั้นตอนง่ายๆ สู่การใช้ทรัพยากรอย่างคุ้มค่า</span>
+    <h5 class="fw-bold">GreenLoop ทำงานอย่างไร</h5>
+    <span class="text-muted small">3 ขั้นตอนง่ายๆ สู่การใช้ทรัพยากรอย่างคุ้มค่า</span>
   </div>
   <div class="row g-4 text-center mb-5">
     <div class="col-md-4">
@@ -228,44 +275,121 @@
   </div>
 </div>
 
-<footer class="py-5 mt-4">
-  <div class="container">
-    <div class="row g-4">
-      <div class="col-md-4">
-        <h5 class="text-white fw-bold"><i class="bi bi-recycle"></i> GreenLoop</h5>
-        <p class="small">แพลตฟอร์มซื้อขายสินค้ามือสองและรีไซเคิล E-Waste/พลาสติก เพื่อโลกที่ยั่งยืนกว่า</p>
-      </div>
-      <div class="col-md-2">
-        <h6 class="text-white">เมนู</h6>
-        <ul class="list-unstyled small">
-          <li><a href="marketplace.html">Marketplace</a></li>
-          <li><a href="recycle-request.html">Recycle</a></li>
-          <li><a href="#">Green Points</a></li>
-        </ul>
-      </div>
-      <div class="col-md-3">
-        <h6 class="text-white">บัญชี</h6>
-        <ul class="list-unstyled small">
-          <li><a href="#">เข้าสู่ระบบ</a></li>
-          <li><a href="#">สมัครสมาชิก</a></li>
-          <li><a href="#">Wallet</a></li>
-        </ul>
-      </div>
-      <div class="col-md-3">
-        <h6 class="text-white">ติดตามเรา</h6>
-        <div class="d-flex gap-3 fs-5">
-          <a href="#"><i class="bi bi-facebook"></i></a>
-          <a href="#"><i class="bi bi-instagram"></i></a>
-          <a href="#"><i class="bi bi-line"></i></a>
-        </div>
-      </div>
-    </div>
-    <hr class="border-secondary my-4">
-    <p class="text-center small mb-0">&copy; 2026 GreenLoop. All rights reserved.</p>
-  </div>
+<!-- FOOTER -->
+<footer class="py-4 mt-5 text-center">
+  <div class="container"><p class="small mb-0">&copy; 2026 GreenLoop. All rights reserved.</p></div>
 </footer>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/js/bootstrap.bundle.min.js"></script>
-<script src="js/Index.js"></script>
+<!-- MODAL LOGIN (Pure JS) -->
+<div id="loginModalOverlay" class="custom-modal-overlay">
+  <div class="custom-modal-box position-relative">
+    <button type="button" onclick="closeModal()" class="btn-close position-absolute top-0 end-0 m-3"></button>
+    <div class="text-center mb-3">
+      <i class="bi bi-shield-lock text-success display-4"></i>
+      <h4 class="fw-bold mt-2">เข้าสู่ระบบ</h4>
+    </div>
+    <form onsubmit="handleLogin(event)">
+      <div class="mb-3">
+        <label class="form-label small fw-bold">อีเมล</label>
+        <input type="email" class="form-control" value="demo@greenloop.com" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label small fw-bold">รหัสผ่าน</label>
+        <input type="password" class="form-control" value="123456" required>
+      </div>
+      <button type="submit" class="btn btn-success w-100 py-2 fw-bold">เข้าสู่ระบบทันที</button>
+    </form>
+  </div>
+</div>
+
+<script>
+  // MOCK DATA
+  const featured = [
+    { title: 'iPhone 12 128GB สีดำ', price: 9900, score: 82, image: 'https://placehold.co/300x200?text=iPhone+12' },
+    { title: 'Notebook Dell Inspiron 14"', price: 12500, score: 76, image: 'https://placehold.co/300x200?text=Dell+Notebook' },
+    { title: 'iPad Gen 9 64GB Wi-Fi', price: 8500, score: 88, image: 'https://placehold.co/300x200?text=iPad+Gen9' },
+    { title: 'กล้อง Canon EOS M50', price: 14900, score: 70, image: 'https://placehold.co/300x200?text=Canon+M50' },
+  ];
+
+  const recycleItems = [
+    { title: 'มือถือ / Tablet เก่า', points: '+50', icon: 'bi-phone', color: '#1e8e5a' },
+    { title: 'แบตเตอรี่ / เครื่องใช้ไฟฟ้า', points: '+50', icon: 'bi-battery-full', color: '#1e8e5a' },
+    { title: 'ขวดพลาสติก PET', points: '+10-30', icon: 'bi-droplet-half', color: '#0d7bb5' },
+    { title: 'บรรจุภัณฑ์พลาสติก', points: '+10-30', icon: 'bi-bag', color: '#0d7bb5' },
+  ];
+
+  // RENDER DYNAMIC DATA
+  function renderData() {
+    const featuredGrid = document.getElementById('featuredGrid');
+    if (featuredGrid) {
+      featuredGrid.innerHTML = featured.map(p => `
+        <div class="col-6 col-md-3">
+          <div class="card product-card h-100 position-relative">
+            <span class="green-score-badge"><i class="bi bi-leaf-fill"></i> ${p.score}</span>
+            <img src="${p.image}" class="product-img" alt="${p.title}">
+            <div class="p-2">
+              <div class="small text-truncate fw-semibold">${p.title}</div>
+              <div class="price-tag">฿${p.price.toLocaleString()}</div>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    const recycleGrid = document.getElementById('recycleGrid');
+    if (recycleGrid) {
+      recycleGrid.innerHTML = recycleItems.map(r => `
+        <div class="col-6 col-md-3">
+          <div class="card product-card h-100 text-center p-3" style="border-top:3px solid ${r.color}">
+            <i class="bi ${r.icon}" style="font-size:1.8rem;color:${r.color}"></i>
+            <div class="small fw-semibold mt-2">${r.title}</div>
+            <span class="badge mt-2" style="background:${r.color}">${r.points} คะแนน</span>
+          </div>
+        </div>
+      `).join('');
+    }
+  }
+
+  // MODAL CONTROLLER
+  function openModal() {
+    document.getElementById('loginModalOverlay').style.display = 'flex';
+  }
+
+  function closeModal() {
+    document.getElementById('loginModalOverlay').style.display = 'none';
+  }
+
+  // UI STATE MANAGEMENT
+  function updateUI() {
+    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+    if (isLoggedIn) {
+      document.getElementById('guestNav').classList.add('d-none');
+      document.getElementById('guestContent').classList.add('d-none');
+      document.getElementById('userNav').classList.remove('d-none');
+      document.getElementById('userContent').classList.remove('d-none');
+      renderData();
+    } else {
+      document.getElementById('userNav').classList.add('d-none');
+      document.getElementById('userContent').classList.add('d-none');
+      document.getElementById('guestNav').classList.remove('d-none');
+      document.getElementById('guestContent').classList.remove('d-none');
+    }
+  }
+
+  function handleLogin(e) {
+    e.preventDefault();
+    localStorage.setItem("isLoggedIn", "true");
+    closeModal();
+    updateUI();
+  }
+
+  function logout() {
+    localStorage.removeItem("isLoggedIn");
+    updateUI();
+  }
+
+  // INITIALIZE
+  document.addEventListener('DOMContentLoaded', updateUI);
+</script>
 </body>
 </html>
