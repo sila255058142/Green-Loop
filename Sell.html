@@ -1,0 +1,181 @@
+    <!DOCTYPE html>
+    <html lang="th">
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ลงขายสินค้า | GreenLoop</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <style>
+:root{
+        --gl-green:#1e8e5a;
+        --gl-green-dark:#166847;
+        --gl-green-light:#e8f6ee;
+    }
+    body{ background:#f5f7f6; font-family:'Segoe UI',sans-serif; }
+    .gl-navbar{ background:var(--gl-green-dark); }
+    .gl-navbar .navbar-brand{ color:#fff; font-weight:700; }
+    .card-form{ border:none; border-radius:16px; box-shadow:0 4px 20px rgba(0,0,0,.06); }
+    .btn-gl-primary{ background:var(--gl-green); border-color:var(--gl-green); color:#fff; }
+    .btn-gl-primary:hover{ background:var(--gl-green-dark); border-color:var(--gl-green-dark); color:#fff; }
+
+    /* Image uploader */
+    .image-uploader{ display:flex; flex-wrap:wrap; gap:.75rem; }
+    .upload-slot{
+        width:110px; height:110px; border:2px dashed #ced4da; border-radius:12px;
+        display:flex; flex-direction:column; align-items:center; justify-content:center;
+        color:#868e96; cursor:pointer; font-size:.75rem; text-align:center; position:relative; overflow:hidden;
+    }
+    .upload-slot:hover{ border-color:var(--gl-green); color:var(--gl-green-dark); }
+    .upload-slot img{ width:100%; height:100%; object-fit:cover; position:absolute; inset:0; }
+    .upload-slot .remove-img{
+        position:absolute; top:2px; right:2px; background:rgba(0,0,0,.55); color:#fff; border:none;
+        width:20px; height:20px; border-radius:50%; font-size:.7rem; line-height:1; z-index:2;
+    }
+    .upload-slot.cover-slot::after{
+        content:'รูปปก'; position:absolute; bottom:2px; left:2px; background:var(--gl-green); color:#fff;
+        font-size:.6rem; padding:.05rem .4rem; border-radius:999px; z-index:2;
+    }
+
+    /* Condition selector */
+    .cond-toggle input[type=radio]{ display:none; }
+    .cond-toggle label{
+        display:block; text-align:center; border:2px solid #dee2e6; border-radius:10px; padding:.6rem .3rem;
+        cursor:pointer; font-size:.85rem; transition:.15s;
+    }
+    .cond-toggle input:checked + label{
+        border-color:var(--gl-green); background:var(--gl-green-light); color:var(--gl-green-dark); font-weight:600;
+    }
+
+    .fee-note{ background:var(--gl-green-light); border-radius:10px; padding:.9rem 1.1rem; font-size:.85rem; color:var(--gl-green-dark); }
+    .green-score-preview{
+        display:flex; align-items:center; gap:.6rem; background:#fff; border:1px solid #e9ecef; border-radius:10px; padding:.8rem 1rem;
+    }
+    </style>
+    </head>
+    <body>
+
+    <nav class="navbar gl-navbar py-3">
+    <div class="container">
+        <a class="navbar-brand" href="index.html"><i class="bi bi-recycle"></i> GreenLoop</a>
+    </div>
+    </nav>
+
+    <div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+
+        <div class="mb-4">
+            <h3 class="fw-bold">ลงขายสินค้ามือสอง</h3>
+            <p class="text-muted">กรอกรายละเอียดสินค้าให้ครบถ้วนเพื่อเพิ่มโอกาสในการขาย และรับ Green Point ทันทีที่ลงขายสำเร็จ</p>
+        </div>
+
+        <div class="card card-form p-4 p-md-5">
+            <form id="sellForm" novalidate>
+
+            <!-- รูปภาพสินค้า -->
+            <label class="form-label fw-semibold mb-2">1. รูปภาพสินค้า (สูงสุด 8 รูป รูปแรกจะเป็นรูปปก)</label>
+            <div class="image-uploader mb-1" id="imageUploader">
+                <label class="upload-slot" id="addImageSlot">
+                <i class="bi bi-plus-lg fs-4"></i>
+                <span>เพิ่มรูป</span>
+                <input type="file" id="imageInput" accept="image/*" multiple class="d-none">
+                </label>
+            </div>
+            <div class="form-text mb-4">รองรับไฟล์ .jpg .png ขนาดไม่เกิน 5MB ต่อรูป</div>
+
+            <!-- ข้อมูลสินค้า -->
+            <label class="form-label fw-semibold">2. ชื่อสินค้า</label>
+            <input type="text" class="form-control mb-3" name="title" placeholder="เช่น iPhone 12 128GB สีดำ สภาพดี" required>
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                <label class="form-label fw-semibold">หมวดหมู่</label>
+                <select class="form-select" name="category" required>
+                    <option value="" selected disabled>เลือกหมวดหมู่</option>
+                    <option value="mobile-phones">โทรศัพท์มือถือ</option>
+                    <option value="notebooks">Notebook / Laptop</option>
+                    <option value="tablets">Tablet</option>
+                    <option value="cameras">กล้องถ่ายรูป</option>
+                    <option value="it-accessories">อุปกรณ์ IT อื่นๆ</option>
+                </select>
+                </div>
+                <div class="col-md-6">
+                <label class="form-label fw-semibold">ราคาขาย (บาท)</label>
+                <div class="input-group">
+                    <span class="input-group-text">฿</span>
+                    <input type="number" min="0" class="form-control" name="price" placeholder="0" required>
+                </div>
+                </div>
+            </div>
+
+            <!-- สภาพสินค้า -->
+            <label class="form-label fw-semibold">3. สภาพสินค้า</label>
+            <div class="row g-2 cond-toggle mb-3">
+                <div class="col-4 col-md-2-4" style="flex:0 0 20%;max-width:20%;">
+                <input type="radio" name="condition" id="condNew" value="new">
+                <label for="condNew">ใหม่</label>
+                </div>
+                <div class="col-4 col-md-2-4" style="flex:0 0 20%;max-width:20%;">
+                <input type="radio" name="condition" id="condLikeNew" value="like_new" checked>
+                <label for="condLikeNew">เหมือนใหม่</label>
+                </div>
+                <div class="col-4 col-md-2-4" style="flex:0 0 20%;max-width:20%;">
+                <input type="radio" name="condition" id="condGood" value="good">
+                <label for="condGood">สภาพดี</label>
+                </div>
+                <div class="col-4 col-md-2-4" style="flex:0 0 20%;max-width:20%;">
+                <input type="radio" name="condition" id="condFair" value="fair">
+                <label for="condFair">พอใช้</label>
+                </div>
+                <div class="col-4 col-md-2-4" style="flex:0 0 20%;max-width:20%;">
+                <input type="radio" name="condition" id="condParts" value="for_parts">
+                <label for="condParts">ซาก/อะไหล่</label>
+                </div>
+            </div>
+
+            <label class="form-label fw-semibold">รายละเอียดสภาพสินค้าเพิ่มเติม</label>
+            <input type="text" class="form-control mb-3" name="conditionNote" placeholder="เช่น มีรอยขีดข่วนเล็กน้อยที่มุมจอ, แบตเตอรี่ 92%">
+
+            <label class="form-label fw-semibold">รายละเอียดสินค้า</label>
+            <textarea class="form-control mb-4" name="description" rows="4" placeholder="อธิบายสเปก, อุปกรณ์ที่ให้มาด้วย, เหตุผลที่ขาย ฯลฯ" required></textarea>
+
+            <!-- Green Score preview -->
+            <label class="form-label fw-semibold">4. Green Score โดยประมาณ</label>
+            <div class="green-score-preview mb-4">
+                <i class="bi bi-leaf-fill text-success fs-4"></i>
+                <div>
+                <div class="fw-bold">คำนวณอัตโนมัติจากสภาพสินค้าและหมวดหมู่</div>
+                <small class="text-muted">ยิ่ง Green Score สูง ยิ่งช่วยลดขยะอิเล็กทรอนิกส์ได้มาก และมีโอกาสถูกค้นเจอมากขึ้น</small>
+                </div>
+            </div>
+
+            <div class="fee-note mb-4">
+                <i class="bi bi-info-circle"></i>
+                เมื่อขายสำเร็จ ระบบจะหักค่าธรรมเนียม <strong>5%</strong> จากยอดขาย และคุณจะได้รับ <strong>+20 Green Point</strong> ทันทีที่ลงขายสำเร็จ
+            </div>
+
+            <div class="form-check mb-4">
+                <input class="form-check-input" type="checkbox" id="agreeTerms" required>
+                <label class="form-check-label small" for="agreeTerms">
+                ฉันยืนยันว่าข้อมูลสินค้าถูกต้อง และยอมรับ <a href="#">เงื่อนไขการลงขายสินค้า</a> ของ GreenLoop
+                </label>
+            </div>
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-gl-primary flex-grow-1 py-2 fw-semibold">
+                <i class="bi bi-tag"></i> ลงขายสินค้า
+                </button>
+                <button type="button" class="btn btn-outline-secondary py-2 px-4">บันทึกแบบร่าง</button>
+            </div>
+            </form>
+        </div>
+
+        </div>
+    </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/js/bootstrap.bundle.min.js"></script>
+    <script src="js/sell.js"></script>
+    </body>
+    </html>

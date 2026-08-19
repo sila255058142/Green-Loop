@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>แจ้งรีไซเคิล | GreenLoop</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+<style>
+      :root{
+        --gl-green:#1e8e5a;
+        --gl-green-dark:#166847;
+        --gl-green-light:#e8f6ee;
+        --gl-plastic:#0d7bb5;
+        --gl-plastic-light:#e7f4fb;
+    }
+    body{ background:#f5f7f6; font-family:'Segoe UI',sans-serif; }
+    .gl-navbar{ background:var(--gl-green-dark); }
+    .gl-navbar .navbar-brand{ color:#fff; font-weight:700; }
+    .card-form{ border:none; border-radius:16px; box-shadow:0 4px 20px rgba(0,0,0,.06); }
+    .type-toggle .btn{ border-radius:12px; padding:1rem; font-weight:600; }
+    .type-toggle input[type=radio]{ display:none; }
+    .type-toggle label{
+        display:flex; flex-direction:column; align-items:center; gap:.4rem;
+        border:2px solid #dee2e6; border-radius:14px; padding:1.2rem; cursor:pointer;
+        transition:.15s; height:100%;
+    }
+    .type-toggle label i{ font-size:1.8rem; }
+    .type-toggle input#typeEwaste:checked + label{
+        border-color:var(--gl-green); background:var(--gl-green-light); color:var(--gl-green-dark);
+    }
+    .type-toggle input#typePlastic:checked + label{
+        border-color:var(--gl-plastic); background:var(--gl-plastic-light); color:var(--gl-plastic);
+    }
+    .section-hidden{ display:none; }
+    .btn-gl-primary{ background:var(--gl-green); border-color:var(--gl-green); color:#fff; }
+    .btn-gl-primary:hover{ background:var(--gl-green-dark); border-color:var(--gl-green-dark); color:#fff; }
+    .points-badge{ background:var(--gl-green-light); color:var(--gl-green-dark); border-radius:999px; padding:.35rem .9rem; font-size:.85rem; font-weight:600; }
+    .upload-box{
+        border:2px dashed #ced4da; border-radius:12px; padding:2rem; text-align:center; color:#868e96; cursor:pointer;
+    }
+    .upload-box:hover{ border-color:var(--gl-green); color:var(--gl-green-dark); }
+</style>
+</head>
+<body>
+
+<nav class="navbar gl-navbar navbar-dark py-3">
+  <div class="container">
+    <a class="navbar-brand" href="index.html"><i class="bi bi-recycle"></i> GreenLoop</a>
+  </div>
+</nav>
+
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+
+      <div class="mb-4">
+        <h3 class="fw-bold">แจ้งความประสงค์รีไซเคิล</h3>
+        <p class="text-muted">ส่งต่อ E-Waste หรือขยะพลาสติกเข้าสู่กระบวนการรีไซเคิลที่ถูกต้อง พร้อมรับ Green Point</p>
+      </div>
+
+      <div class="card card-form p-4 p-md-5">
+        <form id="recycleForm" novalidate>
+
+          <!-- STEP 1: เลือกประเภท -->
+          <label class="form-label fw-semibold mb-3">1. เลือกประเภทของที่ต้องการรีไซเคิล</label>
+          <div class="row type-toggle g-3 mb-4">
+            <div class="col-6">
+              <input type="radio" name="wasteType" id="typeEwaste" value="ewaste" checked>
+              <label for="typeEwaste">
+                <i class="bi bi-cpu"></i>
+                <span>E-Waste</span>
+                <small class="text-muted">มือถือ, แบตเตอรี่, อุปกรณ์ไฟฟ้า</small>
+                <span class="points-badge mt-1">+50 คะแนน</span>
+              </label>
+            </div>
+            <div class="col-6">
+              <input type="radio" name="wasteType" id="typePlastic" value="plastic">
+              <label for="typePlastic">
+                <i class="bi bi-droplet-half"></i>
+                <span>ขยะพลาสติก</span>
+                <small class="text-muted">ขวด PET, ถุง, บรรจุภัณฑ์</small>
+                <span class="points-badge mt-1">+10-30 คะแนน</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- STEP 2A: E-Waste fields -->
+          <div id="ewasteSection">
+            <label class="form-label fw-semibold">ประเภท E-Waste</label>
+            <select class="form-select mb-3" name="ewasteCategory">
+              <option value="mobile">โทรศัพท์มือถือ / Tablet</option>
+              <option value="notebook">Notebook / Laptop</option>
+              <option value="battery">แบตเตอรี่</option>
+              <option value="appliance">เครื่องใช้ไฟฟ้าขนาดเล็ก</option>
+              <option value="other">อื่นๆ</option>
+            </select>
+
+            <label class="form-label fw-semibold">จำนวนชิ้น (โดยประมาณ)</label>
+            <input type="number" min="1" class="form-control mb-3" name="ewasteQty" placeholder="เช่น 2">
+          </div>
+
+          <!-- STEP 2B: Plastic fields -->
+          <div id="plasticSection" class="section-hidden">
+            <label class="form-label fw-semibold">ประเภทพลาสติก</label>
+            <select class="form-select mb-3" name="plasticType">
+              <option value="PET">PET — ขวดน้ำดื่ม/น้ำอัดลม</option>
+              <option value="HDPE">HDPE — ขวดแชมพู/ผลิตภัณฑ์ซักล้าง</option>
+              <option value="PVC">PVC</option>
+              <option value="LDPE">LDPE — ถุงพลาสติก</option>
+              <option value="PP">PP — กล่องบรรจุภัณฑ์</option>
+              <option value="PS">PS — โฟม</option>
+              <option value="OTHER">อื่นๆ</option>
+            </select>
+
+            <label class="form-label fw-semibold">น้ำหนักโดยประมาณ (กก.)</label>
+            <input type="number" step="0.1" min="0.1" class="form-control mb-3" name="plasticWeight" placeholder="เช่น 1.5">
+            <div class="form-text mb-3">คะแนนที่ได้จะขึ้นอยู่กับน้ำหนักที่แจ้ง (10-30 คะแนน)</div>
+          </div>
+
+          <!-- Common fields -->
+          <label class="form-label fw-semibold">รายละเอียดเพิ่มเติม</label>
+          <textarea class="form-control mb-3" name="description" rows="3" placeholder="อธิบายสภาพของ / จำนวน / ข้อมูลอื่นๆ"></textarea>
+
+          <label class="form-label fw-semibold">รูปภาพประกอบ</label>
+          <div class="upload-box mb-4" onclick="document.getElementById('imageInput').click()">
+            <i class="bi bi-cloud-arrow-up fs-2"></i>
+            <div>คลิกเพื่ออัปโหลดรูปภาพ (สูงสุด 5 รูป)</div>
+            <input type="file" id="imageInput" name="images" multiple accept="image/*" class="d-none">
+          </div>
+
+          <label class="form-label fw-semibold">วิธีการส่งต่อ</label>
+          <div class="row g-2 mb-3">
+            <div class="col-6">
+              <input type="radio" class="btn-check" name="pickupMethod" id="dropOff" value="drop_off" checked>
+              <label class="btn btn-outline-success w-100" for="dropOff"><i class="bi bi-geo-alt"></i> นำไปส่งจุดรับ</label>
+            </div>
+            <div class="col-6">
+              <input type="radio" class="btn-check" name="pickupMethod" id="pickup" value="pickup">
+              <label class="btn btn-outline-success w-100" for="pickup"><i class="bi bi-truck"></i> ให้มารับถึงบ้าน</label>
+            </div>
+          </div>
+
+          <div id="addressField" class="section-hidden mb-4">
+            <label class="form-label fw-semibold">ที่อยู่สำหรับเข้ารับ</label>
+            <textarea class="form-control" name="pickupAddress" rows="2" placeholder="กรอกที่อยู่โดยละเอียด"></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-gl-primary w-100 py-2 fw-semibold">
+            <i class="bi bi-send-check"></i> ส่งคำขอรีไซเคิล
+          </button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/js/bootstrap.bundle.min.js"></script>
+<script src="js/recycle-request.js"></script>
+</body>
+</html>

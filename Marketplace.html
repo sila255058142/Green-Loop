@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marketplace | GreenLoop</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+<style>
+      :root{ --gl-green:#1e8e5a; --gl-green-dark:#166847; --gl-green-light:#e8f6ee; }
+    body{ background:#f5f7f6; font-family:'Segoe UI',sans-serif; }
+    .gl-navbar{ background:var(--gl-green-dark); }
+    .gl-navbar .navbar-brand{ color:#fff; font-weight:700; }
+    .gl-navbar .form-control{ border-radius:999px 0 0 999px; }
+    .gl-navbar .btn-search{ border-radius:0 999px 999px 0; background:#fff; color:var(--gl-green-dark); }
+    .filter-card{ border:none; border-radius:14px; box-shadow:0 2px 12px rgba(0,0,0,.05); position:sticky; top:1rem; }
+    .product-card{ border:none; border-radius:14px; overflow:hidden; box-shadow:0 2px 12px rgba(0,0,0,.05); transition:.15s; }
+    .product-card:hover{ transform:translateY(-4px); box-shadow:0 8px 24px rgba(0,0,0,.1); }
+    .product-img{ height:170px; object-fit:cover; width:100%; background:#e9ecef; }
+    .green-score-badge{
+        position:absolute; top:.6rem; left:.6rem; background:var(--gl-green); color:#fff;
+        font-size:.75rem; font-weight:700; padding:.25rem .6rem; border-radius:999px;
+    }
+    .fav-btn{
+        position:absolute; top:.6rem; right:.6rem; background:rgba(255,255,255,.9); border:none;
+        width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    }
+    .price-tag{ color:var(--gl-green-dark); font-weight:700; font-size:1.1rem; }
+    .category-pill{ border-radius:999px; padding:.4rem 1rem; font-size:.85rem; }
+    .sort-select{ max-width:220px; }
+</style>
+</head>
+<body>
+
+<nav class="navbar gl-navbar navbar-dark py-3">
+  <div class="container">
+    <a class="navbar-brand" href="index.html"><i class="bi bi-recycle"></i> GreenLoop</a>
+    <form class="d-flex flex-grow-1 mx-4 d-none d-md-flex" style="max-width:480px;">
+      <input class="form-control" type="search" placeholder="ค้นหาสินค้ามือสอง...">
+      <button class="btn btn-search" type="submit"><i class="bi bi-search"></i></button>
+    </form>
+    <div class="d-flex align-items-center gap-3 text-white">
+      <a href="sell.html" class="text-white text-decoration-none"><i class="bi bi-tag"></i> ลงขายสินค้า</a>
+      <a href="recycle-request.html" class="text-white text-decoration-none"><i class="bi bi-recycle"></i> Recycle</a>
+      <a href="#" class="text-white text-decoration-none"><i class="bi bi-chat-dots"></i></a>
+      <a href="#" class="text-white text-decoration-none"><i class="bi bi-wallet2"></i> ฿1,250</a>
+      <a href="#" class="text-white text-decoration-none"><i class="bi bi-person-circle fs-5"></i></a>
+    </div>
+  </div>
+</nav>
+
+<div class="container py-4">
+  <div class="row g-4">
+
+    <!-- FILTER SIDEBAR -->
+    <div class="col-lg-3">
+      <div class="card filter-card p-4">
+        <h6 class="fw-bold mb-3">หมวดหมู่</h6>
+        <div class="d-flex flex-wrap gap-2 mb-4" id="categoryFilters">
+          <button class="btn btn-gl-active category-pill btn-success" data-cat="all">ทั้งหมด</button>
+          <button class="btn btn-outline-secondary category-pill" data-cat="mobile">โทรศัพท์</button>
+          <button class="btn btn-outline-secondary category-pill" data-cat="notebook">Notebook</button>
+          <button class="btn btn-outline-secondary category-pill" data-cat="tablet">Tablet</button>
+          <button class="btn btn-outline-secondary category-pill" data-cat="camera">กล้อง</button>
+          <button class="btn btn-outline-secondary category-pill" data-cat="accessory">อุปกรณ์ IT</button>
+        </div>
+
+        <h6 class="fw-bold mb-3">ช่วงราคา</h6>
+        <div class="row g-2 mb-4">
+          <div class="col-6"><input type="number" class="form-control form-control-sm" placeholder="ต่ำสุด"></div>
+          <div class="col-6"><input type="number" class="form-control form-control-sm" placeholder="สูงสุด"></div>
+        </div>
+
+        <h6 class="fw-bold mb-3">สภาพสินค้า</h6>
+        <div class="form-check mb-2"><input class="form-check-input" type="checkbox" id="condNew"><label class="form-check-label" for="condNew">ใหม่</label></div>
+        <div class="form-check mb-2"><input class="form-check-input" type="checkbox" id="condLikeNew"><label class="form-check-label" for="condLikeNew">เหมือนใหม่</label></div>
+        <div class="form-check mb-2"><input class="form-check-input" type="checkbox" id="condGood"><label class="form-check-label" for="condGood">สภาพดี</label></div>
+        <div class="form-check mb-4"><input class="form-check-input" type="checkbox" id="condFair"><label class="form-check-label" for="condFair">พอใช้</label></div>
+
+        <h6 class="fw-bold mb-3">Green Score ขั้นต่ำ</h6>
+        <input type="range" class="form-range mb-2" min="0" max="100" value="0" id="greenScoreRange">
+        <div class="text-muted small text-center mb-4"><span id="greenScoreValue">0</span> คะแนนขึ้นไป</div>
+
+        <button class="btn btn-gl-primary w-100" style="background:var(--gl-green);color:#fff;">ใช้ตัวกรอง</button>
+      </div>
+    </div>
+
+    <!-- PRODUCT GRID -->
+    <div class="col-lg-9">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+          <h5 class="fw-bold mb-0">สินค้ามือสองทั้งหมด</h5>
+          <small class="text-muted" id="resultCount">พบ 6 รายการ</small>
+        </div>
+        <select class="form-select sort-select">
+          <option>ล่าสุด</option>
+          <option>ราคา: ต่ำ-สูง</option>
+          <option>ราคา: สูง-ต่ำ</option>
+          <option>Green Score สูงสุด</option>
+          <option>ยอดนิยม</option>
+        </select>
+      </div>
+
+      <div class="row g-3" id="productGrid">
+        <!-- Product cards are rendered here by JS from sample data -->
+      </div>
+
+      <nav class="mt-4">
+        <ul class="pagination justify-content-center">
+          <li class="page-item disabled"><a class="page-link" href="#">ก่อนหน้า</a></li>
+          <li class="page-item active"><a class="page-link" href="#">1</a></li>
+          <li class="page-item"><a class="page-link" href="#">2</a></li>
+          <li class="page-item"><a class="page-link" href="#">3</a></li>
+          <li class="page-item"><a class="page-link" href="#">ถัดไป</a></li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/js/bootstrap.bundle.min.js"></script>
+<script src="js/marketplace.js"></script>
+</body>
+</html>

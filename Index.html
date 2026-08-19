@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GreenLoop | หน้าแรก</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+<style>
+      :root{
+        --gl-green:#1e8e5a;
+        --gl-green-dark:#166847;
+        --gl-green-light:#e8f6ee;
+        --gl-plastic:#0d7bb5;
+    }
+    body{ background:#f5f7f6; font-family:'Segoe UI',sans-serif; }
+
+    /* Navbar */
+    .gl-navbar{ background:var(--gl-green-dark); }
+    .gl-navbar .navbar-brand{ color:#fff; font-weight:700; }
+    .gl-navbar .form-control{ border-radius:999px 0 0 999px; }
+    .gl-navbar .btn-search{ border-radius:0 999px 999px 0; background:#fff; color:var(--gl-green-dark); }
+    .gl-navbar .nav-link{ color:#e8f6ee !important; font-weight:500; }
+    .gl-navbar .nav-link:hover{ color:#fff !important; }
+
+    /* Banner: Top */
+    .banner-top{
+        border-radius:16px; overflow:hidden; min-height:220px;
+        background:linear-gradient(120deg,var(--gl-green) 0%,var(--gl-green-dark) 100%);
+        display:flex; align-items:center; padding:2.5rem; color:#fff; position:relative;
+    }
+    .banner-top .badge-slot{
+        position:absolute; top:.8rem; right:.8rem; background:rgba(0,0,0,.25);
+        font-size:.7rem; padding:.3rem .7rem; border-radius:999px;
+    }
+
+    /* Section titles */
+    .section-title{ font-weight:700; }
+    .section-sub{ color:#868e96; font-size:.9rem; }
+
+    /* Category quick pills */
+    .quick-cat{
+        background:#fff; border-radius:14px; padding:1.2rem .5rem; text-align:center;
+        box-shadow:0 2px 10px rgba(0,0,0,.04); transition:.15s; text-decoration:none; color:#333; display:block;
+    }
+    .quick-cat:hover{ transform:translateY(-3px); box-shadow:0 6px 18px rgba(0,0,0,.08); color:var(--gl-green-dark); }
+    .quick-cat i{ font-size:1.6rem; color:var(--gl-green); }
+
+    /* Product cards (reused style) */
+    .product-card{ border:none; border-radius:14px; overflow:hidden; box-shadow:0 2px 12px rgba(0,0,0,.05); transition:.15s; }
+    .product-card:hover{ transform:translateY(-4px); box-shadow:0 8px 24px rgba(0,0,0,.1); }
+    .product-img{ height:150px; object-fit:cover; width:100%; background:#e9ecef; }
+    .green-score-badge{
+        position:absolute; top:.6rem; left:.6rem; background:var(--gl-green); color:#fff;
+        font-size:.7rem; font-weight:700; padding:.2rem .55rem; border-radius:999px;
+    }
+    .price-tag{ color:var(--gl-green-dark); font-weight:700; }
+
+    /* Banner: Middle */
+    .banner-middle{
+        border-radius:16px; overflow:hidden; min-height:160px; background:var(--gl-plastic);
+        display:flex; align-items:center; padding:2rem; color:#fff; position:relative;
+    }
+
+    /* Banner: Side */
+    .banner-side{
+        border-radius:16px; overflow:hidden; min-height:340px;
+        background:linear-gradient(160deg,#2fae74 0%, var(--gl-green-dark) 100%);
+        display:flex; flex-direction:column; align-items:center; justify-content:center;
+        padding:1.5rem; color:#fff; text-align:center; position:relative;
+    }
+
+    /* Impact stats */
+    .impact-card{
+        background:#fff; border-radius:14px; padding:1.5rem; text-align:center; box-shadow:0 2px 10px rgba(0,0,0,.04);
+    }
+    .impact-number{ font-size:1.8rem; font-weight:800; color:var(--gl-green-dark); }
+
+    /* How it works */
+    .step-circle{
+        width:52px; height:52px; border-radius:50%; background:var(--gl-green-light); color:var(--gl-green-dark);
+        display:flex; align-items:center; justify-content:center; font-weight:700; font-size:1.2rem; margin:0 auto 1rem;
+    }
+
+    footer{ background:#12291f; color:#c9d8cf; }
+    footer a{ color:#c9d8cf; text-decoration:none; }
+    footer a:hover{ color:#fff; }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg gl-navbar py-3">
+  <div class="container">
+    <a class="navbar-brand" href="index.html"><i class="bi bi-recycle"></i> GreenLoop</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navMain">
+      <form class="d-flex flex-grow-1 mx-lg-4 my-3 my-lg-0" style="max-width:480px;">
+        <input class="form-control" type="search" placeholder="ค้นหาสินค้ามือสอง...">
+        <button class="btn btn-search" type="submit"><i class="bi bi-search"></i></button>
+      </form>
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item"><a class="nav-link" href="marketplace.html">Market</a></li>
+        <li class="nav-item"><a class="nav-link" href="sell.html">For Sale</a></li>
+        <li class="nav-item"><a class="nav-link" href="recycle-request.html">Recycle</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Green Points</a></li>
+      </ul>
+      <div class="d-flex align-items-center gap-3 text-white">
+        <a href="#" class="text-white text-decoration-none"><i class="bi bi-chat-dots fs-5"></i></a>
+        <a href="#" class="text-white text-decoration-none"><i class="bi bi-wallet2"></i> ฿1,250</a>
+        <a href="#" class="text-white text-decoration-none"><i class="bi bi-person-circle fs-4"></i></a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="container py-4">
+
+  <!-- ============ TOP BANNER (1) ============ -->
+  <div class="banner-top mb-5 mx-3">
+    <span class="badge-slot"><i class="bi bi-megaphone"></i> Banner ตำแหน่ง Top</span>
+    <div>
+      <h2 class="fw-bold mb-2">ซื้อ-ขาย-รีไซเคิล ครบในที่เดียว</h2>
+      <p class="mb-3 opacity-75">ส่งต่อของมือสอง ลดขยะอิเล็กทรอนิกส์และพลาสติก พร้อมสะสม Green Point</p>
+      <a href="recycle-request.html" class="btn btn-light fw-semibold text-success"><i class="bi bi-recycle"></i> เริ่มรีไซเคิลเลย</a>
+    </div>
+  </div>
+
+  <!-- ============ QUICK CATEGORIES ============ -->
+  <div class="row g-3 mb-5 mx-3">
+    <div class="col-12 col-sm-4 col-md-2"><a href="marketplace.html?category=mobile-phones" class="quick-cat"><i class="bi bi-phone"></i><div class="small mt-2">โทรศัพท์</div></a></div>
+    <div class="col-12 col-sm-4 col-md-2"><a href="marketplace.html?category=notebooks" class="quick-cat"><i class="bi bi-laptop"></i><div class="small mt-2">Notebook</div></a></div>
+    <div class="col-12 col-sm-4 col-md-2"><a href="marketplace.html?category=tablets" class="quick-cat"><i class="bi bi-tablet"></i><div class="small mt-2">Tablet</div></a></div>
+    <div class="col-12 col-sm-4 col-md-2"><a href="marketplace.html?category=cameras" class="quick-cat"><i class="bi bi-camera"></i><div class="small mt-2">กล้อง</div></a></div>
+    <div class="col-12 col-sm-4 col-md-2"><a href="recycle-request.html" class="quick-cat"><i class="bi bi-cpu"></i><div class="small mt-2">E-Waste</div></a></div>
+    <div class="col-12 col-sm-4 col-md-2"><a href="recycle-request.html" class="quick-cat"><i class="bi bi-droplet-half"></i><div class="small mt-2">พลาสติก</div></a></div>
+  </div>
+
+  <div class="row g-4 mx-3">
+    <!-- ============ MAIN COLUMN ============ -->
+    <div class="col-lg-9">
+
+      <!-- Featured products -->
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+          <h5 class="section-title mb-0">สินค้าแนะนำ</h5>
+          <span class="section-sub">อัปเดตล่าสุดจากผู้ขายในระบบ</span>
+        </div>
+        <a href="marketplace.html" class="btn btn-outline-success btn-sm">ดูทั้งหมด <i class="bi bi-arrow-right"></i></a>
+      </div>
+      <div class="row g-3 mb-5" id="featuredGrid"></div>
+
+      <!-- ============ MIDDLE BANNER (2) ============ -->
+      <div class="banner-middle mb-5">
+        <span class="badge-slot" style="position:absolute;top:.6rem;right:.6rem;background:rgba(0,0,0,.25);font-size:.7rem;padding:.3rem .7rem;border-radius:999px;"><i class="bi bi-megaphone"></i> Banner ตำแหน่ง Middle</span>
+        <div>
+          <h5 class="fw-bold mb-1">โปรโมชั่นพาร์ตเนอร์ประจำเดือน</h5>
+          <p class="mb-0 opacity-75 small">แลก Green Point เป็นคูปองส่วนลดจากร้านค้าพาร์ตเนอร์</p>
+        </div>
+      </div>
+
+      <!-- Recycle categories -->
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+          <h5 class="section-title mb-0">รายการรับรีไซเคิลยอดนิยม</h5>
+          <span class="section-sub">แจ้งความประสงค์ได้ทั้ง E-Waste และพลาสติก</span>
+        </div>
+        <a href="recycle-request.html" class="btn btn-outline-success btn-sm">แจ้งรีไซเคิล <i class="bi bi-arrow-right"></i></a>
+      </div>
+      <div class="row g-3 mb-5" id="recycleGrid"></div>
+
+    </div>
+
+    <!-- ============ SIDE COLUMN ============ -->
+    <div class="col-lg-3">
+
+      <!-- ============ SIDE BANNER (3) ============ -->
+      <div class="banner-side mb-4">
+        <span class="badge-slot"><i class="bi bi-megaphone"></i> Banner ด้านข้าง</span>
+        <i class="bi bi-tree fs-1 mb-2"></i>
+        <h6 class="fw-bold">อัปเกรดเป็น Green Hero</h6>
+        <p class="small opacity-75 mb-3">ปลดล็อกสิทธิพิเศษ ส่วนลดค่าธรรมเนียม และของรางวัลพิเศษ</p>
+        <a href="#" class="btn btn-light btn-sm fw-semibold text-success">ดูรายละเอียด</a>
+      </div>
+
+      <!-- Impact stats -->
+      <div class="card border-0 shadow-sm p-3 mb-4">
+        <h6 class="fw-bold mb-3"><i class="bi bi-globe-asia-australia text-success"></i> Green Impact รวมทั้งระบบ</h6>
+        <div class="row g-2 text-center">
+          <div class="col-6"><div class="impact-number">3.2 <small class="fs-6">ตัน</small></div><div class="small text-muted">E-Waste รีไซเคิลแล้ว</div></div>
+          <div class="col-6"><div class="impact-number">5.8 <small class="fs-6">ตัน</small></div><div class="small text-muted">พลาสติกรีไซเคิลแล้ว</div></div>
+        </div>
+      </div>
+
+      <!-- My green points widget -->
+      <div class="card border-0 shadow-sm p-3">
+        <h6 class="fw-bold mb-2"><i class="bi bi-award text-success"></i> Green Point ของฉัน</h6>
+        <div class="impact-number mb-1">1,240 <small class="fs-6 text-muted">คะแนน</small></div>
+        <a href="#" class="btn btn-success btn-sm w-100 mt-2">แลกของรางวัล</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- How it works -->
+  <div class="text-center my-5">
+    <h5 class="section-title">GreenLoop ทำงานอย่างไร</h5>
+    <span class="section-sub">3 ขั้นตอนง่ายๆ สู่การใช้ทรัพยากรอย่างคุ้มค่า</span>
+  </div>
+  <div class="row g-4 text-center mb-5">
+    <div class="col-md-4">
+      <div class="step-circle">1</div>
+      <h6 class="fw-semibold">เลือกสิ่งที่ต้องการ</h6>
+      <p class="small text-muted">ซื้อขายสินค้ามือสอง หรือแจ้งรีไซเคิล E-Waste/พลาสติก</p>
+    </div>
+    <div class="col-md-4">
+      <div class="step-circle">2</div>
+      <h6 class="fw-semibold">ดำเนินการผ่านระบบ</h6>
+      <p class="small text-muted">ชำระผ่าน Wallet หรือส่งของเข้าสู่กระบวนการรีไซเคิล</p>
+    </div>
+    <div class="col-md-4">
+      <div class="step-circle">3</div>
+      <h6 class="fw-semibold">รับ Green Point</h6>
+      <p class="small text-muted">สะสมคะแนนแลกส่วนลด คูปอง และของรางวัล</p>
+    </div>
+  </div>
+</div>
+
+<footer class="py-5 mt-4">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <h5 class="text-white fw-bold"><i class="bi bi-recycle"></i> GreenLoop</h5>
+        <p class="small">แพลตฟอร์มซื้อขายสินค้ามือสองและรีไซเคิล E-Waste/พลาสติก เพื่อโลกที่ยั่งยืนกว่า</p>
+      </div>
+      <div class="col-md-2">
+        <h6 class="text-white">เมนู</h6>
+        <ul class="list-unstyled small">
+          <li><a href="marketplace.html">Marketplace</a></li>
+          <li><a href="recycle-request.html">Recycle</a></li>
+          <li><a href="#">Green Points</a></li>
+        </ul>
+      </div>
+      <div class="col-md-3">
+        <h6 class="text-white">บัญชี</h6>
+        <ul class="list-unstyled small">
+          <li><a href="#">เข้าสู่ระบบ</a></li>
+          <li><a href="#">สมัครสมาชิก</a></li>
+          <li><a href="#">Wallet</a></li>
+        </ul>
+      </div>
+      <div class="col-md-3">
+        <h6 class="text-white">ติดตามเรา</h6>
+        <div class="d-flex gap-3 fs-5">
+          <a href="#"><i class="bi bi-facebook"></i></a>
+          <a href="#"><i class="bi bi-instagram"></i></a>
+          <a href="#"><i class="bi bi-line"></i></a>
+        </div>
+      </div>
+    </div>
+    <hr class="border-secondary my-4">
+    <p class="text-center small mb-0">&copy; 2026 GreenLoop. All rights reserved.</p>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/js/bootstrap.bundle.min.js"></script>
+<script src="js/index.js"></script>
+</body>
+</html>
