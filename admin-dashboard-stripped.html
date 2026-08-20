@@ -1,0 +1,47 @@
+    <!--
+    วิธีติดตั้ง: เปิดไฟล์ admin-dashboard.html ของคุณ แล้วแทรก 3 จุดตามนี้
+    -->
+
+    <!-- 1) เพิ่มเมนูใน <aside class="admin-sidebar" id="adminSidebar"> ...
+        วางต่อจากเมนู "คำขอรีไซเคิล" (data-section="recycle") -->
+    <a class="nav-link" data-section="topup">
+        <i class="bi bi-cash-coin"></i> คำขอเติมเงิน
+        <span class="badge rounded-pill bg-danger" id="topupNavBadge">0</span>
+    </a>
+
+
+    <!-- 2) เพิ่ม section เนื้อหา ใน <div class="admin-content">
+        วางต่อจาก </section> ของ id="section-recycle" -->
+    <section class="admin-section" id="section-topup">
+        <div class="panel">
+            <div class="panel-header">
+                <div>
+                    <h6 class="fw-bold mb-0">คำขอเติมเงิน (Wallet Top-up)</h6>
+                    <span class="text-muted small" id="topupCount">พบ 0 รายการ</span>
+                </div>
+                <div class="d-flex gap-2 flex-wrap">
+                    <button class="btn btn-success category-pill" data-topup-filter="pending">รอตรวจสอบ</button>
+                    <button class="btn btn-outline-success category-pill" data-topup-filter="approved">อนุมัติแล้ว</button>
+                    <button class="btn btn-outline-success category-pill" data-topup-filter="rejected">ถูกปฏิเสธ</button>
+                    <button class="btn btn-outline-success category-pill" data-topup-filter="all">ทั้งหมด</button>
+                </div>
+            </div>
+            <div id="topupList"></div>
+        </div>
+    </section>
+
+
+    <!-- 3) เพิ่ม <script> ต่อท้าย ก่อนปิด </body>
+        (วางต่อจาก <script src="js/admin-dashboard.js"></script>) -->
+    <script src="js/admin-topup.js"></script>
+
+
+    <!--
+    หมายเหตุ:
+    - อย่าลืมเพิ่มโค้ดสลับแท็บของคุณเองให้รองรับ data-section="topup" เหมือนเมนูอื่น ๆ
+    (ถ้า admin-dashboard.js ของคุณ loop ผ่าน [data-section] อยู่แล้ว ก็ไม่ต้องแก้อะไรเพิ่ม)
+    - ปุ่มกรองสถานะใช้คลาส .category-pill ซ้อนสไตล์เดิมจากหน้า Marketplace ถ้าไม่มีสไตล์นี้ใน
+    admin-dashboard.html ให้เพิ่ม CSS นี้ใน <style> ของ admin-dashboard.html:
+
+        .category-pill{ border-radius:999px; padding:.5rem 1.3rem; font-size:.85rem; }
+    -->

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wallet ของฉัน | GreenLoop</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+<style>
+    :root{
+        --gl-green:#1e8e5a;
+        --gl-green-dark:#166847;
+        --gl-green-light:#e8f6ee;
+    }
+    body{ background:#f5f7f6; font-family:'Segoe UI',sans-serif; }
+    .gl-navbar{ background:var(--gl-green-dark); }
+    .gl-navbar .navbar-brand{ color:#fff; font-weight:700; }
+
+    .balance-card{
+        background:
+            linear-gradient(120deg, rgba(30,142,90,.9) 0%, rgba(22,104,71,.94) 100%),
+            url('https://loremflickr.com/900/400/finance,leaf?lock=77') center/cover no-repeat;
+        border-radius:18px; color:#fff; padding:2rem; position:relative; overflow:hidden;
+    }
+    .balance-card .balance-value{ font-size:2.4rem; font-weight:800; }
+    .balance-card i.bg-icon{
+        position:absolute; right:1rem; top:1rem; font-size:5rem; opacity:.15;
+    }
+
+    .card-panel{ border:none; border-radius:16px; box-shadow:0 4px 20px rgba(0,0,0,.06); background:#fff; }
+
+    .quick-amt{ border-radius:10px; font-weight:600; }
+    .quick-amt.active, .quick-amt:active{ background:var(--gl-green); border-color:var(--gl-green); color:#fff; }
+
+    .bank-box{
+        background:var(--gl-green-light); border-radius:12px; padding:1rem 1.2rem; font-size:.9rem;
+    }
+    .bank-box .bank-row{ display:flex; justify-content:space-between; padding:.25rem 0; }
+    .copy-btn{ cursor:pointer; color:var(--gl-green-dark); }
+
+    .upload-box{
+        border:2px dashed #ced4da; border-radius:12px; padding:1.6rem; text-align:center; color:#868e96; cursor:pointer;
+    }
+    .upload-box:hover{ border-color:var(--gl-green); color:var(--gl-green-dark); }
+    .upload-box img{ max-height:180px; border-radius:10px; }
+
+    .btn-gl-primary{ background:var(--gl-green); border-color:var(--gl-green); color:#fff; }
+    .btn-gl-primary:hover{ background:var(--gl-green-dark); border-color:var(--gl-green-dark); color:#fff; }
+
+    .tx-item{ display:flex; align-items:center; gap:.9rem; padding:.85rem 0; border-bottom:1px solid #f1f3f5; }
+    .tx-item:last-child{ border-bottom:none; }
+    .tx-icon{
+        width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+        font-size:1.05rem; color:#fff; flex-shrink:0;
+    }
+    .tx-amount-in{ color:var(--gl-green-dark); font-weight:700; }
+    .tx-amount-out{ color:#e03131; font-weight:700; }
+
+    .status-badge{ font-size:.72rem; padding:.3rem .6rem; border-radius:999px; font-weight:600; }
+    .status-pending{ background:#fff4e6; color:#e8590c; }
+    .status-approved,.status-completed{ background:#ebfbee; color:#2b8a3e; }
+    .status-rejected{ background:#fdecea; color:#e03131; }
+
+    .empty-state{ text-align:center; padding:2.5rem 1rem; color:#adb5bd; }
+</style>
+</head>
+<body>
+
+<nav class="navbar gl-navbar navbar-dark py-3">
+    <div class="container">
+        <a class="navbar-brand" href="index.html"><i class="bi bi-recycle"></i> GreenLoop</a>
+        <div class="d-flex align-items-center gap-3 text-white ms-auto">
+            <a href="Marketplace.html" class="text-white text-decoration-none">Market</a>
+            <a href="Sell.html" class="text-white text-decoration-none">For Sale</a>
+            <a href="recycle-request.html" class="text-white text-decoration-none">Recycle</a>
+            <a href="wallet.html" class="text-white text-decoration-none fw-bold"><i class="bi bi-wallet2"></i> Wallet</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container py-4">
+    <div class="row g-4">
+
+        <!-- LEFT: Balance + Top-up form -->
+        <div class="col-lg-7">
+            <div class="balance-card mb-4">
+                <i class="bi bi-wallet2 bg-icon"></i>
+                <div class="small opacity-75 mb-1">ยอดเงินคงเหลือของ <span id="userNameLabel">-</span></div>
+                <div class="balance-value" id="balanceValue">฿0.00</div>
+            </div>
+
+            <div class="card-panel p-4 p-md-4">
+                <h5 class="fw-bold mb-1"><i class="bi bi-plus-circle text-success"></i> เติมเงินเข้า Wallet</h5>
+                <p class="text-muted small mb-4">โอนเงินตามยอดที่ระบุ แนบสลิป แล้วรอแอดมินตรวจสอบและอนุมัติ</p>
+
+                <form id="topupForm">
+                    <label class="form-label fw-semibold">1. เลือกจำนวนเงิน</label>
+                    <div class="d-flex gap-2 flex-wrap mb-3" id="quickAmounts">
+                        <button type="button" class="btn btn-outline-success quick-amt" data-amt="100">100</button>
+                        <button type="button" class="btn btn-outline-success quick-amt" data-amt="300">300</button>
+                        <button type="button" class="btn btn-outline-success quick-amt" data-amt="500">500</button>
+                        <button type="button" class="btn btn-outline-success quick-amt" data-amt="1000">1,000</button>
+                        <button type="button" class="btn btn-outline-success quick-amt" data-amt="2000">2,000</button>
+                    </div>
+                    <div class="input-group mb-4">
+                        <span class="input-group-text">฿</span>
+                        <input type="number" class="form-control" id="amountInput" name="amount" min="20" max="100000" step="1" placeholder="ระบุจำนวนเงิน (ขั้นต่ำ 20 บาท)" required>
+                    </div>
+
+                    <label class="form-label fw-semibold">2. โอนเงินมาที่บัญชีนี้</label>
+                    <div class="bank-box mb-4">
+                        <div class="bank-row"><span>ธนาคาร</span><strong>กสิกรไทย (KBank)</strong></div>
+                        <div class="bank-row">
+                            <span>เลขบัญชี</span>
+                            <strong id="bankAccNo">123-4-56789-0 <i class="bi bi-copy copy-btn" title="คัดลอก" onclick="copyAccNo()"></i></strong>
+                        </div>
+                        <div class="bank-row"><span>ชื่อบัญชี</span><strong>บริษัท กรีนลูป จำกัด</strong></div>
+                    </div>
+
+                    <label class="form-label fw-semibold">3. แนบสลิปการโอนเงิน</label>
+                    <div class="upload-box mb-2" id="slipUploadBox" onclick="document.getElementById('slipInput').click()">
+                        <div id="slipPlaceholder">
+                            <i class="bi bi-cloud-arrow-up fs-2"></i>
+                            <div>คลิกเพื่ออัปโหลดรูปสลิป (jpg, png ไม่เกิน 5MB)</div>
+                        </div>
+                        <img id="slipPreview" class="d-none" alt="slip preview">
+                    </div>
+                    <input type="file" id="slipInput" accept="image/*" class="d-none" required>
+
+                    <button type="submit" class="btn btn-gl-primary w-100 py-2 fw-semibold mt-3" id="submitTopupBtn">
+                        <i class="bi bi-send-check"></i> ส่งคำขอเติมเงิน
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- RIGHT: Transaction history -->
+        <div class="col-lg-5">
+            <div class="card-panel p-4 h-100">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="fw-bold mb-0"><i class="bi bi-clock-history"></i> ประวัติรายการ</h5>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="loadWallet()"><i class="bi bi-arrow-clockwise"></i></button>
+                </div>
+                <div id="historyList">
+                    <div class="empty-state">
+                        <i class="bi bi-inbox fs-1"></i>
+                        <div class="small mt-2">กำลังโหลดข้อมูล...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Toast -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="glToast" class="toast align-items-center text-white border-0" role="alert">
+        <div class="d-flex">
+            <div class="toast-body" id="glToastBody">-</div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/js/bootstrap.bundle.min.js"></script>
+<script src="js/wallet.js"></script>
+</body>
+</html>
