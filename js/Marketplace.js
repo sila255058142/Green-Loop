@@ -13,6 +13,10 @@ document.addEventListener('DOMContentLoaded', () => {
         { id: 4, title: 'กล้อง Canon EOS M50', price: 14900, condition: 'เหมือนใหม่', category: 'camera', image: 'https://placehold.co/300x200?text=Canon+M50' },
         { id: 5, title: 'Samsung Galaxy S21', price: 7200, condition: 'พอใช้', category: 'mobile', image: 'https://placehold.co/300x200?text=Galaxy+S21' },
         { id: 6, title: 'หูฟังไร้สาย Sony WH-1000XM4', price: 5500, condition: 'สภาพดี', category: 'accessory', image: 'https://placehold.co/300x200?text=Sony+XM4' },
+        { id: 7, title: 'หูฟังไร้สาย Sony WH-1000XM4', price: 5500, condition: 'สภาพดี', category: 'accessory', image: 'https://placehold.co/300x200?text=Sony+XM4' },
+        { id: 8, title: 'หูฟังไร้สาย Sony WH-1000XM4', price: 5500, condition: 'สภาพดี', category: 'accessory', image: 'https://placehold.co/300x200?text=Sony+XM4' },
+        { id: 9, title: 'หูฟังไร้สาย Sony WH-1000XM4', price: 5500, condition: 'สภาพดี', category: 'accessory', image: 'https://placehold.co/300x200?text=Sony+XM4' },
+
     ];
 
     const productGrid     = document.getElementById('productGrid');
