@@ -1,38 +1,102 @@
-async function handleRegister(event) {
-    event.preventDefault(); // ป้องกันไม่ให้หน้าเว็บ รีเฟรช
-    const form = event.target;
+function openRegisterModal() {
+    document.getElementById('registerModalOverlay').style.display = 'flex';
+}
+function closeRegisterModal() {
+    document.getElementById('registerModalOverlay').style.display = 'none';
+}
 
-    // 1. ดึงข้อมูลจากอินพุตในฟอร์ม
-    const payload = {
-        username: form.querySelector('input[name="username"]').value,
-        email: form.querySelector('input[type="email"]').value,
-        firstName: form.querySelector('input[name="firstName"]').value,
-        lastName: form.querySelector('input[name="lastName"]').value,
-        password: form.querySelector('input[type="password"]').value,
-    };
+function updateUI() {
+    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    const walletDisplay = document.getElementById('walletDisplay');
+
+    if (isLoggedIn) {
+        document.getElementById('guestNav').classList.add('d-none');
+        document.getElementById('guestContent').classList.add('d-none');
+
+        document.getElementById('userNav').classList.remove('d-none');
+        document.getElementById('userNav').classList.add('d-flex');
+        document.getElementById('userContent').classList.remove('d-none');
+
+        if (walletDisplay) {
+            walletDisplay.classList.remove('d-none');
+            walletDisplay.classList.add('d-flex');
+        }
+
+        if (typeof renderData === 'function') renderData();
+    } else {
+        document.getElementById('userNav').classList.add('d-none');
+        document.getElementById('userNav').classList.remove('d-flex');
+        document.getElementById('userContent').classList.add('d-none');
+
+        document.getElementById('guestNav').classList.remove('d-none');
+        document.getElementById('guestContent').classList.remove('d-none');
+        if (walletDisplay) {
+            walletDisplay.classList.add('d-none');
+            walletDisplay.classList.remove('d-flex');
+        }
+    }
+}
+
+// 🟢 เพิ่มฟังก์ชันนี้สำหรับ บันทึกข้อมูลลง Database + ล็อกอินทันที
+async function handleRegister(e) {
+    e.preventDefault(); // ป้องกันไม่ให้หน้าเว็บรีเฟรช
+    const form = e.target;
+
+    // อ่านค่าจากฟอร์มลง Form Data
+    const formData = new FormData(form);
 
     try {
-        // 2. ใส่ fetch ตรงนี้เพื่อส่งข้อมูลไปที่ไฟล์ register.php
-        const res = await fetch('api/register.php', {
+        const response = await fetch('api/register.php', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(payload),
+            body: formData,
         });
 
-        const data = await res.json();
+        const result = await response.json();
 
-        // 3. เช็คผลลัพธ์ที่ตอบกลับมาจาก PHP
-        if (data.success) {
-            alert('ลงทะเบียนสำเร็จ! กรุณาเข้าสู่ระบบ');
+        if (result.success) {
+            alert('ลงทะเบียนสำเร็จ!');
+            localStorage.setItem('isLoggedIn', 'true'); // เปลี่ยนสถานะเป็นล็อกอิน
             closeRegisterModal();
-            openModal();
+            updateUI(); // อัปเดตหน้าตาเว็บทันที
         } else {
-            alert(data.message);
+            alert(result.message); // แสดงข้อความ error จาก PHP (เช่น อีเมลซ้ำ)
         }
-    } catch (err) {
-        console.error(err);
+    } catch (error) {
+        console.error('Error:', error);
         alert('เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์');
     }
 }
+
+async function handleLogin(e) {
+    e.preventDefault();
+    const form = e.target;
+
+    try {
+        const response = await fetch('api/login.php', {
+            method: 'POST',
+            body: new FormData(form),
+        });
+        const result = await response.json();
+
+        if (!result.success) {
+            alert(result.message || 'เข้าสู่ระบบไม่สำเร็จ');
+            return;
+        }
+
+        localStorage.setItem('isLoggedIn', 'true');
+        localStorage.setItem('user', JSON.stringify(result.user));
+        if (typeof closeModal === 'function') closeModal();
+        updateUI();
+    } catch (error) {
+        console.error('Login error:', error);
+        alert('เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์');
+    }
+}
+
+function logout() {
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('user');
+    updateUI();
+}
+
+document.addEventListener('DOMContentLoaded', updateUI);
