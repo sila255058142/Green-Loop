@@ -1,0 +1,183 @@
+    <!DOCTYPE html>
+    <html lang="th">
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>บทความ | GreenLoop</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <style>
+    :root {
+        --gl-green: #1e8e5a;
+        --gl-green-dark: #166847;
+        --gl-green-light: #e8f6ee;
+    }
+    html, body { height: 100%; margin: 0; }
+    body {
+        background: #f5f7f6;
+        font-family: 'Segoe UI', sans-serif;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+
+    .gl-navbar { background: var(--gl-green-dark); }
+    .gl-navbar .navbar-brand { color: #fff; font-weight: 700; }
+
+    .article-hero {
+        border-radius: 16px; overflow: hidden; min-height: 220px;
+        background: linear-gradient(120deg, var(--gl-green) 0%, var(--gl-green-dark) 100%);
+        display: flex; align-items: center; padding: 2.5rem; color: #fff;
+    }
+
+    .article-body {
+        background: #fff; border-radius: 16px; box-shadow: 0 2px 12px rgba(0,0,0,.05);
+        padding: 2.5rem;
+    }
+    .article-body p { line-height: 1.9; color: #3a3a3a; margin-bottom: 1.25rem; }
+    .article-body h2 { font-weight: 700; margin-top: 1.5rem; margin-bottom: .75rem; color: var(--gl-green-dark); }
+
+    .related-card {
+        border: none; border-radius: 14px; overflow: hidden;
+        box-shadow: 0 2px 10px rgba(0,0,0,.05); transition: all 0.2s ease; background: #fff;
+    }
+    .related-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,.12); }
+
+    footer { background: #12291f; color: #c9d8cf; }
+    footer a { color: #c9d8cf; text-decoration: none; }
+    footer a:hover { color: #fff; }
+    </style>
+    </head>
+    <body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark gl-navbar py-2">
+    <div class="container-fluid container-lg d-flex align-items-center justify-content-between">
+        <a class="navbar-brand fw-bold me-2 text-nowrap" href="index.html">
+        <i class="bi bi-recycle"></i> GreenLoop
+        </a>
+        <a href="index.html" class="text-white text-decoration-none fw-bold small">
+        <i class="bi bi-arrow-left"></i> กลับหน้าแรก
+        </a>
+    </div>
+    </nav>
+
+    <main class="flex-grow-1">
+    <div class="container py-4" style="max-width: 860px;">
+
+        <div id="articleContent">
+        <!-- Rendered by JS -->
+        </div>
+
+        <h5 class="fw-bold mt-5 mb-3">บทความอื่นๆ ที่น่าสนใจ</h5>
+        <div class="row g-4 mb-5" id="relatedGrid"></div>
+
+    </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="py-4 text-center mt-auto">
+    <div class="container"><p class="small mb-0">&copy; 2026 GreenLoop. All rights reserved.</p></div>
+    </footer>
+
+    <script>
+    // MOCK DATA - บทความ
+    const articles = {
+        1: {
+        badge: 'E-Waste',
+        badgeClass: 'bg-success',
+        title: 'ขยะอิเล็กทรอนิกส์ไปไหนต่อ?',
+        subtitle: 'ขั้นตอนการรีไซเคิลมือถือและคอมพิวเตอร์อย่างปลอดภัย',
+        date: '15 สิงหาคม 2569',
+        readTime: '4 นาที',
+        content: `
+            <p>ทุกปีมีขยะอิเล็กทรอนิกส์ (E-Waste) เกิดขึ้นจำนวนมาก ทั้งมือถือเก่า โน้ตบุ๊กที่พัง หรือแบตเตอรี่ที่หมดอายุการใช้งาน ของเหล่านี้หากถูกทิ้งรวมกับขยะทั่วไป อาจปล่อยสารพิษอย่างตะกั่วและปรอทปนเปื้อนสู่ดินและน้ำได้</p>
+            <h2>ทำไมต้องแยกทิ้ง E-Waste</h2>
+            <p>อุปกรณ์อิเล็กทรอนิกส์ประกอบด้วยโลหะมีค่าอย่างทองแดงและทองคำ รวมถึงสารอันตรายที่ต้องผ่านกระบวนการจัดการเฉพาะทาง การแยกทิ้งอย่างถูกวิธีช่วยให้นำทรัพยากรกลับมาใช้ใหม่ได้ และลดผลกระทบต่อสิ่งแวดล้อม</p>
+            <h2>ขั้นตอนการรีไซเคิลกับ GreenLoop</h2>
+            <p>เพียงแจ้งความประสงค์ผ่านหน้า Recycle เลือกประเภทอุปกรณ์ที่ต้องการทิ้ง แล้วนัดหมายวันรับของ เมื่อดำเนินการเสร็จสิ้นคุณจะได้รับ Green Point สะสมไว้แลกส่วนลดหรือของรางวัลจากพาร์ตเนอร์ทันที</p>
+        `
+        },
+        2: {
+        badge: 'พลาสติก',
+        badgeClass: 'bg-primary',
+        title: 'คัดแยกพลาสติกยังไงให้ได้ราคา',
+        subtitle: 'เทคนิคแยกประเภทพลาสติก PET/HDPE ก่อนส่งรีไซเคิล',
+        date: '10 สิงหาคม 2569',
+        readTime: '3 นาที',
+        content: `
+            <p>พลาสติกแต่ละชนิดมีมูลค่าการรีไซเคิลไม่เท่ากัน การคัดแยกให้ถูกประเภทตั้งแต่ต้นทางจะช่วยให้ได้ราคาดีขึ้น และทำให้กระบวนการรีไซเคิลมีประสิทธิภาพมากขึ้นด้วย</p>
+            <h2>รู้จักสัญลักษณ์บนบรรจุภัณฑ์</h2>
+            <p>สังเกตตัวเลขในสามเหลี่ยมรีไซเคิลที่ก้นขวดหรือบรรจุภัณฑ์ เช่น เลข 1 คือ PET (ขวดน้ำดื่มทั่วไป) และเลข 2 คือ HDPE (ขวดแชมพู แกลลอน) ซึ่งทั้งสองชนิดนี้เป็นที่ต้องการของโรงงานรีไซเคิลมากที่สุด</p>
+            <h2>เคล็ดลับก่อนส่งขาย</h2>
+            <p>ล้างทำความสะอาดคราบอาหารหรือของเหลวออกก่อน แยกฝาขวดออกจากตัวขวดถ้าเป็นคนละวัสดุ และบีบอัดให้แบนเพื่อประหยัดพื้นที่จัดเก็บ วิธีเหล่านี้จะช่วยให้ได้ราคารับซื้อที่ดีขึ้น</p>
+        `
+        },
+        3: {
+        badge: 'Green Points',
+        badgeClass: 'bg-warning text-dark',
+        title: 'วิธีสะสมแต้มแลกส่วนลด',
+        subtitle: 'เปลี่ยนขยะให้เป็นแต้มสะสมแลกซื้อของจากพาร์ตเนอร์',
+        date: '5 สิงหาคม 2569',
+        readTime: '3 นาที',
+        content: `
+            <p>Green Point คือแต้มสะสมที่คุณจะได้รับทุกครั้งที่ขายสินค้ามือสองหรือแจ้งรีไซเคิลผ่านระบบ GreenLoop ยิ่งรีไซเคิลมากเท่าไหร่ ก็ยิ่งสะสมแต้มได้มากขึ้นเท่านั้น</p>
+            <h2>วิธีได้รับแต้ม</h2>
+            <p>ทุกการทำรายการ ไม่ว่าจะเป็นการขายของมือสองในตลาด หรือส่งขยะอิเล็กทรอนิกส์/พลาสติกเข้ารีไซเคิล ระบบจะคำนวณแต้มให้อัตโนมัติตามประเภทและปริมาณของสิ่งของ</p>
+            <h2>แลกแต้มได้ที่ไหนบ้าง</h2>
+            <p>นำแต้มที่สะสมไว้ไปแลกเป็นคูปองส่วนลดจากร้านค้าพาร์ตเนอร์ หรือใช้จ่ายผ่าน Wallet ภายในแอปได้โดยตรง ตรวจสอบยอดแต้มปัจจุบันได้ที่มุมขวาบนของเว็บไซต์ตลอดเวลา</p>
+        `
+        }
+    };
+
+    function getArticleId() {
+        const params = new URLSearchParams(window.location.search);
+        const id = parseInt(params.get('id'), 10);
+        return articles[id] ? id : 1; // ถ้าไม่พบ id ให้ fallback เป็นบทความแรก
+    }
+
+    function renderArticle() {
+        const id = getArticleId();
+        const a = articles[id];
+
+        document.title = a.title + ' | GreenLoop';
+
+        document.getElementById('articleContent').innerHTML = `
+        <div class="article-hero mb-4">
+            <div>
+            <span class="badge ${a.badgeClass} mb-2">${a.badge}</span>
+            <h1 class="fw-bold h3 mb-1">${a.title}</h1>
+            <p class="mb-0 opacity-75 small">${a.subtitle}</p>
+            </div>
+        </div>
+        <div class="d-flex align-items-center text-muted small mb-4 gap-3">
+            <span><i class="bi bi-calendar3"></i> ${a.date}</span>
+            <span><i class="bi bi-clock"></i> อ่าน ${a.readTime}</span>
+        </div>
+        <div class="article-body">
+            ${a.content}
+        </div>
+        `;
+
+        // บทความอื่นๆ (ไม่รวมบทความปัจจุบัน)
+        const relatedGrid = document.getElementById('relatedGrid');
+        const relatedIds = Object.keys(articles).filter(key => parseInt(key, 10) !== id);
+
+        relatedGrid.innerHTML = relatedIds.map(key => {
+        const r = articles[key];
+        return `
+            <div class="col-md-6">
+            <a href="article.html?id=${key}" class="card related-card h-100 p-3 text-decoration-none text-dark">
+                <span class="badge ${r.badgeClass} mb-2 w-auto align-self-start">${r.badge}</span>
+                <h6 class="fw-bold">${r.title}</h6>
+                <p class="text-muted small mb-0">${r.subtitle}</p>
+            </a>
+            </div>
+        `;
+        }).join('');
+    }
+
+    document.addEventListener('DOMContentLoaded', renderArticle);
+    </script>
+    </body>
+    </html>
