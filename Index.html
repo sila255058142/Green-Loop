@@ -13,7 +13,19 @@
     --gl-green-light: #e8f6ee;
     --gl-plastic: #0d7bb5;
   }
-  body { background: #f5f7f6; font-family: 'Segoe UI', sans-serif; }
+  
+  /* [ปรับแก้ไขส่วนที่ 1] ทำ Sticky Footer ให้เต็มความสูงหน้าจอเสมอ */
+  html, body {
+    height: 100%;
+    margin: 0;
+  }
+  body { 
+    background: #f5f7f6; 
+    font-family: 'Segoe UI', sans-serif; 
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
 
   /* Navbar Custom Styling */
   .gl-navbar { background: var(--gl-green-dark); }
@@ -92,7 +104,6 @@
 <body>
 
 <!-- NAVBAR -->
-<!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg navbar-dark gl-navbar py-2">
   <div class="container-fluid container-lg d-flex align-items-center justify-content-between">
     
@@ -109,7 +120,7 @@
       </div>
     </form>
 
-    <!-- 3. COLLAPSIBLE MENU (เมนูหน้าต่างๆ + Account/Logout) -->
+    <!-- 3. COLLAPSIBLE MENU -->
     <div class="collapse navbar-collapse order-3 order-lg-2" id="glNavbarNav">
       <!-- GUEST NAV -->
       <div id="guestNav" class="d-flex gap-3 text-white ms-auto pt-2 pt-lg-0">
@@ -126,7 +137,7 @@
           <li class="nav-item"><a class="nav-link" href="GreenPoints.html">Green Points</a></li>
         </ul>
         
-        <!-- PROFILE & LOGOUT (ไม่มีเส้นขอบขาวแล้ว) -->
+        <!-- PROFILE & LOGOUT -->
         <div class="d-flex align-items-center text-white gap-2 pt-2 pt-lg-0">
           <div class="d-flex align-items-center"><i class="bi bi-person-circle fs-5 me-1"></i> <span class="small fw-bold">My Account</span></div>
           <button type="button" onclick="logout()" class="btn btn-outline-light btn-sm ms-auto ms-lg-0">Logout</button>
@@ -134,9 +145,9 @@
       </div>
     </div>
 
-    <!-- 4. RIGHTMOST WRAPPER (กระเป๋าตังค์ขวาสุด + ปุ่ม Hamburger) -->
+    <!-- 4. RIGHTMOST WRAPPER -->
     <div class="d-flex align-items-center order-2 order-lg-3 ms-2">
-      <!-- WALLET (ขวาสุดเรียบร้อย) -->
+      <!-- WALLET -->
       <div id="walletDisplay" class="text-white small fw-bold d-none align-items-center text-nowrap me-2">
         <i class="bi bi-wallet2 me-1"></i><span>฿1,250</span>
       </div>
@@ -149,127 +160,130 @@
   </div>
 </nav>
 
-<!-- A. GUEST VIEW -->
-<div id="guestContent" class="container py-4">
-  <div class="banner-top mb-5">
-    <div>
-      <h2 class="fw-bold mb-2">ยินดีต้อนรับสู่ GreenLoop</h2>
-      <p class="mb-3 opacity-75">แพลตฟอร์มซื้อ-ขาย และรีไซเคิลเพื่อสิ่งแวดล้อม อ่านบทความน่ารู้เกี่ยวกับการจัดการขยะได้เลย</p>
-      <button onclick="openModal()" class="btn btn-light fw-semibold text-success shadow-sm">
-        <i class="bi bi-box-arrow-in-right"></i> เข้าสู่ระบบเพื่อเริ่มใช้งาน
-      </button>
-    </div>
-  </div>
-
-  <h4 class="fw-bold mb-3">บทความน่าสนใจ</h4>
-  <div class="row g-4 mb-5">
-    <div class="col-md-4">
-      <div class="card article-card h-100 p-3" onclick="openModal()">
-        <span class="badge bg-success mb-2 w-auto align-self-start">E-Waste</span>
-        <h5 class="fw-bold">ขยะอิเล็กทรอนิกส์ไปไหนต่อ?</h5>
-        <p class="text-muted small">ขั้นตอนการรีไซเคิลมือถือและคอมพิวเตอร์อย่างปลอดภัย...</p>
-        <span class="text-success small fw-bold mt-auto">อ่านต่อ <i class="bi bi-arrow-right"></i></span>
+<!-- [ปรับแก้ไขส่วนที่ 2] เพิ่มแท็ก main ครอบเนื้อหาตรงกลางทั้งหมดเพื่อยืดพื้นที่ -->
+<main class="flex-grow-1">
+  <!-- A. GUEST VIEW -->
+  <div id="guestContent" class="container py-4">
+    <div class="banner-top mb-5">
+      <div>
+        <h2 class="fw-bold mb-2">ยินดีต้อนรับสู่ GreenLoop</h2>
+        <p class="mb-3 opacity-75">แพลตฟอร์มซื้อ-ขาย และรีไซเคิลเพื่อสิ่งแวดล้อม อ่านบทความน่ารู้เกี่ยวกับการจัดการขยะได้เลย</p>
+        <button onclick="openModal()" class="btn btn-light fw-semibold text-success shadow-sm">
+          <i class="bi bi-box-arrow-in-right"></i> เข้าสู่ระบบเพื่อเริ่มใช้งาน
+        </button>
       </div>
     </div>
-    <div class="col-md-4">
-      <div class="card article-card h-100 p-3" onclick="openModal()">
-        <span class="badge bg-primary mb-2 w-auto align-self-start">พลาสติก</span>
-        <h5 class="fw-bold">คัดแยกพลาสติกยังไงให้ได้ราคา</h5>
-        <p class="text-muted small">เทคนิคแยกประเภทพลาสติก PET/HDPE ก่อนส่งรีไซเคิล...</p>
-        <span class="text-success small fw-bold mt-auto">อ่านต่อ <i class="bi bi-arrow-right"></i></span>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="card article-card h-100 p-3" onclick="openModal()">
-        <span class="badge bg-warning text-dark mb-2 w-auto align-self-start">Green Points</span>
-        <h5 class="fw-bold">วิธีสะสมแต้มแลกส่วนลด</h5>
-        <p class="text-muted small">เปลี่ยนขยะให้เป็นแต้มสะสมแลกซื้อของจากพาร์ตเนอร์...</p>
-        <span class="text-success small fw-bold mt-auto">อ่านต่อ <i class="bi bi-arrow-right"></i></span>
-      </div>
-    </div>
-  </div>
-</div>
 
-<!-- B. USER VIEW -->
-<div id="userContent" class="container py-4 d-none">
-  <!-- TOP BANNER -->
-  <div class="banner-top mb-5">
-    <span class="badge-slot"><i class="bi bi-megaphone"></i> Banner Top</span>
-    <div>
-      <h2 class="fw-bold mb-2">ซื้อ-ขาย-รีไซเคิล ครบในที่เดียว</h2>
-      <p class="mb-3 opacity-75">ส่งต่อของมือสอง ลดขยะอิเล็กทรอนิกส์และพลาสติก พร้อมสะสม Green Point</p>
-      <a href="#" class="btn btn-light fw-semibold text-success shadow-sm"><i class="bi bi-recycle"></i> เริ่มรีไซเคิลเลย</a>
-    </div>
-  </div>
-
-  <!-- QUICK CATEGORIES -->
-  <div class="row g-3 mb-5">
-    <div class="col-4 col-md-2"><a href="#" class="quick-cat"><i class="bi bi-phone"></i><div class="small mt-2">โทรศัพท์</div></a></div>
-    <div class="col-4 col-md-2"><a href="#" class="quick-cat"><i class="bi bi-laptop"></i><div class="small mt-2">Notebook</div></a></div>
-    <div class="col-4 col-md-2"><a href="#" class="quick-cat"><i class="bi bi-tablet"></i><div class="small mt-2">Tablet</div></a></div>
-    <div class="col-4 col-md-2"><a href="#" class="quick-cat"><i class="bi bi-camera"></i><div class="small mt-2">กล้อง</div></a></div>
-    <div class="col-4 col-md-2"><a href="#" class="quick-cat"><i class="bi bi-cpu"></i><div class="small mt-2">E-Waste</div></a></div>
-    <div class="col-4 col-md-2"><a href="#" class="quick-cat"><i class="bi bi-droplet-half"></i><div class="small mt-2">พลาสติก</div></a></div>
-  </div>
-
-  <div class="row g-4">
-    <div class="col-lg-12">
-      <div class="d-flex justify-content-between align-items-center mb-3">
-        <div>
-          <h5 class="fw-bold mb-0">สินค้าแนะนำ</h5>
-          <span class="text-muted small">อัปเดตล่าสุดจากผู้ขายในระบบ</span>
-        </div>
-        <a href="#" class="btn btn-outline-success btn-sm">ดูทั้งหมด <i class="bi bi-arrow-right"></i></a>
-      </div>
-      <div class="row g-3 mb-5" id="featuredGrid"></div>
-
-      <!-- MIDDLE BANNER -->
-      <div class="banner-middle mb-5">
-        <span class="badge-slot"><i class="bi bi-megaphone"></i> Banner Middle</span>
-        <div>
-          <h5 class="fw-bold mb-1">โปรโมชั่นพาร์ตเนอร์ประจำเดือน</h5>
-          <p class="mb-0 opacity-75 small">แลก Green Point เป็นคูปองส่วนลดจากร้านค้าพาร์ตเนอร์</p>
+    <h4 class="fw-bold mb-3">บทความน่าสนใจ</h4>
+    <div class="row g-4 mb-5">
+      <div class="col-md-4">
+        <div class="card article-card h-100 p-3" onclick="openModal()">
+          <span class="badge bg-success mb-2 w-auto align-self-start">E-Waste</span>
+          <h5 class="fw-bold">ขยะอิเล็กทรอนิกส์ไปไหนต่อ?</h5>
+          <p class="text-muted small">ขั้นตอนการรีไซเคิลมือถือและคอมพิวเตอร์อย่างปลอดภัย...</p>
+          <span class="text-success small fw-bold mt-auto">อ่านต่อ <i class="bi bi-arrow-right"></i></span>
         </div>
       </div>
-
-      <!-- RECYCLE CATEGORIES -->
-      <div class="d-flex justify-content-between align-items-center mb-3">
-        <div>
-          <h5 class="fw-bold mb-0">รายการรับรีไซเคิลยอดนิยม</h5>
-          <span class="text-muted small">แจ้งความประสงค์ได้ทั้ง E-Waste และพลาสติก</span>
+      <div class="col-md-4">
+        <div class="card article-card h-100 p-3" onclick="openModal()">
+          <span class="badge bg-primary mb-2 w-auto align-self-start">พลาสติก</span>
+          <h5 class="fw-bold">คัดแยกพลาสติกยังไงให้ได้ราคา</h5>
+          <p class="text-muted small">เทคนิคแยกประเภทพลาสติก PET/HDPE ก่อนส่งรีไซเคิล...</p>
+          <span class="text-success small fw-bold mt-auto">อ่านต่อ <i class="bi bi-arrow-right"></i></span>
         </div>
-        <a href="#" class="btn btn-outline-success btn-sm">แจ้งรีไซเคิล <i class="bi bi-arrow-right"></i></a>
       </div>
-      <div class="row g-3 mb-5" id="recycleGrid"></div>
+      <div class="col-md-4">
+        <div class="card article-card h-100 p-3" onclick="openModal()">
+          <span class="badge bg-warning text-dark mb-2 w-auto align-self-start">Green Points</span>
+          <h5 class="fw-bold">วิธีสะสมแต้มแลกส่วนลด</h5>
+          <p class="text-muted small">เปลี่ยนขยะให้เป็นแต้มสะสมแลกซื้อของจากพาร์ตเนอร์...</p>
+          <span class="text-success small fw-bold mt-auto">อ่านต่อ <i class="bi bi-arrow-right"></i></span>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- HOW IT WORKS -->
-  <div class="text-center my-5">
-    <h5 class="fw-bold">GreenLoop ทำงานอย่างไร</h5>
-    <span class="text-muted small">3 ขั้นตอนง่ายๆ สู่การใช้ทรัพยากรอย่างคุ้มค่า</span>
+  <!-- B. USER VIEW -->
+  <div id="userContent" class="container py-4 d-none">
+    <!-- TOP BANNER -->
+    <div class="banner-top mb-5">
+      <span class="badge-slot"><i class="bi bi-megaphone"></i> Banner Top</span>
+      <div>
+        <h2 class="fw-bold mb-2">ซื้อ-ขาย-รีไซเคิล ครบในที่เดียว</h2>
+        <p class="mb-3 opacity-75">ส่งต่อของมือสอง ลดขยะอิเล็กทรอนิกส์และพลาสติก พร้อมสะสม Green Point</p>
+        <a href="#" class="btn btn-light fw-semibold text-success shadow-sm"><i class="bi bi-recycle"></i> เริ่มรีไซเคิลเลย</a>
+      </div>
+    </div>
+
+    <!-- QUICK CATEGORIES -->
+    <div class="row g-3 mb-5">
+      <div class="col-4 col-md-2"><a href="#" class="quick-cat"><i class="bi bi-phone"></i><div class="small mt-2">โทรศัพท์</div></a></div>
+      <div class="col-4 col-md-2"><a href="#" class="quick-cat"><i class="bi bi-laptop"></i><div class="small mt-2">Notebook</div></a></div>
+      <div class="col-4 col-md-2"><a href="#" class="quick-cat"><i class="bi bi-tablet"></i><div class="small mt-2">Tablet</div></a></div>
+      <div class="col-4 col-md-2"><a href="#" class="quick-cat"><i class="bi bi-camera"></i><div class="small mt-2">กล้อง</div></a></div>
+      <div class="col-4 col-md-2"><a href="#" class="quick-cat"><i class="bi bi-cpu"></i><div class="small mt-2">E-Waste</div></a></div>
+      <div class="col-4 col-md-2"><a href="#" class="quick-cat"><i class="bi bi-droplet-half"></i><div class="small mt-2">พลาสติก</div></a></div>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-lg-12">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div>
+            <h5 class="fw-bold mb-0">สินค้าแนะนำ</h5>
+            <span class="text-muted small">อัปเดตล่าสุดจากผู้ขายในระบบ</span>
+          </div>
+          <a href="#" class="btn btn-outline-success btn-sm">ดูทั้งหมด <i class="bi bi-arrow-right"></i></a>
+        </div>
+        <div class="row g-3 mb-5" id="featuredGrid"></div>
+
+        <!-- MIDDLE BANNER -->
+        <div class="banner-middle mb-5">
+          <span class="badge-slot"><i class="bi bi-megaphone"></i> Banner Middle</span>
+          <div>
+            <h5 class="fw-bold mb-1">โปรโมชั่นพาร์ตเนอร์ประจำเดือน</h5>
+            <p class="mb-0 opacity-75 small">แลก Green Point เป็นคูปองส่วนลดจากร้านค้าพาร์ตเนอร์</p>
+          </div>
+        </div>
+
+        <!-- RECYCLE CATEGORIES -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div>
+            <h5 class="fw-bold mb-0">รายการรับรีไซเคิลยอดนิยม</h5>
+            <span class="text-muted small">แจ้งความประสงค์ได้ทั้ง E-Waste และพลาสติก</span>
+          </div>
+          <a href="#" class="btn btn-outline-success btn-sm">แจ้งรีไซเคิล <i class="bi bi-arrow-right"></i></a>
+        </div>
+        <div class="row g-3 mb-5" id="recycleGrid"></div>
+      </div>
+    </div>
+
+    <!-- HOW IT WORKS -->
+    <div class="text-center my-5">
+      <h5 class="fw-bold">GreenLoop ทำงานอย่างไร</h5>
+      <span class="text-muted small">3 ขั้นตอนง่ายๆ สู่การใช้ทรัพยากรอย่างคุ้มค่า</span>
+    </div>
+    <div class="row g-4 text-center mb-5">
+      <div class="col-md-4">
+        <div class="step-circle">1</div>
+        <h6 class="fw-semibold">เลือกสิ่งที่ต้องการ</h6>
+        <p class="small text-muted">ซื้อขายสินค้ามือสอง หรือแจ้งรีไซเคิล E-Waste/พลาสติก</p>
+      </div>
+      <div class="col-md-4">
+        <div class="step-circle">2</div>
+        <h6 class="fw-semibold">ดำเนินการผ่านระบบ</h6>
+        <p class="small text-muted">ชำระผ่าน Wallet หรือส่งของเข้าสู่กระบวนการรีไซเคิล</p>
+      </div>
+      <div class="col-md-4">
+        <div class="step-circle">3</div>
+        <h6 class="fw-semibold">รับ Green Point</h6>
+        <p class="small text-muted">สะสมคะแนนแลกส่วนลด คูปอง และของรางวัล</p>
+      </div>
+    </div>
   </div>
-  <div class="row g-4 text-center mb-5">
-    <div class="col-md-4">
-      <div class="step-circle">1</div>
-      <h6 class="fw-semibold">เลือกสิ่งที่ต้องการ</h6>
-      <p class="small text-muted">ซื้อขายสินค้ามือสอง หรือแจ้งรีไซเคิล E-Waste/พลาสติก</p>
-    </div>
-    <div class="col-md-4">
-      <div class="step-circle">2</div>
-      <h6 class="fw-semibold">ดำเนินการผ่านระบบ</h6>
-      <p class="small text-muted">ชำระผ่าน Wallet หรือส่งของเข้าสู่กระบวนการรีไซเคิล</p>
-    </div>
-    <div class="col-md-4">
-      <div class="step-circle">3</div>
-      <h6 class="fw-semibold">รับ Green Point</h6>
-      <p class="small text-muted">สะสมคะแนนแลกส่วนลด คูปอง และของรางวัล</p>
-    </div>
-  </div>
-</div>
+</main>
 
 <!-- FOOTER -->
-<footer class="py-4 mt-5 text-center">
+<footer class="py-4 text-center mt-auto">
   <div class="container"><p class="small mb-0">&copy; 2026 GreenLoop. All rights reserved.</p></div>
 </footer>
 
