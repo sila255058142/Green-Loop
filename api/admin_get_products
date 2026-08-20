@@ -1,0 +1,31 @@
+<?php
+// api/admin_get_products.php — ดึงสินค้าทุกสถานะ (ไม่กรองเหมือน get_products.php ของฝั่งลูกค้า)
+session_start();
+header('Content-Type: application/json; charset=UTF-8');
+require_once '../db.php';
+
+if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
+    http_response_code(401);
+    echo json_encode(['success' => false, 'message' => 'ไม่มีสิทธิ์เข้าถึง']);
+    exit;
+}
+
+try {
+    $stmt = $pdo->query("
+        SELECT p.id, p.title, p.category, p.price, p.status, p.created_at, u.username AS seller
+        FROM `Products` p
+        LEFT JOIN users u ON u.id = p.user_id
+        ORDER BY p.created_at DESC
+    ");
+    $products = $stmt->fetchAll();
+    foreach ($products as &$p) {
+        $p['price'] = (float) $p['price'];
+    }
+    unset($p);
+
+    echo json_encode(['success' => true, 'products' => $products]);
+} catch (Throwable $e) {
+    http_response_code(500);
+    error_log($e->getMessage());
+    echo json_encode(['success' => false, 'message' => 'โหลดรายการสินค้าไม่สำเร็จ']);
+}

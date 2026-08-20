@@ -2,7 +2,7 @@
     // api/wallet/history.php?user_id=1
     // คืนยอดคงเหลือปัจจุบัน + ประวัติรายการทั้งหมดของผู้ใช้
     header('Content-Type: application/json; charset=utf-8');
-    require_once '../db.php';
+    require_once '../../db.php';
 
     $userId = isset($_GET['user_id']) ? (int)$_GET['user_id'] : 0;
 

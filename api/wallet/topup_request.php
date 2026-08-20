@@ -37,7 +37,7 @@ try {
         throw new RuntimeException('รองรับเฉพาะไฟล์ JPG, PNG และ WebP');
     }
 
-    $directory = __DIR__ . '/../../uploads/slips';
+    $directory = __DIR__ . '/../../uploads/wallet_slips';
     if (!is_dir($directory) && !mkdir($directory, 0755, true)) {
         throw new RuntimeException('ไม่สามารถสร้างโฟลเดอร์สลิปได้');
     }
@@ -47,7 +47,7 @@ try {
         throw new RuntimeException('ไม่สามารถบันทึกสลิปได้');
     }
 
-    $slipPath = 'uploads/slips/' . $fileName;
+    $slipPath = 'uploads/wallet_slips/' . $fileName;
     $stmt = $pdo->prepare("INSERT INTO wallet_transactions (user_id, type, amount, balance_after, status, slip_image, created_at) VALUES (?, 'topup', ?, NULL, 'pending', ?, NOW())");
     $stmt->execute([$userId, $amount, $slipPath]);
 

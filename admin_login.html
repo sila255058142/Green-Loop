@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>เข้าสู่ระบบแอดมิน | GreenLoop</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+<style>
+    :root{ --gl-green:#1e8e5a; --gl-green-dark:#166847; --gl-sidebar:#0f2e20; }
+    body{
+        background: var(--gl-sidebar);
+        font-family:'Segoe UI',sans-serif;
+        min-height:100vh;
+        display:flex; align-items:center; justify-content:center;
+    }
+    .admin-login-card{
+        background:#fff; border-radius:16px; padding:2.5rem; width:100%; max-width:380px;
+        box-shadow:0 10px 40px rgba(0,0,0,.25);
+    }
+    .brand{ text-align:center; margin-bottom:1.5rem; color:var(--gl-sidebar); }
+    .brand i{ font-size:2rem; color:var(--gl-green); }
+    .btn-gl-primary{ background:var(--gl-green); border-color:var(--gl-green); color:#fff; }
+    .btn-gl-primary:hover{ background:var(--gl-green-dark); border-color:var(--gl-green-dark); color:#fff; }
+    #loginError{ display:none; }
+</style>
+</head>
+<body>
+
+<div class="admin-login-card">
+    <div class="brand">
+        <i class="bi bi-recycle"></i>
+        <h5 class="fw-bold mt-2 mb-0">GreenLoop Admin</h5>
+        <small class="text-muted">เข้าสู่ระบบด้วยบัญชีผู้ดูแลระบบ</small>
+    </div>
+
+    <div class="alert alert-danger py-2 small" id="loginError"></div>
+
+    <form id="adminLoginForm">
+        <div class="mb-3">
+            <label class="form-label small fw-semibold">อีเมล</label>
+            <input type="email" class="form-control" id="adminEmail" required autofocus>
+        </div>
+        <div class="mb-3">
+            <label class="form-label small fw-semibold">รหัสผ่าน</label>
+            <input type="password" class="form-control" id="adminPassword" required>
+        </div>
+        <button type="submit" class="btn btn-gl-primary w-100 py-2 fw-semibold" id="adminLoginBtn">
+            เข้าสู่ระบบ
+        </button>
+    </form>
+</div>
+
+<script>
+document.getElementById('adminLoginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const errorBox = document.getElementById('loginError');
+    const btn = document.getElementById('adminLoginBtn');
+    errorBox.style.display = 'none';
+    btn.disabled = true;
+    btn.textContent = 'กำลังตรวจสอบ...';
+
+    try {
+        const res = await fetch('api/admin_login.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                email: document.getElementById('adminEmail').value.trim(),
+                password: document.getElementById('adminPassword').value
+            })
+        });
+        const result = await res.json();
+
+        if (result.success) {
+            window.location.href = 'admin-dashboard.php';
+        } else {
+            errorBox.textContent = result.message || 'เข้าสู่ระบบไม่สำเร็จ';
+            errorBox.style.display = 'block';
+        }
+    } catch (err) {
+        errorBox.textContent = 'ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้';
+        errorBox.style.display = 'block';
+    } finally {
+        btn.disabled = false;
+        btn.textContent = 'เข้าสู่ระบบ';
+    }
+});
+</script>
+</body>
+</html>

@@ -2,7 +2,7 @@
 // api/admin/topup_action.php
 // { "id": 12, "action": "approve" | "reject", "note": "...", "admin_name": "Admin" }
 header('Content-Type: application/json; charset=utf-8');
-require_once '../db.php';
+require_once '../../db.php';
 
 $input = json_decode(file_get_contents('php://input'), true);
 

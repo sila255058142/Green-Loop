@@ -1,7 +1,7 @@
     <?php
     // api/admin/topup_requests.php?status=pending|approved|rejected|all
     header('Content-Type: application/json; charset=utf-8');
-    require_once '../db.php';
+    require_once '../../db.php';
 
     $status = isset($_GET['status']) ? $_GET['status'] : 'pending';
     $allowed = ['pending', 'approved', 'rejected', 'all'];

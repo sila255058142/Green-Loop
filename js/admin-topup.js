@@ -10,17 +10,29 @@ const ADMIN_NAME = 'Admin'; // เปลี่ยนเป็นชื่อแ�
 let currentTopupFilter = 'pending';
 
 function adminStatusLabel(status) {
-    const map = { pending: 'รอตรวจสอบ', approved: 'อนุมัติแล้ว', rejected: 'ถูกปฏิเสธ' };
+    const map = {
+        pending: 'รอตรวจสอบ',
+        approved: 'อนุมัติแล้ว',
+        rejected: 'ถูกปฏิเสธ',
+    };
     return map[status] || status;
 }
 
 function adminFormatMoney(n) {
-    return '฿' + Number(n).toLocaleString('th-TH', { minimumFractionDigits: 2 });
+    return (
+        '฿' + Number(n).toLocaleString('th-TH', { minimumFractionDigits: 2 })
+    );
 }
 
 function adminFormatDate(str) {
     const d = new Date(str.replace(' ', 'T'));
-    return d.toLocaleString('th-TH', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+    return d.toLocaleString('th-TH', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+    });
 }
 
 async function loadTopupRequests(status = currentTopupFilter) {
@@ -28,10 +40,13 @@ async function loadTopupRequests(status = currentTopupFilter) {
     const listEl = document.getElementById('topupList');
     if (!listEl) return;
 
-    listEl.innerHTML = '<div class="text-center text-muted py-4"><span class="spinner-border spinner-border-sm"></span> กำลังโหลด...</div>';
+    listEl.innerHTML =
+        '<div class="text-center text-muted py-4"><span class="spinner-border spinner-border-sm"></span> กำลังโหลด...</div>';
 
     try {
-        const res = await fetch(`${ADMIN_API_BASE}/topup_requests.php?status=${status}`);
+        const res = await fetch(
+            `${ADMIN_API_BASE}/topup_request.php?status=${status}`,
+        );
         const data = await res.json();
 
         if (!data.success) {
@@ -46,7 +61,8 @@ async function loadTopupRequests(status = currentTopupFilter) {
         if (countEl) countEl.textContent = `พบ ${data.requests.length} รายการ`;
 
         if (data.requests.length === 0) {
-            listEl.innerHTML = '<div class="text-center text-muted py-4"><i class="bi bi-inbox fs-2"></i><div class="small mt-2">ไม่มีรายการ</div></div>';
+            listEl.innerHTML =
+                '<div class="text-center text-muted py-4"><i class="bi bi-inbox fs-2"></i><div class="small mt-2">ไม่มีรายการ</div></div>';
             return;
         }
 
@@ -57,7 +73,9 @@ async function loadTopupRequests(status = currentTopupFilter) {
                 <th>ผู้ใช้</th><th>จำนวนเงิน</th><th>สลิป</th><th>วันที่แจ้ง</th><th>สถานะ</th><th class="text-end">จัดการ</th>
             </tr></thead>
             <tbody>
-                ${data.requests.map((r) => `
+                ${data.requests
+                    .map(
+                        (r) => `
                 <tr>
                     <td>
                         <div class="fw-semibold">${r.username}</div>
@@ -65,34 +83,51 @@ async function loadTopupRequests(status = currentTopupFilter) {
                     </td>
                     <td class="fw-bold text-success">${adminFormatMoney(r.amount)}</td>
                     <td>
-                        ${r.slip_image
-                            ? `<a href="${r.slip_image}" target="_blank" class="btn btn-sm btn-outline-secondary"><i class="bi bi-image"></i> ดูสลิป</a>`
-                            : '<span class="text-muted small">-</span>'}
+                        ${
+                            r.slip_image
+                                ? `<a href="${r.slip_image}" target="_blank" class="btn btn-sm btn-outline-secondary"><i class="bi bi-image"></i> ดูสลิป</a>`
+                                : '<span class="text-muted small">-</span>'
+                        }
                     </td>
                     <td class="small">${adminFormatDate(r.created_at)}</td>
                     <td><span class="badge ${r.status === 'pending' ? 'bg-warning text-dark' : r.status === 'approved' ? 'bg-success' : 'bg-danger'}">${adminStatusLabel(r.status)}</span></td>
                     <td class="text-end">
-                        ${r.status === 'pending' ? `
+                        ${
+                            r.status === 'pending'
+                                ? `
                         <button class="action-btn me-1" title="อนุมัติ" onclick="reviewTopup(${r.id}, 'approve')"><i class="bi bi-check-lg text-success"></i></button>
                         <button class="action-btn danger" title="ปฏิเสธ" onclick="reviewTopup(${r.id}, 'reject')"><i class="bi bi-x-lg"></i></button>
-                        ` : `<span class="text-muted small">${r.reviewed_by || ''}</span>`}
+                        `
+                                : `<span class="text-muted small">${r.reviewed_by || ''}</span>`
+                        }
                     </td>
-                </tr>`).join('')}
+                </tr>`,
+                    )
+                    .join('')}
             </tbody>
         </table>
         </div>`;
     } catch (e) {
-        listEl.innerHTML = '<div class="text-center text-danger py-4">เชื่อมต่อเซิร์ฟเวอร์ไม่สำเร็จ</div>';
+        listEl.innerHTML =
+            '<div class="text-center text-danger py-4">เชื่อมต่อเซิร์ฟเวอร์ไม่สำเร็จ</div>';
     }
 }
 
 async function reviewTopup(id, action) {
     let note = null;
     if (action === 'reject') {
-        note = prompt('ระบุเหตุผลที่ปฏิเสธ (ไม่บังคับ):', 'สลิปไม่ชัดเจน / ยอดเงินไม่ตรง');
+        note = prompt(
+            'ระบุเหตุผลที่ปฏิเสธ (ไม่บังคับ):',
+            'สลิปไม่ชัดเจน / ยอดเงินไม่ตรง',
+        );
         if (note === null) return; // ผู้ใช้กดยกเลิก
     } else {
-        if (!confirm('ยืนยันอนุมัติคำขอเติมเงินนี้? ระบบจะเพิ่มยอดเงินเข้า Wallet ผู้ใช้ทันที')) return;
+        if (
+            !confirm(
+                'ยืนยันอนุมัติคำขอเติมเงินนี้? ระบบจะเพิ่มยอดเงินเข้า Wallet ผู้ใช้ทันที',
+            )
+        )
+            return;
     }
 
     try {
@@ -116,7 +151,7 @@ document.addEventListener('DOMContentLoaded', () => {
         navLink.addEventListener('click', () => loadTopupRequests('pending'));
     }
     // โหลด badge จำนวนรอตรวจสอบตอนเปิดหน้า admin ครั้งแรก
-    fetch(`${ADMIN_API_BASE}/topup_requests.php?status=pending`)
+    fetch(`${ADMIN_API_BASE}/topup_request.php?status=pending`)
         .then((r) => r.json())
         .then((data) => {
             const badge = document.getElementById('topupNavBadge');
@@ -128,7 +163,9 @@ document.addEventListener('DOMContentLoaded', () => {
     filterButtons.forEach((btn) => {
         btn.addEventListener('click', () => {
             filterButtons.forEach((b) => b.classList.remove('btn-success'));
-            filterButtons.forEach((b) => b.classList.add('btn-outline-success'));
+            filterButtons.forEach((b) =>
+                b.classList.add('btn-outline-success'),
+            );
             btn.classList.remove('btn-outline-success');
             btn.classList.add('btn-success');
             loadTopupRequests(btn.dataset.topupFilter);

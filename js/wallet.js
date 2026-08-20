@@ -22,12 +22,24 @@ function showToast(message, isError = false) {
 }
 
 function formatMoney(n) {
-    return '฿' + Number(n).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    return (
+        '฿' +
+        Number(n).toLocaleString('th-TH', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+        })
+    );
 }
 
 function formatDate(str) {
     const d = new Date(str.replace(' ', 'T'));
-    return d.toLocaleString('th-TH', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+    return d.toLocaleString('th-TH', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+    });
 }
 
 function statusLabel(status) {
@@ -42,12 +54,30 @@ function statusLabel(status) {
 
 function txMeta(type, status) {
     if (type === 'topup') {
-        return { icon: 'bi-arrow-down-circle-fill', color: '#1e8e5a', sign: '+', amountClass: 'tx-amount-in', label: 'เติมเงิน' };
+        return {
+            icon: 'bi-arrow-down-circle-fill',
+            color: '#1e8e5a',
+            sign: '+',
+            amountClass: 'tx-amount-in',
+            label: 'เติมเงิน',
+        };
     }
     if (type === 'refund') {
-        return { icon: 'bi-arrow-counterclockwise', color: '#0d7bb5', sign: '+', amountClass: 'tx-amount-in', label: 'คืนเงิน' };
+        return {
+            icon: 'bi-arrow-counterclockwise',
+            color: '#0d7bb5',
+            sign: '+',
+            amountClass: 'tx-amount-in',
+            label: 'คืนเงิน',
+        };
     }
-    return { icon: 'bi-cart-check-fill', color: '#e03131', sign: '-', amountClass: 'tx-amount-out', label: 'ชำระเงินซื้อสินค้า' };
+    return {
+        icon: 'bi-cart-check-fill',
+        color: '#e03131',
+        sign: '-',
+        amountClass: 'tx-amount-out',
+        label: 'ชำระเงินซื้อสินค้า',
+    };
 }
 
 async function loadWallet() {
@@ -58,10 +88,13 @@ async function loadWallet() {
         return;
     }
 
-    document.getElementById('userNameLabel').textContent = user.username || user.email || '';
+    document.getElementById('userNameLabel').textContent =
+        user.username || user.email || '';
 
     try {
-        const res = await fetch(`${API_BASE}/wallet/history.php?user_id=${user.id}`);
+        const res = await fetch(
+            `${API_BASE}/wallet/history.php?user_id=${user.id}`,
+        );
         const data = await res.json();
 
         if (!data.success) {
@@ -69,7 +102,9 @@ async function loadWallet() {
             return;
         }
 
-        document.getElementById('balanceValue').textContent = formatMoney(data.balance);
+        document.getElementById('balanceValue').textContent = formatMoney(
+            data.balance,
+        );
 
         // sync ค่าล่าสุดกลับเข้า localStorage เผื่อหน้าอื่นอ่านต่อ
         user.walletBalance = data.balance;
@@ -85,13 +120,15 @@ function renderHistory(transactions) {
     const container = document.getElementById('historyList');
 
     if (!transactions || transactions.length === 0) {
-        container.innerHTML = '<div class="empty-state"><i class="bi bi-inbox fs-1"></i><div class="small mt-2">ยังไม่มีรายการ</div></div>';
+        container.innerHTML =
+            '<div class="empty-state"><i class="bi bi-inbox fs-1"></i><div class="small mt-2">ยังไม่มีรายการ</div></div>';
         return;
     }
 
-    container.innerHTML = transactions.map((tx) => {
-        const meta = txMeta(tx.type, tx.status);
-        return `
+    container.innerHTML = transactions
+        .map((tx) => {
+            const meta = txMeta(tx.type, tx.status);
+            return `
         <div class="tx-item">
             <div class="tx-icon" style="background:${meta.color}"><i class="bi ${meta.icon}"></i></div>
             <div class="flex-grow-1">
@@ -106,11 +143,14 @@ function renderHistory(transactions) {
                 ${tx.note ? `<div class="text-muted small mt-1"><i class="bi bi-chat-left-text"></i> ${tx.note}</div>` : ''}
             </div>
         </div>`;
-    }).join('');
+        })
+        .join('');
 }
 
 function copyAccNo() {
-    navigator.clipboard.writeText('1234567890').then(() => showToast('คัดลอกเลขบัญชีแล้ว'));
+    navigator.clipboard
+        .writeText('1234567890')
+        .then(() => showToast('คัดลอกเลขบัญชีแล้ว'));
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -119,7 +159,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // quick amount buttons
     document.querySelectorAll('.quick-amt').forEach((btn) => {
         btn.addEventListener('click', () => {
-            document.querySelectorAll('.quick-amt').forEach((b) => b.classList.remove('active'));
+            document
+                .querySelectorAll('.quick-amt')
+                .forEach((b) => b.classList.remove('active'));
             btn.classList.add('active');
             document.getElementById('amountInput').value = btn.dataset.amt;
         });
@@ -140,56 +182,70 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // submit top-up
-    document.getElementById('topupForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const user = getCurrentUser();
-        if (!user || !user.id) {
-            showToast('กรุณาเข้าสู่ระบบก่อนทำรายการ', true);
-            return;
-        }
-
-        const amount = document.getElementById('amountInput').value;
-        const slipFile = document.getElementById('slipInput').files[0];
-
-        if (!amount || Number(amount) < 20) {
-            showToast('กรุณาระบุจำนวนเงินขั้นต่ำ 20 บาท', true);
-            return;
-        }
-        if (!slipFile) {
-            showToast('กรุณาแนบรูปสลิปการโอนเงิน', true);
-            return;
-        }
-
-        const submitBtn = document.getElementById('submitTopupBtn');
-        submitBtn.disabled = true;
-        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> กำลังส่งคำขอ...';
-
-        const formData = new FormData();
-        formData.append('user_id', user.id);
-        formData.append('amount', amount);
-        formData.append('slip', slipFile);
-
-        try {
-            const res = await fetch(`${API_BASE}/wallet/topup_request.php`, { method: 'POST', body: formData });
-            const data = await res.json();
-
-            if (data.success) {
-                showToast(data.message);
-                document.getElementById('topupForm').reset();
-                document.getElementById('slipPlaceholder').classList.remove('d-none');
-                document.getElementById('slipPreview').classList.add('d-none');
-                document.querySelectorAll('.quick-amt').forEach((b) => b.classList.remove('active'));
-                loadWallet();
-            } else {
-                showToast(data.message || 'ส่งคำขอไม่สำเร็จ', true);
+    document
+        .getElementById('topupForm')
+        .addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const user = getCurrentUser();
+            if (!user || !user.id) {
+                showToast('กรุณาเข้าสู่ระบบก่อนทำรายการ', true);
+                return;
             }
-        } catch (err) {
-            showToast('เชื่อมต่อเซิร์ฟเวอร์ไม่สำเร็จ', true);
-        } finally {
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = '<i class="bi bi-send-check"></i> ส่งคำขอเติมเงิน';
-        }
-    });
+
+            const amount = document.getElementById('amountInput').value;
+            const slipFile = document.getElementById('slipInput').files[0];
+
+            if (!amount || Number(amount) < 20) {
+                showToast('กรุณาระบุจำนวนเงินขั้นต่ำ 20 บาท', true);
+                return;
+            }
+            if (!slipFile) {
+                showToast('กรุณาแนบรูปสลิปการโอนเงิน', true);
+                return;
+            }
+
+            const submitBtn = document.getElementById('submitTopupBtn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML =
+                '<span class="spinner-border spinner-border-sm"></span> กำลังส่งคำขอ...';
+
+            const formData = new FormData();
+            formData.append('user_id', user.id);
+            formData.append('amount', amount);
+            formData.append('slip', slipFile);
+
+            try {
+                const res = await fetch(
+                    `${API_BASE}/wallet/topup_request.php`,
+                    { method: 'POST', body: formData },
+                );
+                const data = await res.json();
+
+                if (data.success) {
+                    showToast(data.message);
+                    document.getElementById('topupForm').reset();
+                    document
+                        .getElementById('slipPlaceholder')
+                        .classList.remove('d-none');
+                    document
+                        .getElementById('slipPreview')
+                        .classList.add('d-none');
+                    document
+                        .querySelectorAll('.quick-amt')
+                        .forEach((b) => b.classList.remove('active'));
+                    loadWallet();
+                } else {
+                    showToast(data.message || 'ส่งคำขอไม่สำเร็จ', true);
+                }
+            } catch (err) {
+                console.error('Top-up error:', err);
+                showToast(err.message || 'เชื่อมต่อเซิร์ฟเวอร์ไม่สำเร็จ', true);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML =
+                    '<i class="bi bi-send-check"></i> ส่งคำขอเติมเงิน';
+            }
+        });
 });
 
 // ---------------------------------------------------------------

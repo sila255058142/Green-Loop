@@ -1,3 +1,4 @@
+    
     <!DOCTYPE html>
     <html lang="th">
     <head>
@@ -126,6 +127,7 @@
         <a class="nav-link active" data-section="overview"><i class="bi bi-grid-1x2-fill"></i> ภาพรวม</a>
         <a class="nav-link" data-section="members"><i class="bi bi-people-fill"></i> สมาชิก</a>
         <a class="nav-link" data-section="products"><i class="bi bi-bag-fill"></i> สินค้า</a>
+        <a class="nav-link" data-section="topup"><i class="bi bi-wallet2"></i> คำขอเติมเงิน <span class="badge rounded-pill bg-danger" id="topupNavBadge">0</span></a>
         <a class="nav-link" data-section="recycle"><i class="bi bi-arrow-repeat"></i> คำขอรีไซเคิล</a>
         <a class="nav-link" data-section="articles"><i class="bi bi-file-earmark-text-fill"></i> บทความ</a>
         <a class="nav-link" data-section="notifications">
@@ -264,6 +266,24 @@
                 <tbody id="productsTableBody"></tbody>
             </table>
             </div>
+        </div>
+        </section>
+
+        <!-- ============ TOPUP REQUESTS ============ -->
+        <section class="admin-section" id="section-topup">
+        <div class="panel">
+            <div class="panel-header">
+            <div>
+                <h6 class="fw-bold mb-0">คำขอเติมเงิน</h6>
+                <span class="text-muted small" id="topupCount">กำลังโหลด...</span>
+            </div>
+            <div class="d-flex gap-2">
+                <button class="btn btn-success btn-sm" data-topup-filter="pending">รอตรวจสอบ</button>
+                <button class="btn btn-outline-success btn-sm" data-topup-filter="approved">อนุมัติแล้ว</button>
+                <button class="btn btn-outline-success btn-sm" data-topup-filter="rejected">ปฏิเสธ</button>
+            </div>
+            </div>
+            <div id="topupList"></div>
         </div>
         </section>
 
@@ -519,5 +539,6 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/js/bootstrap.bundle.min.js"></script>
     <script src="js/admin-dashboard.js"></script>
+    <script src="js/admin-topup.js"></script>
     </body>
     </html>
