@@ -1,6 +1,6 @@
 /**
  * GreenLoop - marketplace.js
- * Logic สำหรับหน้า Marketplace: render สินค้า, กรองตามหมวดหมู่ และการสั่งซื้อ
+ * Logic สำหรับหน้า Marketplace: render สินค้า, กรองตามหมวดหมู่, แบ่งหน้า (pagination) และการสั่งซื้อ
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -16,26 +16,35 @@ document.addEventListener('DOMContentLoaded', () => {
         { id: 7, title: 'หูฟังไร้สาย Sony WH-1000XM4', price: 5500, condition: 'สภาพดี', category: 'accessory', image: 'https://placehold.co/300x200?text=Sony+XM4' },
         { id: 8, title: 'หูฟังไร้สาย Sony WH-1000XM4', price: 5500, condition: 'สภาพดี', category: 'accessory', image: 'https://placehold.co/300x200?text=Sony+XM4' },
         { id: 9, title: 'หูฟังไร้สาย Sony WH-1000XM4', price: 5500, condition: 'สภาพดี', category: 'accessory', image: 'https://placehold.co/300x200?text=Sony+XM4' },
-
     ];
 
-    const productGrid     = document.getElementById('productGrid');
-    const resultCount     = document.getElementById('resultCount');
-    const categoryFilters = document.getElementById('categoryFilters');
+    const ITEMS_PER_PAGE = 6;
 
-    function renderProducts(products) {
-        if (!productGrid) return;
+    const productTrack     = document.getElementById('productTrack');
+    const resultCount      = document.getElementById('resultCount');
+    const categoryFilters  = document.getElementById('categoryFilters');
+    const prevPageBtn      = document.getElementById('prevPageBtn');
+    const nextPageBtn      = document.getElementById('nextPageBtn');
 
-        if (products.length === 0) {
-            productGrid.innerHTML = `
-                <div class="col-12 text-center text-muted py-5">
-                    <h5>ไม่พบสินค้าในหมวดหมู่นี้</h5>
-                </div>`;
-            if (resultCount) resultCount.textContent = 'พบ 0 รายการ';
-            return;
+    let currentCategory = 'all';
+    let currentPageIndex = 0; // 0-based
+
+    function getFilteredProducts() {
+        return currentCategory === 'all'
+            ? sampleProducts
+            : sampleProducts.filter(p => p.category === currentCategory);
+    }
+
+    function chunkIntoPages(items) {
+        const pages = [];
+        for (let i = 0; i < items.length; i += ITEMS_PER_PAGE) {
+            pages.push(items.slice(i, i + ITEMS_PER_PAGE));
         }
+        return pages.length ? pages : [[]];
+    }
 
-        productGrid.innerHTML = products.map(p => `
+    function renderProductCard(p) {
+        return `
         <div class="col-6 col-md-4">
             <div class="card product-card h-100 d-flex flex-column justify-content-between">
                 <div>
@@ -61,15 +70,62 @@ document.addEventListener('DOMContentLoaded', () => {
                     </button>
                 </div>
             </div>
-        </div>
+        </div>`;
+    }
+
+    function renderProducts() {
+        if (!productTrack) return;
+
+        const filtered = getFilteredProducts();
+
+        if (resultCount) resultCount.textContent = `พบ ${filtered.length} รายการ`;
+
+        if (filtered.length === 0) {
+            productTrack.style.transform = 'translateX(0%)';
+            productTrack.innerHTML = `
+                <div class="carousel-page">
+                    <div class="row g-3">
+                        <div class="col-12 text-center text-muted py-5">
+                            <h5>ไม่พบสินค้าในหมวดหมู่นี้</h5>
+                        </div>
+                    </div>
+                </div>`;
+            updateArrowStates(0, 1);
+            return;
+        }
+
+        const pages = chunkIntoPages(filtered);
+        if (currentPageIndex > pages.length - 1) currentPageIndex = pages.length - 1;
+
+        productTrack.innerHTML = pages.map(pageItems => `
+            <div class="carousel-page">
+                <div class="row g-3">
+                    ${pageItems.map(renderProductCard).join('')}
+                </div>
+            </div>
         `).join('');
 
-        if (resultCount) resultCount.textContent = `พบ ${products.length} รายการ`;
+        goToPage(currentPageIndex, pages.length, true);
+    }
+
+    function goToPage(index, totalPages, skipScroll) {
+        currentPageIndex = Math.max(0, Math.min(index, totalPages - 1));
+        productTrack.style.transform = `translateX(-${currentPageIndex * 100}%)`;
+        updateArrowStates(currentPageIndex, totalPages);
+
+        if (!skipScroll) {
+            productTrack.closest('.carousel-shell').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
+
+    function updateArrowStates(index, totalPages) {
+        if (prevPageBtn) prevPageBtn.disabled = index <= 0;
+        if (nextPageBtn) nextPageBtn.disabled = index >= totalPages - 1;
     }
 
     // Favorite toggle (event delegation)
-    if (productGrid) {
-        productGrid.addEventListener('click', (e) => {
+    if (productTrack) {
+        productTrack.addEventListener('click', (e) => {
             const btn = e.target.closest('[data-action="toggle-fav"]');
             if (!btn) return;
             const icon = btn.querySelector('i');
@@ -85,14 +141,28 @@ document.addEventListener('DOMContentLoaded', () => {
             [...categoryFilters.children].forEach(btn => btn.classList.replace('btn-success', 'btn-outline-secondary'));
             e.target.classList.replace('btn-outline-secondary', 'btn-success');
 
-            const cat = e.target.dataset.cat;
-            const filtered = cat === 'all' ? sampleProducts : sampleProducts.filter(p => p.category === cat);
-            renderProducts(filtered);
+            currentCategory = e.target.dataset.cat;
+            currentPageIndex = 0; // รีเซ็ตกลับหน้าแรกทุกครั้งที่เปลี่ยนหมวดหมู่
+            renderProducts();
+        });
+    }
+
+    // Arrow navigation
+    if (prevPageBtn) {
+        prevPageBtn.addEventListener('click', () => {
+            const totalPages = chunkIntoPages(getFilteredProducts()).length;
+            goToPage(currentPageIndex - 1, totalPages);
+        });
+    }
+    if (nextPageBtn) {
+        nextPageBtn.addEventListener('click', () => {
+            const totalPages = chunkIntoPages(getFilteredProducts()).length;
+            goToPage(currentPageIndex + 1, totalPages);
         });
     }
 
     // แสดงผลข้อมูลเริ่มต้น
-    renderProducts(sampleProducts);
+    renderProducts();
 });
 
 // ฟังก์ชันส่งข้อมูลการสั่งซื้อ
