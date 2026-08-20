@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ยืนยันการสั่งซื้อ | GreenLoop</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <style>
+        :root { --gl-green: #1e8e5a; --gl-green-dark: #166847; }
+        body { background: #f5f7f6; font-family: 'Segoe UI', sans-serif; }
+        .gl-navbar { background: var(--gl-green-dark); }
+        .checkout-card { border: none; border-radius: 14px; box-shadow: 0 2px 12px rgba(0,0,0,.05); }
+    </style>
+</head>
+<body>
+
+<nav class="navbar gl-navbar navbar-dark py-3 mb-4">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="index.html"><i class="bi bi-recycle"></i> GreenLoop</a>
+    </div>
+</nav>
+
+<div class="container py-3">
+    <h4 class="fw-bold mb-4"><i class="bi bi-bag-check me-2"></i>ยืนยันคำสั่งซื้อ</h4>
+    
+    <div class="row g-4">
+        <!-- รายละเอียดสินค้าและแบบฟอร์ม -->
+        <div class="col-md-7">
+            <!-- ข้อมูลสินค้า -->
+            <div class="card checkout-card p-4 mb-3">
+                <h6 class="fw-bold mb-3">รายการสินค้า</h6>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 id="productTitle" class="fw-bold mb-1">กำลังโหลด...</h6>
+                        <small class="text-muted">รหัสสินค้า: #<span id="productId">-</span></small>
+                    </div>
+                    <div class="fw-bold text-success fs-5">฿<span id="productPrice">0</span></div>
+                </div>
+            </div>
+
+            <!-- ข้อมูลการจัดส่ง -->
+            <div class="card checkout-card p-4">
+                <h6 class="fw-bold mb-3">ข้อมูลการจัดส่ง</h6>
+                <form id="checkoutForm">
+                    <div class="mb-3">
+                        <label class="form-label">ชื่อ-นามสกุล</label>
+                        <input type="text" class="form-control" id="custName" required placeholder="สมชาย ใจดี">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">เบอร์โทรศัพท์</label>
+                        <input type="tel" class="form-control" id="custPhone" required placeholder="0812345678">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">ที่อยู่จัดส่ง</label>
+                        <textarea class="form-control" id="custAddress" rows="3" required placeholder="บ้านเลขที่, ถนน, แขวง/ตำบล..."></textarea>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- สรุปยอดและปุ่มชำระเงิน -->
+        <div class="col-md-5">
+            <div class="card checkout-card p-4">
+                <h6 class="fw-bold mb-3">สรุปยอดชำระ</h6>
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="text-muted">ราคาสินค้า</span>
+                    <span>฿<span id="summaryPrice">0</span></span>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="text-muted">ค่าจัดส่ง</span>
+                    <span class="text-success">ฟรี</span>
+                </div>
+                <hr>
+                <div class="d-flex justify-content-between mb-4">
+                    <span class="fw-bold">ยอดชำระสุทธิ</span>
+                    <span class="fw-bold fs-4 text-success">฿<span id="totalPrice">0</span></span>
+                </div>
+
+                <button type="button" class="btn w-100 py-2 text-white fw-bold" 
+                        style="background: var(--gl-green);" onclick="submitOrder()">
+                    ยืนยันสั่งซื้อและบันทึกข้อมูล
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let currentProduct = {};
+
+    // 1. ดึงข้อมูลจาก URL เมื่อเปิดหน้า checkout.html
+    document.addEventListener('DOMContentLoaded', () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        
+        currentProduct = {
+            id: urlParams.get('id'),
+            title: urlParams.get('title'),
+            price: parseFloat(urlParams.get('price') || 0)
+        };
+
+        // แสดงผลบนหน้าจอ
+        if (currentProduct.id) {
+            document.getElementById('productId').textContent = currentProduct.id;
+            document.getElementById('productTitle').textContent = currentProduct.title;
+            document.getElementById('productPrice').textContent = currentProduct.price.toLocaleString();
+            document.getElementById('summaryPrice').textContent = currentProduct.price.toLocaleString();
+            document.getElementById('totalPrice').textContent = currentProduct.price.toLocaleString();
+        }
+    });
+
+    // 2. ฟังก์ชันยืนยันคำสั่งซื้อเพื่อบันทึกลง Database
+    async function submitOrder() {
+        const name = document.getElementById('custName').value;
+        const phone = document.getElementById('custPhone').value;
+        const address = document.getElementById('custAddress').value;
+
+        if (!name || !phone || !address) {
+            alert('กรุณากรอกข้อมูลการจัดส่งให้ครบถ้วน');
+            return;
+        }
+
+        const payload = {
+            product_id: currentProduct.id,
+            price: currentProduct.price,
+            customer_name: name,
+            customer_phone: phone,
+            customer_address: address,
+            created_at: new Date().toISOString()
+        };
+
+        try {
+            // ส่งข้อมูลไปบันทึกที่ Backend API
+            const response = await fetch('api/create_order.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            const result = await response.json();
+
+            if (response.ok && result.success) {
+                alert('สั่งซื้อสำเร็จ! บันทึกข้อมูลเรียบร้อยแล้ว');
+                window.location.href = 'index.html'; // กลับหน้าหลัก
+            } else {
+                alert('เกิดข้อผิดพลาดในการบันทึก: ' + (result.message || ''));
+            }
+        } catch (error) {
+            // กรณีจำลองระบบถ้ายังไม่ได้ต่อ API จริง
+            console.log('Order Payload:', payload);
+            alert('[จำลองการสั่งซื้อ] บันทึกคำสั่งซื้อเรียบร้อยแล้ว!');
+            window.location.href = 'index.html';
+        }
+    }
+</script>
+
+</body>
+</html>
