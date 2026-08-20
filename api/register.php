@@ -21,7 +21,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$username, $email, $firstName, $lastName, $passwordHash]);
 
-        echo json_encode(["success" => true, "message" => "ลงทะเบียนสำเร็จ"]);
+        // ✅ ส่ง redirect: "login" กลับไปให้ JavaScript
+        echo json_encode([
+            "success" => true, 
+            "message" => "ลงทะเบียนสำเร็จ! กรุณาเข้าสู่ระบบ",
+            "redirect" => "login"
+        ]);
     } catch (PDOException $e) {
         echo json_encode(["success" => false, "message" => "อีเมลหรือ Username นี้ถูกใช้งานแล้ว"]);
     }

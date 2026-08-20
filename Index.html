@@ -993,16 +993,9 @@
                 }
             }
 
-            function handleLogin(e) {
-                e.preventDefault();
-                localStorage.setItem('isLoggedIn', 'true');
-                closeModal();
-                closeRegisterModal();
-                updateUI();
-            }
-
             function logout() {
                 localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('user');
                 updateUI();
             }
 
