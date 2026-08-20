@@ -112,14 +112,6 @@
       <i class="bi bi-recycle"></i> GreenLoop
     </a>
 
-    <!-- 2. SEARCH BAR -->
-    <form class="d-flex my-0 me-auto" style="max-width: 180px; min-width: 100px;">
-      <div class="input-group input-group-sm">
-        <input class="form-control px-2" type="search" placeholder="ค้นหา...">
-        <button class="btn btn-search px-2" type="submit"><i class="bi bi-search"></i></button>
-      </div>
-    </form>
-
     <!-- 3. COLLAPSIBLE MENU -->
     <div class="collapse navbar-collapse order-3 order-lg-2" id="glNavbarNav">
       <!-- GUEST NAV -->
@@ -134,11 +126,15 @@
           <li class="nav-item"><a class="nav-link" href="Marketplace.html">Market</a></li>
           <li class="nav-item"><a class="nav-link" href="Sell.html">For Sale</a></li>
           <li class="nav-item"><a class="nav-link" href="Recycle.html">Recycle</a></li>
-          <li class="nav-item"><a class="nav-link" href="GreenPoints.html">Green Points</a></li>
         </ul>
         
         <!-- PROFILE & LOGOUT -->
         <div class="d-flex align-items-center text-white gap-2 pt-2 pt-lg-0">
+          <!-- WALLET (โชว์เฉพาะ Desktop: d-none d-lg-flex) -->
+          <div class="walletDisplay text-white small fw-bold d-none d-lg-flex align-items-center text-nowrap me-2">
+            <i class="bi bi-wallet2 me-1"></i><span>฿1,250</span>
+          </div>
+
           <div class="d-flex align-items-center"><i class="bi bi-person-circle fs-5 me-1"></i> <span class="small fw-bold">My Account</span></div>
           <button type="button" onclick="logout()" class="btn btn-outline-light btn-sm ms-auto ms-lg-0">Logout</button>
         </div>
@@ -147,8 +143,8 @@
 
     <!-- 4. RIGHTMOST WRAPPER -->
     <div class="d-flex align-items-center order-2 order-lg-3 ms-2">
-      <!-- WALLET -->
-      <div id="walletDisplay" class="text-white small fw-bold d-none align-items-center text-nowrap me-2">
+      <!-- WALLET (โชว์เฉพาะ Mobile หน้า Hamburger: d-flex d-lg-none) -->
+      <div class="walletDisplay text-white small fw-bold d-flex d-lg-none align-items-center text-nowrap me-2">
         <i class="bi bi-wallet2 me-1"></i><span>฿1,250</span>
       </div>
 
@@ -159,7 +155,6 @@
     </div>
   </div>
 </nav>
-
 <!-- [ปรับแก้ไขส่วนที่ 2] เพิ่มแท็ก main ครอบเนื้อหาตรงกลางทั้งหมดเพื่อยืดพื้นที่ -->
 <main class="flex-grow-1">
   <!-- A. GUEST VIEW -->
@@ -201,12 +196,33 @@
         </div>
       </div>
     </div>
+    <div class="text-center my-5">
+      <h5 class="fw-bold">GreenLoop ทำงานอย่างไร</h5>
+      <span class="text-muted small">3 ขั้นตอนง่ายๆ สู่การใช้ทรัพยากรอย่างคุ้มค่า</span>
+    </div>
+    <div class="row g-4 text-center mb-5">
+      <div class="col-md-4">
+        <div class="step-circle">1</div>
+        <h6 class="fw-semibold">เลือกสิ่งที่ต้องการ</h6>
+        <p class="small text-muted">ซื้อขายสินค้ามือสอง หรือแจ้งรีไซเคิล E-Waste/พลาสติก</p>
+      </div>
+      <div class="col-md-4">
+        <div class="step-circle">2</div>
+        <h6 class="fw-semibold">ดำเนินการผ่านระบบ</h6>
+        <p class="small text-muted">ชำระผ่าน Wallet หรือส่งของเข้าสู่กระบวนการรีไซเคิล</p>
+      </div>
+      <div class="col-md-4">
+        <div class="step-circle">3</div>
+        <h6 class="fw-semibold">รับ Green Point</h6>
+        <p class="small text-muted">สะสมคะแนนแลกส่วนลด คูปอง และของรางวัล</p>
+      </div>
+    </div>
   </div>
 
   <!-- B. USER VIEW -->
   <div id="userContent" class="container py-4 d-none">
     <!-- TOP BANNER -->
-    <div class="banner-top mb-5">
+    <div class="banner-top mx-3 mb-5">
       <span class="badge-slot"><i class="bi bi-megaphone"></i> Banner Top</span>
       <div>
         <h2 class="fw-bold mb-2">ซื้อ-ขาย-รีไซเคิล ครบในที่เดียว</h2>
@@ -216,16 +232,16 @@
     </div>
 
     <!-- QUICK CATEGORIES -->
-    <div class="row g-3 mb-5">
-      <div class="col-4 col-md-2"><a href="#" class="quick-cat"><i class="bi bi-phone"></i><div class="small mt-2">โทรศัพท์</div></a></div>
-      <div class="col-4 col-md-2"><a href="#" class="quick-cat"><i class="bi bi-laptop"></i><div class="small mt-2">Notebook</div></a></div>
-      <div class="col-4 col-md-2"><a href="#" class="quick-cat"><i class="bi bi-tablet"></i><div class="small mt-2">Tablet</div></a></div>
-      <div class="col-4 col-md-2"><a href="#" class="quick-cat"><i class="bi bi-camera"></i><div class="small mt-2">กล้อง</div></a></div>
-      <div class="col-4 col-md-2"><a href="#" class="quick-cat"><i class="bi bi-cpu"></i><div class="small mt-2">E-Waste</div></a></div>
-      <div class="col-4 col-md-2"><a href="#" class="quick-cat"><i class="bi bi-droplet-half"></i><div class="small mt-2">พลาสติก</div></a></div>
+    <div class="row mx-3 g-3 mb-5">
+      <div class="col-12 col-sm-4 col-md-2"><a href="#" class="quick-cat"><i class="bi bi-phone"></i><div class="small mt-2">โทรศัพท์</div></a></div>
+      <div class="col-12 col-sm-4 col-md-2"><a href="#" class="quick-cat"><i class="bi bi-laptop"></i><div class="small mt-2">Notebook</div></a></div>
+      <div class="col-12 col-sm-4 col-md-2"><a href="#" class="quick-cat"><i class="bi bi-tablet"></i><div class="small mt-2">Tablet</div></a></div>
+      <div class="col-12 col-sm-4 col-md-2"><a href="#" class="quick-cat"><i class="bi bi-camera"></i><div class="small mt-2">กล้อง</div></a></div>
+      <div class="col-12 col-sm-4 col-md-2"><a href="#" class="quick-cat"><i class="bi bi-cpu"></i><div class="small mt-2">E-Waste</div></a></div>
+      <div class="col-12 col-sm-4 col-md-2"><a href="#" class="quick-cat"><i class="bi bi-droplet-half"></i><div class="small mt-2">พลาสติก</div></a></div>
     </div>
 
-    <div class="row g-4">
+    <div class="row mx-3 g-4">
       <div class="col-lg-12">
         <div class="d-flex justify-content-between align-items-center mb-3">
           <div>
@@ -426,7 +442,6 @@
       
       document.getElementById('guestNav').classList.remove('d-none');
       document.getElementById('guestContent').classList.remove('d-none');
-      
       if(walletDisplay) {
         walletDisplay.classList.add('d-none');
         walletDisplay.classList.remove('d-flex');
