@@ -1,56 +1,38 @@
-/**
- * GreenLoop - index.js
- * Logic สำหรับ Render สินค้าแนะนำ และรายการรับรีไซเคิล
- */
+async function handleRegister(event) {
+    event.preventDefault(); // ป้องกันไม่ให้หน้าเว็บ รีเฟรช
+    const form = event.target;
 
-// 1. Mock Data
-const featured = [
-  { title: 'iPhone 12 128GB สีดำ', price: 9900, score: 82, image: 'https://placehold.co/300x200?text=iPhone+12' },
-  { title: 'Notebook Dell Inspiron 14"', price: 12500, score: 76, image: 'https://placehold.co/300x200?text=Dell+Notebook' },
-  { title: 'iPad Gen 9 64GB Wi-Fi', price: 8500, score: 88, image: 'https://placehold.co/300x200?text=iPad+Gen9' },
-  { title: 'กล้อง Canon EOS M50', price: 14900, score: 70, image: 'https://placehold.co/300x200?text=Canon+M50' },
-];
+    // 1. ดึงข้อมูลจากอินพุตในฟอร์ม
+    const payload = {
+        username: form.querySelector('input[name="username"]').value,
+        email: form.querySelector('input[type="email"]').value,
+        firstName: form.querySelector('input[name="firstName"]').value,
+        lastName: form.querySelector('input[name="lastName"]').value,
+        password: form.querySelector('input[type="password"]').value,
+    };
 
-const recycleItems = [
-  { title: 'มือถือ / Tablet เก่า', points: '+50', icon: 'bi-phone', color: '#1e8e5a' },
-  { title: 'แบตเตอรี่ / อุปกรณ์ไฟฟ้า', points: '+50', icon: 'bi-battery-full', color: '#1e8e5a' },
-  { title: 'ขวดพลาสติก PET', points: '+10-30', icon: 'bi-droplet-half', color: '#0d7bb5' },
-  { title: 'ถุง / บรรจุภัณฑ์พลาสติก', points: '+10-30', icon: 'bi-bag', color: '#0d7bb5' },
-];
+    try {
+        // 2. ใส่ fetch ตรงนี้เพื่อส่งข้อมูลไปที่ไฟล์ register.php
+        const res = await fetch('api/register.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(payload),
+        });
 
-// 2. Render Function รวม
-function renderMockData() {
-  const featuredGrid = document.getElementById('featuredGrid');
-  if (featuredGrid) {
-    featuredGrid.innerHTML = featured.map(p => `
-      <div class="col-6 col-md-3">
-        <div class="card product-card h-100">
-          <div class="position-relative">
-            <img src="${p.image}" class="product-img" alt="${p.title}">
-            <span class="green-score-badge"><i class="bi bi-leaf-fill"></i> ${p.score}</span>
-          </div>
-          <div class="card-body p-2">
-            <div class="small text-truncate">${p.title}</div>
-            <div class="price-tag">฿${p.price.toLocaleString()}</div>
-          </div>
-        </div>
-      </div>
-    `).join('');
-  }
+        const data = await res.json();
 
-  const recycleGrid = document.getElementById('recycleGrid');
-  if (recycleGrid) {
-    recycleGrid.innerHTML = recycleItems.map(r => `
-      <div class="col-6 col-md-3">
-        <div class="card product-card h-100 text-center p-3" style="border-top:3px solid ${r.color};">
-          <i class="bi ${r.icon}" style="font-size:1.8rem;color:${r.color};"></i>
-          <div class="small fw-semibold mt-2">${r.title}</div>
-          <span class="badge mt-2" style="background:${r.color};">${r.points} คะแนน</span>
-        </div>
-      </div>
-    `).join('');
-  }
+        // 3. เช็คผลลัพธ์ที่ตอบกลับมาจาก PHP
+        if (data.success) {
+            alert('ลงทะเบียนสำเร็จ! กรุณาเข้าสู่ระบบ');
+            closeRegisterModal();
+            openModal();
+        } else {
+            alert(data.message);
+        }
+    } catch (err) {
+        console.error(err);
+        alert('เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์');
+    }
 }
-
-// ส่งฟังก์ชันไปที่ window ให้สคริปต์ใน HTML เรียกใช้ได้
-window.renderMockData = renderMockData;
