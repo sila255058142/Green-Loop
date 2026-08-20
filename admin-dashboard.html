@@ -1,0 +1,523 @@
+    <!DOCTYPE html>
+    <html lang="th">
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | GreenLoop</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <style>
+    :root{
+        --gl-green:#1e8e5a;
+        --gl-green-dark:#166847;
+        --gl-green-light:#e8f6ee;
+        --gl-plastic:#0d7bb5;
+        --gl-sidebar:#0f2e20;
+    }
+    html,body{ height:100%; margin:0; }
+    body{
+        background:#f2f4f3; font-family:'Segoe UI',sans-serif;
+        display:flex; min-height:100vh;
+    }
+
+    /* SIDEBAR */
+    .admin-sidebar{
+        width:250px; background:var(--gl-sidebar); color:#cfe4d8; flex-shrink:0;
+        display:flex; flex-direction:column; position:sticky; top:0; height:100vh;
+    }
+    .admin-sidebar .brand{
+        padding:1.2rem 1.3rem; font-weight:700; color:#fff; font-size:1.15rem;
+        border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    .admin-sidebar .nav-link{
+        color:#cfe4d8; padding:.75rem 1.3rem; border-left:3px solid transparent;
+        display:flex; align-items:center; gap:.6rem; font-size:.92rem; cursor:pointer;
+    }
+    .admin-sidebar .nav-link i{ font-size:1.05rem; width:20px; text-align:center; }
+    .admin-sidebar .nav-link:hover{ background:rgba(255,255,255,.06); color:#fff; }
+    .admin-sidebar .nav-link.active{ background:rgba(30,142,90,.25); border-left-color:var(--gl-green); color:#fff; font-weight:600; }
+    .admin-sidebar .nav-link .badge{ margin-left:auto; }
+    .admin-sidebar .back-link{
+        margin-top:auto; padding:1rem 1.3rem; border-top:1px solid rgba(255,255,255,.08);
+        font-size:.85rem;
+    }
+    .admin-sidebar .back-link a{ color:#cfe4d8; text-decoration:none; }
+    .admin-sidebar .back-link a:hover{ color:#fff; }
+
+    /* MAIN */
+    .admin-main{ flex-grow:1; min-width:0; }
+    .admin-topbar{
+        background:#fff; border-bottom:1px solid #e9ecef; padding:.9rem 1.75rem;
+        display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:10;
+    }
+    .admin-topbar h5{ margin:0; font-weight:700; }
+    .admin-content{ padding:1.75rem; }
+
+    .admin-section{ display:none; }
+    .admin-section.active{ display:block; }
+
+    /* STAT CARDS */
+    .stat-card{
+        border:none; border-radius:14px; box-shadow:0 2px 12px rgba(0,0,0,.05); padding:1.3rem;
+        background:#fff; display:flex; align-items:center; gap:1rem;
+    }
+    .stat-icon{
+        width:52px; height:52px; border-radius:12px; display:flex; align-items:center; justify-content:center;
+        font-size:1.4rem; color:#fff; flex-shrink:0;
+    }
+    .stat-value{ font-size:1.5rem; font-weight:700; line-height:1.1; }
+    .stat-label{ font-size:.8rem; color:#868e96; }
+
+    /* CARD / TABLE PANEL */
+    .panel{ background:#fff; border-radius:14px; box-shadow:0 2px 12px rgba(0,0,0,.05); padding:1.5rem; }
+    .panel-header{ display:flex; flex-wrap:wrap; gap:.75rem; align-items:center; justify-content:space-between; margin-bottom:1.2rem; }
+    .table thead th{ font-size:.78rem; text-transform:uppercase; color:#868e96; border-bottom-width:1px; white-space:nowrap; }
+    .table td{ vertical-align:middle; font-size:.9rem; }
+    .search-box{ max-width:280px; }
+
+    .btn-gl-primary{ background:var(--gl-green); border-color:var(--gl-green); color:#fff; }
+    .btn-gl-primary:hover{ background:var(--gl-green-dark); border-color:var(--gl-green-dark); color:#fff; }
+
+    .action-btn{
+        width:32px; height:32px; border-radius:8px; border:1px solid #e9ecef; background:#fff;
+        display:inline-flex; align-items:center; justify-content:center; color:#495057;
+    }
+    .action-btn:hover{ background:#f1f3f5; }
+    .action-btn.danger:hover{ background:#fdecea; color:#e03131; border-color:#f5c2c7; }
+
+    /* MINI BAR CHART */
+    .mini-bars{ display:flex; align-items:flex-end; gap:.6rem; height:130px; padding-top:.5rem; }
+    .mini-bar-col{ flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; }
+    .mini-bar{ width:100%; max-width:26px; background:var(--gl-green); border-radius:6px 6px 0 0; transition:.2s; }
+    .mini-bar-col small{ margin-top:.4rem; color:#868e96; font-size:.72rem; }
+
+    .cat-bar-row{ display:flex; align-items:center; gap:.7rem; margin-bottom:.65rem; }
+    .cat-bar-track{ flex-grow:1; background:#eef1ef; border-radius:999px; height:8px; overflow:hidden; }
+    .cat-bar-fill{ height:100%; background:var(--gl-plastic); border-radius:999px; }
+    .cat-bar-label{ width:110px; font-size:.82rem; flex-shrink:0; }
+    .cat-bar-count{ width:26px; text-align:right; font-size:.8rem; color:#868e96; flex-shrink:0; }
+
+    /* NOTIFICATIONS */
+    .notif-item{
+        display:flex; gap:.9rem; padding:.9rem 0; border-bottom:1px solid #f1f3f5;
+    }
+    .notif-item:last-child{ border-bottom:none; }
+    .notif-icon{
+        width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+        flex-shrink:0; font-size:1rem; color:#fff;
+    }
+    .notif-badge-pending{ background:#fff4e6; color:#e8590c; }
+    .notif-badge-resolved{ background:#ebfbee; color:#2b8a3e; }
+
+    @media (max-width: 991px){
+        .admin-sidebar{ position:fixed; left:-250px; z-index:1050; transition:left .2s ease; }
+        .admin-sidebar.open{ left:0; }
+        .sidebar-overlay{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:1040; }
+        .sidebar-overlay.show{ display:block; }
+    }
+    </style>
+    </head>
+    <body>
+
+    <!-- SIDEBAR -->
+    <aside class="admin-sidebar" id="adminSidebar">
+    <div class="brand"><i class="bi bi-recycle"></i> GreenLoop <span class="fw-normal opacity-75">Admin</span></div>
+    <nav class="py-2">
+        <a class="nav-link active" data-section="overview"><i class="bi bi-grid-1x2-fill"></i> ภาพรวม</a>
+        <a class="nav-link" data-section="members"><i class="bi bi-people-fill"></i> สมาชิก</a>
+        <a class="nav-link" data-section="products"><i class="bi bi-bag-fill"></i> สินค้า</a>
+        <a class="nav-link" data-section="recycle"><i class="bi bi-arrow-repeat"></i> คำขอรีไซเคิล</a>
+        <a class="nav-link" data-section="articles"><i class="bi bi-file-earmark-text-fill"></i> บทความ</a>
+        <a class="nav-link" data-section="notifications">
+        <i class="bi bi-bell-fill"></i> การแจ้งเตือน
+        <span class="badge rounded-pill bg-danger" id="notifNavBadge">0</span>
+        </a>
+    </nav>
+    <div class="back-link">
+        <a href="index.html"><i class="bi bi-box-arrow-left"></i> กลับหน้าเว็บไซต์</a>
+    </div>
+    </aside>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- MAIN -->
+    <div class="admin-main">
+    <div class="admin-topbar">
+        <div class="d-flex align-items-center gap-2">
+        <button class="btn btn-sm btn-outline-secondary d-lg-none" id="sidebarToggle"><i class="bi bi-list"></i></button>
+        <h5 id="pageTitle">ภาพรวมระบบ</h5>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+        <i class="bi bi-person-circle fs-4 text-secondary"></i>
+        <span class="fw-semibold small">Admin</span>
+        </div>
+    </div>
+
+    <div class="admin-content">
+
+        <!-- ============ OVERVIEW ============ -->
+        <section class="admin-section active" id="section-overview">
+        <div class="row g-3 mb-4">
+            <div class="col-6 col-lg-3">
+            <div class="stat-card">
+                <div class="stat-icon" style="background:var(--gl-green);"><i class="bi bi-people-fill"></i></div>
+                <div>
+                <div class="stat-value" id="statMembers">-</div>
+                <div class="stat-label">สมาชิกทั้งหมด</div>
+                </div>
+            </div>
+            </div>
+            <div class="col-6 col-lg-3">
+            <div class="stat-card">
+                <div class="stat-icon" style="background:var(--gl-plastic);"><i class="bi bi-bag-fill"></i></div>
+                <div>
+                <div class="stat-value" id="statProducts">-</div>
+                <div class="stat-label">สินค้าที่ลงขาย</div>
+                </div>
+            </div>
+            </div>
+            <div class="col-6 col-lg-3">
+            <div class="stat-card">
+                <div class="stat-icon" style="background:#f08c00;"><i class="bi bi-arrow-repeat"></i></div>
+                <div>
+                <div class="stat-value" id="statRecycle">-</div>
+                <div class="stat-label">คำขอรีไซเคิล (รอดำเนินการ)</div>
+                </div>
+            </div>
+            </div>
+            <div class="col-6 col-lg-3">
+            <div class="stat-card">
+                <div class="stat-icon" style="background:#e03131;"><i class="bi bi-bell-fill"></i></div>
+                <div>
+                <div class="stat-value" id="statNotif">-</div>
+                <div class="stat-label">แจ้งเตือนที่ยังไม่แก้ไข</div>
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <div class="row g-3 mb-4">
+            <div class="col-lg-7">
+            <div class="panel h-100">
+                <h6 class="fw-bold mb-3">สมาชิกใหม่รายวัน (7 วันล่าสุด)</h6>
+                <div class="mini-bars" id="signupChart"></div>
+            </div>
+            </div>
+            <div class="col-lg-5">
+            <div class="panel h-100">
+                <h6 class="fw-bold mb-3">สินค้าตามหมวดหมู่</h6>
+                <div id="categoryBars"></div>
+            </div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+            <h6 class="fw-bold mb-0">แจ้งเตือนล่าสุด</h6>
+            <a href="#" class="small text-decoration-none" data-goto="notifications">ดูทั้งหมด <i class="bi bi-arrow-right"></i></a>
+            </div>
+            <div id="overviewNotifList"></div>
+        </div>
+        </section>
+
+        <!-- ============ MEMBERS ============ -->
+        <section class="admin-section" id="section-members">
+        <div class="panel">
+            <div class="panel-header">
+            <div>
+                <h6 class="fw-bold mb-0">จัดการสมาชิก</h6>
+                <span class="text-muted small" id="membersCount">พบ 0 รายการ</span>
+            </div>
+            <div class="d-flex gap-2 flex-wrap">
+                <input type="text" class="form-control search-box" id="memberSearch" placeholder="ค้นหาชื่อหรืออีเมล...">
+                <button class="btn btn-gl-primary" onclick="openMemberModal()"><i class="bi bi-plus-lg"></i> เพิ่มสมาชิก</button>
+            </div>
+            </div>
+            <div class="table-responsive">
+            <table class="table align-middle">
+                <thead><tr>
+                <th>ชื่อ</th><th>อีเมล</th><th>วันที่สมัคร</th><th>สถานะ</th><th>คำสั่งซื้อ</th><th class="text-end">จัดการ</th>
+                </tr></thead>
+                <tbody id="membersTableBody"></tbody>
+            </table>
+            </div>
+        </div>
+        </section>
+
+        <!-- ============ PRODUCTS ============ -->
+        <section class="admin-section" id="section-products">
+        <div class="panel">
+            <div class="panel-header">
+            <div>
+                <h6 class="fw-bold mb-0">จัดการสินค้า</h6>
+                <span class="text-muted small" id="productsCount">พบ 0 รายการ</span>
+            </div>
+            <div class="d-flex gap-2 flex-wrap">
+                <input type="text" class="form-control search-box" id="productSearch" placeholder="ค้นหาชื่อสินค้าหรือผู้ขาย...">
+                <button class="btn btn-gl-primary" onclick="openProductModal()"><i class="bi bi-plus-lg"></i> เพิ่มสินค้า</button>
+            </div>
+            </div>
+            <div class="table-responsive">
+            <table class="table align-middle">
+                <thead><tr>
+                <th>สินค้า</th><th>ผู้ขาย</th><th>หมวดหมู่</th><th>ราคา</th><th>สถานะ</th><th class="text-end">จัดการ</th>
+                </tr></thead>
+                <tbody id="productsTableBody"></tbody>
+            </table>
+            </div>
+        </div>
+        </section>
+
+        <!-- ============ RECYCLE REQUESTS ============ -->
+        <section class="admin-section" id="section-recycle">
+        <div class="panel">
+            <div class="panel-header">
+            <div>
+                <h6 class="fw-bold mb-0">จัดการคำขอรีไซเคิล</h6>
+                <span class="text-muted small" id="recycleCount">พบ 0 รายการ</span>
+            </div>
+            <div class="d-flex gap-2 flex-wrap">
+                <input type="text" class="form-control search-box" id="recycleSearch" placeholder="ค้นหาชื่อผู้แจ้ง...">
+                <button class="btn btn-gl-primary" onclick="openRecycleModal()"><i class="bi bi-plus-lg"></i> เพิ่มคำขอ</button>
+            </div>
+            </div>
+            <div class="table-responsive">
+            <table class="table align-middle">
+                <thead><tr>
+                <th>ผู้แจ้ง</th><th>ประเภท</th><th>รายละเอียด</th><th>วันที่แจ้ง</th><th>สถานะ</th><th class="text-end">จัดการ</th>
+                </tr></thead>
+                <tbody id="recycleTableBody"></tbody>
+            </table>
+            </div>
+        </div>
+        </section>
+
+        <!-- ============ ARTICLES ============ -->
+        <section class="admin-section" id="section-articles">
+        <div class="panel">
+            <div class="panel-header">
+            <div>
+                <h6 class="fw-bold mb-0">จัดการบทความ</h6>
+                <span class="text-muted small" id="articlesCount">พบ 0 รายการ</span>
+            </div>
+            <div class="d-flex gap-2 flex-wrap">
+                <input type="text" class="form-control search-box" id="articleSearch" placeholder="ค้นหาหัวข้อบทความ...">
+                <button class="btn btn-gl-primary" onclick="openArticleModal()"><i class="bi bi-plus-lg"></i> เพิ่มบทความ</button>
+            </div>
+            </div>
+            <div class="table-responsive">
+            <table class="table align-middle">
+                <thead><tr>
+                <th>หัวข้อ</th><th>หมวด</th><th>วันที่เผยแพร่</th><th>สถานะ</th><th class="text-end">จัดการ</th>
+                </tr></thead>
+                <tbody id="articlesTableBody"></tbody>
+            </table>
+            </div>
+        </div>
+        </section>
+
+        <!-- ============ NOTIFICATIONS ============ -->
+        <section class="admin-section" id="section-notifications">
+        <div class="panel">
+            <div class="panel-header">
+            <div>
+                <h6 class="fw-bold mb-0">การแจ้งเตือนและปัญหาที่รายงาน</h6>
+                <span class="text-muted small" id="notifCount">พบ 0 รายการ</span>
+            </div>
+            <select class="form-select" id="notifFilter" style="max-width:180px;">
+                <option value="all">ทั้งหมด</option>
+                <option value="pending">รอดำเนินการ</option>
+                <option value="resolved">แก้ไขแล้ว</option>
+            </select>
+            </div>
+            <div id="notificationsList"></div>
+        </div>
+        </section>
+
+    </div>
+    </div>
+
+    <!-- ============ MODAL: MEMBER ============ -->
+    <div class="modal fade" id="memberModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="memberModalTitle">เพิ่มสมาชิก</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+            <form id="memberForm">
+            <input type="hidden" id="memberId">
+            <div class="mb-3">
+                <label class="form-label small fw-bold">ชื่อ-นามสกุล</label>
+                <input type="text" class="form-control" id="memberName" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label small fw-bold">อีเมล</label>
+                <input type="email" class="form-control" id="memberEmail" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label small fw-bold">สถานะ</label>
+                <select class="form-select" id="memberStatus">
+                <option value="active">Active</option>
+                <option value="suspended">Suspended</option>
+                </select>
+            </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+            <button class="btn btn-gl-primary" onclick="saveMember()">บันทึก</button>
+        </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- ============ MODAL: PRODUCT ============ -->
+    <div class="modal fade" id="productModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="productModalTitle">เพิ่มสินค้า</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+            <form id="productForm">
+            <input type="hidden" id="productId">
+            <div class="mb-3">
+                <label class="form-label small fw-bold">ชื่อสินค้า</label>
+                <input type="text" class="form-control" id="productTitle" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label small fw-bold">ผู้ขาย</label>
+                <input type="text" class="form-control" id="productSeller" required>
+            </div>
+            <div class="row g-2 mb-3">
+                <div class="col-6">
+                <label class="form-label small fw-bold">หมวดหมู่</label>
+                <select class="form-select" id="productCategory">
+                    <option value="mobile">โทรศัพท์</option>
+                    <option value="notebook">Notebook</option>
+                    <option value="tablet">Tablet</option>
+                    <option value="camera">กล้อง</option>
+                    <option value="accessory">อุปกรณ์ IT</option>
+                </select>
+                </div>
+                <div class="col-6">
+                <label class="form-label small fw-bold">ราคา (บาท)</label>
+                <input type="number" class="form-control" id="productPrice" min="0" required>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label small fw-bold">สถานะ</label>
+                <select class="form-select" id="productStatus">
+                <option value="active">กำลังขาย</option>
+                <option value="sold">ขายแล้ว</option>
+                <option value="reported">ถูกรายงาน</option>
+                </select>
+            </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+            <button class="btn btn-gl-primary" onclick="saveProduct()">บันทึก</button>
+        </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- ============ MODAL: RECYCLE ============ -->
+    <div class="modal fade" id="recycleModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="recycleModalTitle">เพิ่มคำขอรีไซเคิล</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+            <form id="recycleForm">
+            <input type="hidden" id="recycleId">
+            <div class="mb-3">
+                <label class="form-label small fw-bold">ผู้แจ้ง</label>
+                <input type="text" class="form-control" id="recycleUser" required>
+            </div>
+            <div class="row g-2 mb-3">
+                <div class="col-6">
+                <label class="form-label small fw-bold">ประเภท</label>
+                <select class="form-select" id="recycleType">
+                    <option value="ewaste">E-Waste</option>
+                    <option value="plastic">พลาสติก</option>
+                </select>
+                </div>
+                <div class="col-6">
+                <label class="form-label small fw-bold">สถานะ</label>
+                <select class="form-select" id="recycleStatus">
+                    <option value="pending">รอดำเนินการ</option>
+                    <option value="approved">อนุมัติแล้ว</option>
+                    <option value="completed">เสร็จสิ้น</option>
+                </select>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label small fw-bold">รายละเอียด</label>
+                <input type="text" class="form-control" id="recycleDetail" placeholder="เช่น มือถือ 2 ชิ้น / ขวด PET 1.5 กก.">
+            </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+            <button class="btn btn-gl-primary" onclick="saveRecycle()">บันทึก</button>
+        </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- ============ MODAL: ARTICLE ============ -->
+    <div class="modal fade" id="articleModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="articleModalTitle">เพิ่มบทความ</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+            <form id="articleForm">
+            <input type="hidden" id="articleId">
+            <div class="mb-3">
+                <label class="form-label small fw-bold">หัวข้อบทความ</label>
+                <input type="text" class="form-control" id="articleTitle" required>
+            </div>
+            <div class="row g-2 mb-3">
+                <div class="col-6">
+                <label class="form-label small fw-bold">หมวดหมู่</label>
+                <select class="form-select" id="articleBadge">
+                    <option value="E-Waste">E-Waste</option>
+                    <option value="พลาสติก">พลาสติก</option>
+                    <option value="Green Points">Green Points</option>
+                </select>
+                </div>
+                <div class="col-6">
+                <label class="form-label small fw-bold">สถานะ</label>
+                <select class="form-select" id="articleStatus">
+                    <option value="published">เผยแพร่แล้ว</option>
+                    <option value="draft">ฉบับร่าง</option>
+                </select>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label small fw-bold">เนื้อหาย่อ</label>
+                <textarea class="form-control" id="articleExcerpt" rows="3"></textarea>
+            </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+            <button class="btn btn-gl-primary" onclick="saveArticle()">บันทึก</button>
+        </div>
+        </div>
+    </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/js/bootstrap.bundle.min.js"></script>
+    <script src="js/admin-dashboard.js"></script>
+    </body>
+    </html>

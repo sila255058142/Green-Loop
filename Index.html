@@ -1,901 +1,424 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="th">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>GreenLoop | หน้าแรก</title>
-        <link
-            href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/css/bootstrap.min.css"
-            rel="stylesheet"
-        />
-        <link
-            href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css"
-            rel="stylesheet"
-        />
-        <style>
-            :root {
-                --gl-green: #1e8e5a;
-                --gl-green-dark: #166847;
-                --gl-green-light: #e8f6ee;
-                --gl-plastic: #0d7bb5;
-            }
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GreenLoop | หน้าแรก</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+<style>
+  :root {
+    --gl-green: #1e8e5a;
+    --gl-green-dark: #166847;
+    --gl-green-light: #e8f6ee;
+    --gl-plastic: #0d7bb5;
+  }
+  
+  /* [ปรับแก้ไขส่วนที่ 1] ทำ Sticky Footer ให้เต็มความสูงหน้าจอเสมอ */
+  html, body {
+    height: 100%;
+    margin: 0;
+  }
+  body { 
+    background: #f5f7f6; 
+    font-family: 'Segoe UI', sans-serif; 
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
 
-            /* [ปรับแก้ไขส่วนที่ 1] ทำ Sticky Footer ให้เต็มความสูงหน้าจอเสมอ */
-            html,
-            body {
-                height: 100%;
-                margin: 0;
-            }
-            body {
-                background: #f5f7f6;
-                font-family: 'Segoe UI', sans-serif;
-                display: flex;
-                flex-direction: column;
-                min-height: 100vh;
-            }
+  /* Navbar Custom Styling */
+  .gl-navbar { background: var(--gl-green-dark); }
+  .gl-navbar .navbar-brand { color: #fff; font-weight: 700; }
+  .gl-navbar .form-control { border-radius: 999px 0 0 999px; }
+  .gl-navbar .btn-search { border-radius: 0 999px 999px 0; background: #fff; color: var(--gl-green-dark); }
+  .gl-navbar .nav-link { color: #e8f6ee !important; font-weight: 500; transition: color 0.2s; }
+  .gl-navbar .nav-link:hover { color: #fff !important; text-decoration: underline; }
 
-            /* Navbar Custom Styling */
-            .gl-navbar {
-                background: var(--gl-green-dark);
-            }
-            .gl-navbar .navbar-brand {
-                color: #fff;
-                font-weight: 700;
-            }
-            .gl-navbar .form-control {
-                border-radius: 999px 0 0 999px;
-            }
-            .gl-navbar .btn-search {
-                border-radius: 0 999px 999px 0;
-                background: #fff;
-                color: var(--gl-green-dark);
-            }
-            .gl-navbar .nav-link {
-                color: #e8f6ee !important;
-                font-weight: 500;
-                transition: color 0.2s;
-            }
-            .gl-navbar .nav-link:hover {
-                color: #fff !important;
-                text-decoration: underline;
-            }
+  /* Banners */
+  .banner-top {
+    border-radius: 16px; overflow: hidden; min-height: 220px;
+    background: linear-gradient(120deg, var(--gl-green) 0%, var(--gl-green-dark) 100%);
+    display: flex; align-items: center; padding: 2.5rem; color: #fff; position: relative;
+  }
+  .banner-top .badge-slot, .banner-middle .badge-slot {
+    position: absolute; top: .8rem; right: .8rem; background: rgba(0,0,0,.25);
+    font-size: .7rem; padding: .3rem .7rem; border-radius: 999px;
+  }
+  .banner-middle {
+    border-radius: 16px; overflow: hidden; min-height: 160px; background: var(--gl-plastic);
+    display: flex; align-items: center; padding: 2rem; color: #fff; position: relative;
+  }
 
-            /* Banners */
-            .banner-top {
-                border-radius: 16px;
-                overflow: hidden;
-                min-height: 220px;
-                background: linear-gradient(
-                    120deg,
-                    var(--gl-green) 0%,
-                    var(--gl-green-dark) 100%
-                );
-                display: flex;
-                align-items: center;
-                padding: 2.5rem;
-                color: #fff;
-                position: relative;
-            }
-            .banner-top .badge-slot,
-            .banner-middle .badge-slot {
-                position: absolute;
-                top: 0.8rem;
-                right: 0.8rem;
-                background: rgba(0, 0, 0, 0.25);
-                font-size: 0.7rem;
-                padding: 0.3rem 0.7rem;
-                border-radius: 999px;
-            }
-            .banner-middle {
-                border-radius: 16px;
-                overflow: hidden;
-                min-height: 160px;
-                background: var(--gl-plastic);
-                display: flex;
-                align-items: center;
-                padding: 2rem;
-                color: #fff;
-                position: relative;
-            }
+  /* Quick Categories */
+  .quick-cat {
+    background: #fff; border-radius: 14px; padding: 1.2rem .5rem; text-align: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,.04); transition: all 0.2s ease; text-decoration: none; color: #333; display: block;
+  }
+  .quick-cat:hover { transform: translateY(-4px); box-shadow: 0 6px 18px rgba(0,0,0,.12); color: var(--gl-green-dark); }
+  .quick-cat i { font-size: 1.6rem; color: var(--gl-green); }
 
-            /* Quick Categories */
-            .quick-cat {
-                background: #fff;
-                border-radius: 14px;
-                padding: 1.2rem 0.5rem;
-                text-align: center;
-                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
-                transition: all 0.2s ease;
-                text-decoration: none;
-                color: #333;
-                display: block;
-            }
-            .quick-cat:hover {
-                transform: translateY(-4px);
-                box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
-                color: var(--gl-green-dark);
-            }
-            .quick-cat i {
-                font-size: 1.6rem;
-                color: var(--gl-green);
-            }
+  /* Product Cards */
+  .product-card {
+    border: none; border-radius: 14px; overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,.05); transition: all 0.2s ease; background: #fff;
+  }
+  .product-card:hover { transform: translateY(-5px); box-shadow: 0 8px 24px rgba(0,0,0,.15); }
+  .product-img { height: 150px; object-fit: cover; width: 100%; background: #e9ecef; display: block; }
+  .green-score-badge {
+    position: absolute; top: .6rem; left: .6rem; background: var(--gl-green); color: #fff;
+    font-size: .75rem; font-weight: 700; padding: .2rem .55rem; border-radius: 999px; z-index: 2;
+  }
+  .price-tag { color: var(--gl-green-dark); font-weight: 700; font-size: 1rem; }
 
-            /* Product Cards */
-            .product-card {
-                border: none;
-                border-radius: 14px;
-                overflow: hidden;
-                box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
-                transition: all 0.2s ease;
-                background: #fff;
-            }
-            .product-card:hover {
-                transform: translateY(-5px);
-                box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-            }
-            .product-img {
-                height: 150px;
-                object-fit: cover;
-                width: 100%;
-                background: #e9ecef;
-                display: block;
-            }
-            .green-score-badge {
-                position: absolute;
-                top: 0.6rem;
-                left: 0.6rem;
-                background: var(--gl-green);
-                color: #fff;
-                font-size: 0.75rem;
-                font-weight: 700;
-                padding: 0.2rem 0.55rem;
-                border-radius: 999px;
-                z-index: 2;
-            }
-            .price-tag {
-                color: var(--gl-green-dark);
-                font-weight: 700;
-                font-size: 1rem;
-            }
+  .article-card {
+    border: none; border-radius: 14px; overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05); transition: all 0.2s ease; cursor: pointer; background: #fff;
+  }
+  .article-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,.12); }
 
-            .article-card {
-                border: none;
-                border-radius: 14px;
-                overflow: hidden;
-                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-                transition: all 0.2s ease;
-                cursor: pointer;
-                background: #fff;
-            }
-            .article-card:hover {
-                transform: translateY(-5px);
-                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-            }
+  .step-circle {
+    width: 52px; height: 52px; border-radius: 50%; background: var(--gl-green-light); color: var(--gl-green-dark);
+    display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.2rem; margin: 0 auto 1rem;
+  }
 
-            .step-circle {
-                width: 52px;
-                height: 52px;
-                border-radius: 50%;
-                background: var(--gl-green-light);
-                color: var(--gl-green-dark);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-weight: 700;
-                font-size: 1.2rem;
-                margin: 0 auto 1rem;
-            }
+  /* PURE JS MODAL */
+  .custom-modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.6); display: none; align-items: center; justify-content: center; z-index: 9999;
+  }
+  .custom-modal-box {
+    background: #fff; border-radius: 16px; padding: 2rem; width: 90%; max-width: 650px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3); animation: popIn 0.2s ease-out;
+  }
+  @keyframes popIn {
+    from { transform: scale(0.85); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
 
-            /* PURE JS MODAL */
-            .custom-modal-overlay {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(0, 0, 0, 0.6);
-                display: none;
-                align-items: center;
-                justify-content: center;
-                z-index: 9999;
-            }
-            .custom-modal-box {
-                background: #fff;
-                border-radius: 16px;
-                padding: 2rem;
-                width: 90%;
-                max-width: 650px;
-                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-                animation: popIn 0.2s ease-out;
-            }
-            @keyframes popIn {
-                from {
-                    transform: scale(0.85);
-                    opacity: 0;
-                }
-                to {
-                    transform: scale(1);
-                    opacity: 1;
-                }
-            }
+  footer { background: #12291f; color: #c9d8cf; }
+  footer a { color: #c9d8cf; text-decoration: none; }
+  footer a:hover { color: #fff; }
+</style>
+</head>
+<body>
 
-            footer {
-                background: #12291f;
-                color: #c9d8cf;
-            }
-            footer a {
-                color: #c9d8cf;
-                text-decoration: none;
-            }
-            footer a:hover {
-                color: #fff;
-            }
-        </style>
-    </head>
-    <body>
-        <!-- NAVBAR -->
-        <nav class="navbar navbar-expand-lg navbar-dark gl-navbar py-2">
-            <div
-                class="container-fluid container-lg d-flex align-items-center justify-content-between"
-            >
-                <!-- 1. BRAND -->
-                <a class="navbar-brand fw-bold me-2 text-nowrap" href="#">
-                    <i class="bi bi-recycle"></i> GreenLoop
-                </a>
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark gl-navbar py-2">
+  <div class="container-fluid container-lg d-flex align-items-center justify-content-between">
+    
+    <!-- 1. BRAND -->
+    <a class="navbar-brand fw-bold me-2 text-nowrap" href="#">
+      <i class="bi bi-recycle"></i> GreenLoop
+    </a>
 
-                <!-- 3. COLLAPSIBLE MENU -->
-                <div
-                    class="collapse navbar-collapse order-3 order-lg-2"
-                    id="glNavbarNav"
-                >
-                    <!-- GUEST NAV -->
-                    <div
-                        id="guestNav"
-                        class="d-flex gap-3 text-white ms-auto pt-2 pt-lg-0"
-                    >
-                        <a
-                            href="#"
-                            onclick="openModal()"
-                            class="text-white text-decoration-none fw-bold"
-                            ><i class="bi bi-box-arrow-in-right"></i> Login</a
-                        >
-                        <a
-                            href="#"
-                            onclick="openRegisterModal()"
-                            class="text-white text-decoration-none fw-bold"
-                            ><i class="bi bi-person-plus"></i> Sign Up</a
-                        >
-                    </div>
+    <!-- 3. COLLAPSIBLE MENU -->
+    <div class="collapse navbar-collapse order-3 order-lg-2" id="glNavbarNav">
+      <!-- GUEST NAV -->
+      <div id="guestNav" class="d-flex gap-3 text-white ms-auto pt-2 pt-lg-0">
+        <a href="#" onclick="openModal()" class="text-white text-decoration-none fw-bold"><i class="bi bi-box-arrow-in-right"></i> Login</a>
+        <a href="#" onclick="openRegisterModal()" class="text-white text-decoration-none fw-bold"><i class="bi bi-person-plus"></i> Sign Up</a>
+      </div>
 
-                    <!-- USER NAV -->
-                    <div
-                        id="userNav"
-                        class="d-none flex-column flex-lg-row align-items-lg-center ms-auto pt-2 pt-lg-0"
-                    >
-                        <ul class="navbar-nav me-lg-3 mb-2 mb-lg-0">
-                            <li class="nav-item">
-                                <a class="nav-link" href="Marketplace.html"
-                                    >Market</a
-                                >
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="Sell.html"
-                                    >For Sale</a
-                                >
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="recycle-request.html"
-                                    >Recycle</a
-                                >
-                            </li>
-                        </ul>
+      <!-- USER NAV -->
+      <div id="userNav" class="d-none flex-column flex-lg-row align-items-lg-center ms-auto pt-2 pt-lg-0">
+        <ul class="navbar-nav me-lg-3 mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link" href="Marketplace.html">Market</a></li>
+          <li class="nav-item"><a class="nav-link" href="Sell.html">For Sale</a></li>
+          <li class="nav-item"><a class="nav-link" href="recycle-request.html">Recycle</a></li>
+        </ul>
+        
+        <!-- PROFILE & LOGOUT -->
+        <div class="d-flex align-items-center text-white gap-2 pt-2 pt-lg-0">
+          <!-- WALLET (โชว์เฉพาะ Desktop: d-none d-lg-flex) -->
+          <div class="walletDisplay text-white small fw-bold d-none d-lg-flex align-items-center text-nowrap me-2">
+            <i class="bi bi-wallet2 me-1"></i><span>฿1,250</span>
+          </div>
 
-                        <!-- PROFILE & LOGOUT -->
-                        <div
-                            class="d-flex align-items-center text-white gap-2 pt-2 pt-lg-0"
-                        >
-                            <!-- WALLET (โชว์เฉพาะ Desktop: d-none d-lg-flex) -->
-                            <div
-                                class="walletDisplay text-white small fw-bold d-none d-lg-flex align-items-center text-nowrap me-2"
-                            >
-                                <i class="bi bi-wallet2 me-1"></i
-                                ><span>฿1,250</span>
-                            </div>
+          <div class="d-flex align-items-center"><i class="bi bi-person-circle fs-5 me-1"></i> <span class="small fw-bold">My Account</span></div>
+          <button type="button" onclick="logout()" class="btn btn-outline-light btn-sm ms-auto ms-lg-0">Logout</button>
+        </div>
+      </div>
+    </div>
 
-                            <div class="d-flex align-items-center">
-                                <i class="bi bi-person-circle fs-5 me-1"></i>
-                                <span class="small fw-bold">My Account</span>
-                            </div>
-                            <button
-                                type="button"
-                                onclick="logout()"
-                                class="btn btn-outline-light btn-sm ms-auto ms-lg-0"
-                            >
-                                Logout
-                            </button>
-                        </div>
-                    </div>
-                </div>
+    <!-- 4. RIGHTMOST WRAPPER -->
+    <div class="d-flex align-items-center order-2 order-lg-3 ms-2">
+      <!-- WALLET (โชว์เฉพาะ Mobile หน้า Hamburger: d-flex d-lg-none) -->
+      <div class="walletDisplay text-white small fw-bold d-flex d-lg-none align-items-center text-nowrap me-2">
+        <i class="bi bi-wallet2 me-1"></i><span>฿1,250</span>
+      </div>
 
-                <!-- 4. RIGHTMOST WRAPPER -->
-                <div class="d-flex align-items-center order-2 order-lg-3 ms-2">
-                    <!-- WALLET (โชว์เฉพาะ Mobile หน้า Hamburger: d-flex d-lg-none) -->
-                    <div
-                        class="walletDisplay text-white small fw-bold d-flex d-lg-none align-items-center text-nowrap me-2"
-                    >
-                        <i class="bi bi-wallet2 me-1"></i><span>฿1,250</span>
-                    </div>
+      <!-- HAMBURGER BUTTON -->
+      <button class="navbar-toggler p-1 border-0" type="button" data-bs-toggle="collapse" data-bs-target="#glNavbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
+  </div>
+</nav>
+<!-- [ปรับแก้ไขส่วนที่ 2] เพิ่มแท็ก main ครอบเนื้อหาตรงกลางทั้งหมดเพื่อยืดพื้นที่ -->
+<main class="flex-grow-1">
+  <!-- A. GUEST VIEW -->
+  <div id="guestContent" class="container py-4">
+    <div class="banner-top mb-5">
+      <div>
+        <h2 class="fw-bold mb-2">ยินดีต้อนรับสู่ GreenLoop</h2>
+        <p class="mb-3 opacity-75">แพลตฟอร์มซื้อ-ขาย และรีไซเคิลเพื่อสิ่งแวดล้อม อ่านบทความน่ารู้เกี่ยวกับการจัดการขยะได้เลย</p>
+        <button onclick="openModal()" class="btn btn-light fw-semibold text-success shadow-sm">
+          <i class="bi bi-box-arrow-in-right"></i>เข้าสู่ระบบเพื่อเริ่มใช้งานเว็บไซต์
+        </button>
+      </div>
+    </div>
 
-                    <!-- HAMBURGER BUTTON -->
-                    <button
-                        class="navbar-toggler p-1 border-0"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#glNavbarNav"
-                    >
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                </div>
-            </div>
-        </nav>
-        <!-- [ปรับแก้ไขส่วนที่ 2] เพิ่มแท็ก main ครอบเนื้อหาตรงกลางทั้งหมดเพื่อยืดพื้นที่ -->
-        <main class="flex-grow-1">
-            <!-- A. GUEST VIEW -->
-            <div id="guestContent" class="container py-4">
-                <div class="banner-top mb-5">
-                    <div>
-                        <h2 class="fw-bold mb-2">ยินดีต้อนรับสู่ GreenLoop</h2>
-                        <p class="mb-3 opacity-75">
-                            แพลตฟอร์มซื้อ-ขาย และรีไซเคิลเพื่อสิ่งแวดล้อม
-                            อ่านบทความน่ารู้เกี่ยวกับการจัดการขยะได้เลย
-                        </p>
-                        <button
-                            onclick="openModal()"
-                            class="btn btn-light fw-semibold text-success shadow-sm"
-                        >
-                            <i class="bi bi-box-arrow-in-right"></i
-                            >เข้าสู่ระบบเพื่อเริ่มใช้งานเว็บไซต์
-                        </button>
-                    </div>
-                </div>
+    <h4 class="fw-bold mb-3">บทความน่าสนใจ</h4>
+    <div class="row g-4 mb-5">
+      <div class="col-md-4">
+        <a href="article.html?id=1" class="card article-card h-100 p-3 text-decoration-none text-dark">
+          <span class="badge bg-success mb-2 w-auto align-self-start">E-Waste</span>
+          <h5 class="fw-bold">ขยะอิเล็กทรอนิกส์ไปไหนต่อ?</h5>
+          <p class="text-muted small">ขั้นตอนการรีไซเคิลมือถือและคอมพิวเตอร์อย่างปลอดภัย...</p>
+          <span class="text-success small fw-bold mt-auto">อ่านต่อ <i class="bi bi-arrow-right"></i></span>
+        </a>
+      </div>
+      <div class="col-md-4">
+        <a href="article.html?id=2" class="card article-card h-100 p-3 text-decoration-none text-dark">
+          <span class="badge bg-primary mb-2 w-auto align-self-start">พลาสติก</span>
+          <h5 class="fw-bold">คัดแยกพลาสติกยังไงให้ได้ราคา</h5>
+          <p class="text-muted small">เทคนิคแยกประเภทพลาสติก PET/HDPE ก่อนส่งรีไซเคิล...</p>
+          <span class="text-success small fw-bold mt-auto">อ่านต่อ <i class="bi bi-arrow-right"></i></span>
+        </a>
+      </div>
+      <div class="col-md-4">
+        <a href="article.html?id=3" class="card article-card h-100 p-3 text-decoration-none text-dark">
+          <span class="badge bg-warning text-dark mb-2 w-auto align-self-start">Green Points</span>
+          <h5 class="fw-bold">วิธีสะสมแต้มแลกส่วนลด</h5>
+          <p class="text-muted small">เปลี่ยนขยะให้เป็นแต้มสะสมแลกซื้อของจากพาร์ตเนอร์...</p>
+          <span class="text-success small fw-bold mt-auto">อ่านต่อ <i class="bi bi-arrow-right"></i></span>
+        </a>
+      </div>
+    </div>
+    <div class="text-center my-5">
+      <h5 class="fw-bold">GreenLoop ทำงานอย่างไร</h5>
+      <span class="text-muted small">3 ขั้นตอนง่ายๆ สู่การใช้ทรัพยากรอย่างคุ้มค่า</span>
+    </div>
+    <div class="row g-4 text-center mb-5">
+      <div class="col-md-4">
+        <div class="step-circle">1</div>
+        <h6 class="fw-semibold">เลือกสิ่งที่ต้องการ</h6>
+        <p class="small text-muted">ซื้อขายสินค้ามือสอง หรือแจ้งรีไซเคิล E-Waste/พลาสติก</p>
+      </div>
+      <div class="col-md-4">
+        <div class="step-circle">2</div>
+        <h6 class="fw-semibold">ดำเนินการผ่านระบบ</h6>
+        <p class="small text-muted">ชำระผ่าน Wallet หรือส่งของเข้าสู่กระบวนการรีไซเคิล</p>
+      </div>
+      <div class="col-md-4">
+        <div class="step-circle">3</div>
+        <h6 class="fw-semibold">รับ Green Point</h6>
+        <p class="small text-muted">สะสมคะแนนแลกส่วนลด คูปอง และของรางวัล</p>
+      </div>
+    </div>
+  </div>
 
-                <h4 class="fw-bold mb-3">บทความน่าสนใจ</h4>
-                <div class="row g-4 mb-5">
-                    <div class="col-md-4">
-                        <a
-                            href="article.html?id=1"
-                            class="card article-card h-100 p-3 text-decoration-none text-dark"
-                        >
-                            <span
-                                class="badge bg-success mb-2 w-auto align-self-start"
-                                >E-Waste</span
-                            >
-                            <h5 class="fw-bold">ขยะอิเล็กทรอนิกส์ไปไหนต่อ?</h5>
-                            <p class="text-muted small">
-                                ขั้นตอนการรีไซเคิลมือถือและคอมพิวเตอร์อย่างปลอดภัย...
-                            </p>
-                            <span class="text-success small fw-bold mt-auto"
-                                >อ่านต่อ <i class="bi bi-arrow-right"></i
-                            ></span>
-                        </a>
-                    </div>
-                    <div class="col-md-4">
-                        <a
-                            href="article.html?id=2"
-                            class="card article-card h-100 p-3 text-decoration-none text-dark"
-                        >
-                            <span
-                                class="badge bg-primary mb-2 w-auto align-self-start"
-                                >พลาสติก</span
-                            >
-                            <h5 class="fw-bold">
-                                คัดแยกพลาสติกยังไงให้ได้ราคา
-                            </h5>
-                            <p class="text-muted small">
-                                เทคนิคแยกประเภทพลาสติก PET/HDPE
-                                ก่อนส่งรีไซเคิล...
-                            </p>
-                            <span class="text-success small fw-bold mt-auto"
-                                >อ่านต่อ <i class="bi bi-arrow-right"></i
-                            ></span>
-                        </a>
-                    </div>
-                    <div class="col-md-4">
-                        <a
-                            href="article.html?id=3"
-                            class="card article-card h-100 p-3 text-decoration-none text-dark"
-                        >
-                            <span
-                                class="badge bg-warning text-dark mb-2 w-auto align-self-start"
-                                >Green Points</span
-                            >
-                            <h5 class="fw-bold">วิธีสะสมแต้มแลกส่วนลด</h5>
-                            <p class="text-muted small">
-                                เปลี่ยนขยะให้เป็นแต้มสะสมแลกซื้อของจากพาร์ตเนอร์...
-                            </p>
-                            <span class="text-success small fw-bold mt-auto"
-                                >อ่านต่อ <i class="bi bi-arrow-right"></i
-                            ></span>
-                        </a>
-                    </div>
-                </div>
-                <div class="text-center my-5">
-                    <h5 class="fw-bold">GreenLoop ทำงานอย่างไร</h5>
-                    <span class="text-muted small"
-                        >3 ขั้นตอนง่ายๆ สู่การใช้ทรัพยากรอย่างคุ้มค่า</span
-                    >
-                </div>
-                <div class="row g-4 text-center mb-5">
-                    <div class="col-md-4">
-                        <div class="step-circle">1</div>
-                        <h6 class="fw-semibold">เลือกสิ่งที่ต้องการ</h6>
-                        <p class="small text-muted">
-                            ซื้อขายสินค้ามือสอง หรือแจ้งรีไซเคิล E-Waste/พลาสติก
-                        </p>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="step-circle">2</div>
-                        <h6 class="fw-semibold">ดำเนินการผ่านระบบ</h6>
-                        <p class="small text-muted">
-                            ชำระผ่าน Wallet หรือส่งของเข้าสู่กระบวนการรีไซเคิล
-                        </p>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="step-circle">3</div>
-                        <h6 class="fw-semibold">รับ Green Point</h6>
-                        <p class="small text-muted">
-                            สะสมคะแนนแลกส่วนลด คูปอง และของรางวัล
-                        </p>
-                    </div>
-                </div>
-            </div>
+  <!-- B. USER VIEW -->
+  <div id="userContent" class="container py-4 d-none">
+    <!-- TOP BANNER -->
+    <div class="banner-top mx-3 mb-5">
+      <span class="badge-slot"><i class="bi bi-megaphone"></i> Banner Top</span>
+      <div>
+        <h2 class="fw-bold mb-2">ซื้อ-ขาย-รีไซเคิล ครบในที่เดียว</h2>
+        <p class="mb-3 opacity-75">ส่งต่อของมือสอง ลดขยะอิเล็กทรอนิกส์และพลาสติก พร้อมสะสม Green Point</p>
+        <a href="#" class="btn btn-light fw-semibold text-success shadow-sm"><i class="bi bi-recycle"></i> เริ่มรีไซเคิลเลย</a>
+      </div>
+    </div>
 
-            <!-- B. USER VIEW -->
-            <div id="userContent" class="container py-4 d-none">
-                <!-- TOP BANNER -->
-                <div class="banner-top mx-3 mb-5">
-                    <span class="badge-slot"
-                        ><i class="bi bi-megaphone"></i> Banner Top</span
-                    >
-                    <div>
-                        <h2 class="fw-bold mb-2">
-                            ซื้อ-ขาย-รีไซเคิล ครบในที่เดียว
-                        </h2>
-                        <p class="mb-3 opacity-75">
-                            ส่งต่อของมือสอง ลดขยะอิเล็กทรอนิกส์และพลาสติก
-                            พร้อมสะสม Green Point
-                        </p>
-                        <a
-                            href="#"
-                            class="btn btn-light fw-semibold text-success shadow-sm"
-                            ><i class="bi bi-recycle"></i> เริ่มรีไซเคิลเลย</a
-                        >
-                    </div>
-                </div>
+<!-- QUICK CATEGORIES -->
+<div class="row mx-3 g-3 mb-5">
+  <div class="col-12 col-sm-4 col-md-2"><a href="Marketplace.html?cat=mobile" class="quick-cat"><i class="bi bi-phone"></i><div class="small mt-2">โทรศัพท์</div></a></div>
+  <div class="col-12 col-sm-4 col-md-2"><a href="Marketplace.html?cat=notebook" class="quick-cat"><i class="bi bi-laptop"></i><div class="small mt-2">Notebook</div></a></div>
+  <div class="col-12 col-sm-4 col-md-2"><a href="Marketplace.html?cat=tablet" class="quick-cat"><i class="bi bi-tablet"></i><div class="small mt-2">Tablet</div></a></div>
+  <div class="col-12 col-sm-4 col-md-2"><a href="Marketplace.html?cat=camera" class="quick-cat"><i class="bi bi-camera"></i><div class="small mt-2">กล้อง</div></a></div>
+  <div class="col-12 col-sm-4 col-md-2"><a href="recycle-request.html?cat=ewaste" class="quick-cat"><i class="bi bi-cpu"></i><div class="small mt-2">E-Waste</div></a></div>
+  <div class="col-12 col-sm-4 col-md-2"><a href="recycle-request.html?cat=plastic" class="quick-cat"><i class="bi bi-droplet-half"></i><div class="small mt-2">พลาสติก</div></a></div>
+</div>
 
-                <!-- QUICK CATEGORIES -->
-                <div class="row mx-3 g-3 mb-5">
-                    <div class="col-12 col-sm-4 col-md-2">
-                        <a href="Marketplace.html?cat=mobile" class="quick-cat"
-                            ><i class="bi bi-phone"></i>
-                            <div class="small mt-2">โทรศัพท์</div></a
-                        >
-                    </div>
-                    <div class="col-12 col-sm-4 col-md-2">
-                        <a
-                            href="Marketplace.html?cat=notebook"
-                            class="quick-cat"
-                            ><i class="bi bi-laptop"></i>
-                            <div class="small mt-2">Notebook</div></a
-                        >
-                    </div>
-                    <div class="col-12 col-sm-4 col-md-2">
-                        <a href="Marketplace.html?cat=tablet" class="quick-cat"
-                            ><i class="bi bi-tablet"></i>
-                            <div class="small mt-2">Tablet</div></a
-                        >
-                    </div>
-                    <div class="col-12 col-sm-4 col-md-2">
-                        <a href="Marketplace.html?cat=camera" class="quick-cat"
-                            ><i class="bi bi-camera"></i>
-                            <div class="small mt-2">กล้อง</div></a
-                        >
-                    </div>
-                    <div class="col-12 col-sm-4 col-md-2">
-                        <a
-                            href="recycle-request.html?cat=ewaste"
-                            class="quick-cat"
-                            ><i class="bi bi-cpu"></i>
-                            <div class="small mt-2">E-Waste</div></a
-                        >
-                    </div>
-                    <div class="col-12 col-sm-4 col-md-2">
-                        <a
-                            href="recycle-request.html?cat=plastic"
-                            class="quick-cat"
-                            ><i class="bi bi-droplet-half"></i>
-                            <div class="small mt-2">พลาสติก</div></a
-                        >
-                    </div>
-                </div>
+    <div class="row mx-3 g-4">
+      <div class="col-lg-12">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div>
+            <h5 class="fw-bold mb-0">สินค้าแนะนำ</h5>
+            <span class="text-muted small">อัปเดตล่าสุดจากผู้ขายในระบบ</span>
+          </div>
+          <a href="Marketplace.html" class="btn btn-outline-success btn-sm">ดูทั้งหมด <i class="bi bi-arrow-right"></i></a>
+        </div>
+        <div class="row g-3 mb-5" id="featuredGrid"></div>
 
-                <div class="row mx-3 g-4">
-                    <div class="col-lg-12">
-                        <div
-                            class="d-flex justify-content-between align-items-center mb-3"
-                        >
-                            <div>
-                                <h5 class="fw-bold mb-0">สินค้าแนะนำ</h5>
-                                <span class="text-muted small"
-                                    >อัปเดตล่าสุดจากผู้ขายในระบบ</span
-                                >
-                            </div>
-                            <a
-                                href="Marketplace.html"
-                                class="btn btn-outline-success btn-sm"
-                                >ดูทั้งหมด <i class="bi bi-arrow-right"></i
-                            ></a>
-                        </div>
-                        <div class="row g-3 mb-5" id="featuredGrid"></div>
-
-                        <!-- MIDDLE BANNER -->
-                        <div class="banner-middle mb-5">
-                            <span class="badge-slot"
-                                ><i class="bi bi-megaphone"></i> Banner
-                                Middle</span
-                            >
-                            <div>
-                                <h5 class="fw-bold mb-1">
-                                    โปรโมชั่นพาร์ตเนอร์ประจำเดือน
-                                </h5>
-                                <p class="mb-0 opacity-75 small">
-                                    แลก Green Point
-                                    เป็นคูปองส่วนลดจากร้านค้าพาร์ตเนอร์
-                                </p>
-                            </div>
-                        </div>
-
-                        <!-- RECYCLE CATEGORIES -->
-                        <div
-                            class="d-flex justify-content-between align-items-center mb-3"
-                        >
-                            <div>
-                                <h5 class="fw-bold mb-0">
-                                    รายการรับรีไซเคิลยอดนิยม
-                                </h5>
-                                <span class="text-muted small"
-                                    >แจ้งความประสงค์ได้ทั้ง E-Waste
-                                    และพลาสติก</span
-                                >
-                            </div>
-                            <a
-                                href="recycle-request.html"
-                                class="btn btn-outline-success btn-sm"
-                                >แจ้งรีไซเคิล <i class="bi bi-arrow-right"></i
-                            ></a>
-                        </div>
-                        <div class="row g-3 mb-5" id="recycleGrid"></div>
-
-                        <!-- ARTICLES -->
-                        <div
-                            class="d-flex justify-content-between align-items-center mb-3"
-                        >
-                            <div>
-                                <h5 class="fw-bold mb-0">บทความน่าสนใจ</h5>
-                                <span class="text-muted small"
-                                    >อ่านเคล็ดลับการจัดการขยะและรีไซเคิล</span
-                                >
-                            </div>
-                        </div>
-                        <div class="row g-4 mb-5">
-                            <div class="col-md-4">
-                                <a
-                                    href="article.html?id=1"
-                                    class="card article-card h-100 p-3 text-decoration-none text-dark"
-                                >
-                                    <span
-                                        class="badge bg-success mb-2 w-auto align-self-start"
-                                        >E-Waste</span
-                                    >
-                                    <h5 class="fw-bold">
-                                        ขยะอิเล็กทรอนิกส์ไปไหนต่อ?
-                                    </h5>
-                                    <p class="text-muted small">
-                                        ขั้นตอนการรีไซเคิลมือถือและคอมพิวเตอร์อย่างปลอดภัย...
-                                    </p>
-                                    <span
-                                        class="text-success small fw-bold mt-auto"
-                                        >อ่านต่อ
-                                        <i class="bi bi-arrow-right"></i
-                                    ></span>
-                                </a>
-                            </div>
-                            <div class="col-md-4">
-                                <a
-                                    href="article.html?id=2"
-                                    class="card article-card h-100 p-3 text-decoration-none text-dark"
-                                >
-                                    <span
-                                        class="badge bg-primary mb-2 w-auto align-self-start"
-                                        >พลาสติก</span
-                                    >
-                                    <h5 class="fw-bold">
-                                        คัดแยกพลาสติกยังไงให้ได้ราคา
-                                    </h5>
-                                    <p class="text-muted small">
-                                        เทคนิคแยกประเภทพลาสติก PET/HDPE
-                                        ก่อนส่งรีไซเคิล...
-                                    </p>
-                                    <span
-                                        class="text-success small fw-bold mt-auto"
-                                        >อ่านต่อ
-                                        <i class="bi bi-arrow-right"></i
-                                    ></span>
-                                </a>
-                            </div>
-                            <div class="col-md-4">
-                                <a
-                                    href="article.html?id=3"
-                                    class="card article-card h-100 p-3 text-decoration-none text-dark"
-                                >
-                                    <span
-                                        class="badge bg-warning text-dark mb-2 w-auto align-self-start"
-                                        >Green Points</span
-                                    >
-                                    <h5 class="fw-bold">
-                                        วิธีสะสมแต้มแลกส่วนลด
-                                    </h5>
-                                    <p class="text-muted small">
-                                        เปลี่ยนขยะให้เป็นแต้มสะสมแลกซื้อของจากพาร์ตเนอร์...
-                                    </p>
-                                    <span
-                                        class="text-success small fw-bold mt-auto"
-                                        >อ่านต่อ
-                                        <i class="bi bi-arrow-right"></i
-                                    ></span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- HOW IT WORKS -->
-                <div class="text-center my-5">
-                    <h5 class="fw-bold">GreenLoop ทำงานอย่างไร</h5>
-                    <span class="text-muted small"
-                        >3 ขั้นตอนง่ายๆ สู่การใช้ทรัพยากรอย่างคุ้มค่า</span
-                    >
-                </div>
-                <div class="row g-4 text-center mb-5">
-                    <div class="col-md-4">
-                        <div class="step-circle">1</div>
-                        <h6 class="fw-semibold">เลือกสิ่งที่ต้องการ</h6>
-                        <p class="small text-muted">
-                            ซื้อขายสินค้ามือสอง หรือแจ้งรีไซเคิล E-Waste/พลาสติก
-                        </p>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="step-circle">2</div>
-                        <h6 class="fw-semibold">ดำเนินการผ่านระบบ</h6>
-                        <p class="small text-muted">
-                            ชำระผ่าน Wallet หรือส่งของเข้าสู่กระบวนการรีไซเคิล
-                        </p>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="step-circle">3</div>
-                        <h6 class="fw-semibold">รับ Green Point</h6>
-                        <p class="small text-muted">
-                            สะสมคะแนนแลกส่วนลด คูปอง และของรางวัล
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </main>
-
-        <!-- FOOTER -->
-        <footer class="py-4 text-center mt-auto">
-            <div class="container">
-                <p class="small mb-0">
-                    &copy; 2026 GreenLoop. All rights reserved.
-                </p>
-            </div>
-        </footer>
-
-        <!-- MODAL LOGIN -->
-        <div id="loginModalOverlay" class="custom-modal-overlay">
-            <div class="custom-modal-box position-relative">
-                <button
-                    type="button"
-                    onclick="closeModal()"
-                    class="btn-close position-absolute top-0 end-0 m-3"
-                ></button>
-                <div class="text-center mb-3">
-                    <i class="bi bi-shield-lock text-success display-4"></i>
-                    <h4 class="fw-bold mt-2">เข้าสู่ระบบ</h4>
-                </div>
-                <form onsubmit="handleLogin(event)">
-                    <div class="mb-3">
-                        <label class="form-label small fw-bold">อีเมล</label>
-                        <input
-                            type="email"
-                            class="form-control"
-                            name="email"
-                            placeholder="example@email.com"
-                            required
-                        />
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label small fw-bold">รหัสผ่าน</label>
-                        <input
-                            type="password"
-                            class="form-control"
-                            name="password"
-                            required
-                        />
-                    </div>
-                    <button
-                        type="submit"
-                        class="btn btn-success w-100 py-2 fw-bold"
-                    >
-                        เข้าสู่ระบบทันที
-                    </button>
-                </form>
-            </div>
+        <!-- MIDDLE BANNER -->
+        <div class="banner-middle mb-5">
+          <span class="badge-slot"><i class="bi bi-megaphone"></i> Banner Middle</span>
+          <div>
+            <h5 class="fw-bold mb-1">โปรโมชั่นพาร์ตเนอร์ประจำเดือน</h5>
+            <p class="mb-0 opacity-75 small">แลก Green Point เป็นคูปองส่วนลดจากร้านค้าพาร์ตเนอร์</p>
+          </div>
         </div>
 
-        <!-- MODAL SIGN UP -->
-        <div id="registerModalOverlay" class="custom-modal-overlay">
-            <div class="custom-modal-box position-relative">
-                <button
-                    type="button"
-                    onclick="closeRegisterModal()"
-                    class="btn-close position-absolute top-0 end-0 m-3"
-                ></button>
-                <div class="text-center mb-3">
-                    <i class="bi bi-person-plus text-success display-4"></i>
-                    <h4 class="fw-bold mt-1">ลงทะเบียน</h4>
-                </div>
-                <form onsubmit="handleRegister(event)">
-                    <div class="mb-3">
-                        <label class="form-label small fw-bold">Username</label>
-                        <input
-                            type="text"
-                            name="username"
-                            class="form-control"
-                            placeholder="Username"
-                            required
-                        />
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label small fw-bold">อีเมล</label>
-                        <input
-                            type="email"
-                            name="email"
-                            class="form-control"
-                            placeholder="example@email.com"
-                            required
-                        />
-                    </div>
-                    <div class="row g-2 mb-3">
-                        <div class="col-6">
-                            <label class="form-label small fw-bold"
-                                >First Name</label
-                            >
-                            <input
-                                type="text"
-                                name="firstName"
-                                class="form-control"
-                                placeholder="ชื่อจริง"
-                                required
-                            />
-                        </div>
-                        <div class="col-6">
-                            <label class="form-label small fw-bold"
-                                >Last Name</label
-                            >
-                            <input
-                                type="text"
-                                name="lastName"
-                                class="form-control"
-                                placeholder="นามสกุล"
-                                required
-                            />
-                        </div>
-                    </div>
-                    <div class="mb-4">
-                        <label class="form-label small fw-bold">รหัสผ่าน</label>
-                        <input
-                            type="password"
-                            name="password"
-                            class="form-control"
-                            required
-                        />
-                    </div>
-                    <button
-                        type="submit"
-                        class="btn btn-success w-100 py-2 fw-bold"
-                    >
-                        ลงทะเบียน
-                    </button>
-                    <a
-                        href="#"
-                        class="small d-block mt-3 text-center text-decoration-none"
-                        onclick="
-                            closeRegisterModal();
-                            openModal();
-                        "
-                        ><i class="bi bi-box-arrow-in-right"></i> มีบัญชีแล้ว?
-                        เข้าสู่ระบบ</a
-                    >
-                </form>
-            </div>
+        <!-- RECYCLE CATEGORIES -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div>
+            <h5 class="fw-bold mb-0">รายการรับรีไซเคิลยอดนิยม</h5>
+            <span class="text-muted small">แจ้งความประสงค์ได้ทั้ง E-Waste และพลาสติก</span>
+          </div>
+          <a href="recycle-request.html" class="btn btn-outline-success btn-sm">แจ้งรีไซเคิล <i class="bi bi-arrow-right"></i></a>
         </div>
+        <div class="row g-3 mb-5" id="recycleGrid"></div>
 
-        <!-- Bootstrap Bundle JS -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/js/bootstrap.bundle.min.js"></script>
+        <!-- ARTICLES -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div>
+            <h5 class="fw-bold mb-0">บทความน่าสนใจ</h5>
+            <span class="text-muted small">อ่านเคล็ดลับการจัดการขยะและรีไซเคิล</span>
+          </div>
+        </div>
+        <div class="row g-4 mb-5">
+          <div class="col-md-4">
+            <a href="article.html?id=1" class="card article-card h-100 p-3 text-decoration-none text-dark">
+              <span class="badge bg-success mb-2 w-auto align-self-start">E-Waste</span>
+              <h5 class="fw-bold">ขยะอิเล็กทรอนิกส์ไปไหนต่อ?</h5>
+              <p class="text-muted small">ขั้นตอนการรีไซเคิลมือถือและคอมพิวเตอร์อย่างปลอดภัย...</p>
+              <span class="text-success small fw-bold mt-auto">อ่านต่อ <i class="bi bi-arrow-right"></i></span>
+            </a>
+          </div>
+          <div class="col-md-4">
+            <a href="article.html?id=2" class="card article-card h-100 p-3 text-decoration-none text-dark">
+              <span class="badge bg-primary mb-2 w-auto align-self-start">พลาสติก</span>
+              <h5 class="fw-bold">คัดแยกพลาสติกยังไงให้ได้ราคา</h5>
+              <p class="text-muted small">เทคนิคแยกประเภทพลาสติก PET/HDPE ก่อนส่งรีไซเคิล...</p>
+              <span class="text-success small fw-bold mt-auto">อ่านต่อ <i class="bi bi-arrow-right"></i></span>
+            </a>
+          </div>
+          <div class="col-md-4">
+            <a href="article.html?id=3" class="card article-card h-100 p-3 text-decoration-none text-dark">
+              <span class="badge bg-warning text-dark mb-2 w-auto align-self-start">Green Points</span>
+              <h5 class="fw-bold">วิธีสะสมแต้มแลกส่วนลด</h5>
+              <p class="text-muted small">เปลี่ยนขยะให้เป็นแต้มสะสมแลกซื้อของจากพาร์ตเนอร์...</p>
+              <span class="text-success small fw-bold mt-auto">อ่านต่อ <i class="bi bi-arrow-right"></i></span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
 
-        <script>
-            // MOCK DATA
-            const featured = [
-                {
-                    title: 'iPhone 12 128GB สีดำ',
-                    price: 9900,
-                    score: 82,
-                    image: 'https://placehold.co/300x200?text=iPhone+12',
-                },
-                {
-                    title: 'Notebook Dell Inspiron 14"',
-                    price: 12500,
-                    score: 76,
-                    image: 'https://placehold.co/300x200?text=Dell+Notebook',
-                },
-                {
-                    title: 'iPad Gen 9 64GB Wi-Fi',
-                    price: 8500,
-                    score: 88,
-                    image: 'https://placehold.co/300x200?text=iPad+Gen9',
-                },
-                {
-                    title: 'กล้อง Canon EOS M50',
-                    price: 14900,
-                    score: 70,
-                    image: 'https://placehold.co/300x200?text=Canon+M50',
-                },
-            ];
+    <!-- HOW IT WORKS -->
+    <div class="text-center my-5">
+      <h5 class="fw-bold">GreenLoop ทำงานอย่างไร</h5>
+      <span class="text-muted small">3 ขั้นตอนง่ายๆ สู่การใช้ทรัพยากรอย่างคุ้มค่า</span>
+    </div>
+    <div class="row g-4 text-center mb-5">
+      <div class="col-md-4">
+        <div class="step-circle">1</div>
+        <h6 class="fw-semibold">เลือกสิ่งที่ต้องการ</h6>
+        <p class="small text-muted">ซื้อขายสินค้ามือสอง หรือแจ้งรีไซเคิล E-Waste/พลาสติก</p>
+      </div>
+      <div class="col-md-4">
+        <div class="step-circle">2</div>
+        <h6 class="fw-semibold">ดำเนินการผ่านระบบ</h6>
+        <p class="small text-muted">ชำระผ่าน Wallet หรือส่งของเข้าสู่กระบวนการรีไซเคิล</p>
+      </div>
+      <div class="col-md-4">
+        <div class="step-circle">3</div>
+        <h6 class="fw-semibold">รับ Green Point</h6>
+        <p class="small text-muted">สะสมคะแนนแลกส่วนลด คูปอง และของรางวัล</p>
+      </div>
+    </div>
+  </div>
+</main>
 
-            const recycleItems = [
-                {
-                    title: 'มือถือ / Tablet เก่า',
-                    points: '+50',
-                    icon: 'bi-phone',
-                    color: '#1e8e5a',
-                },
-                {
-                    title: 'แบตเตอรี่ / เครื่องใช้ไฟฟ้า',
-                    points: '+50',
-                    icon: 'bi-battery-full',
-                    color: '#1e8e5a',
-                },
-                {
-                    title: 'ขวดพลาสติก PET',
-                    points: '+10-30',
-                    icon: 'bi-droplet-half',
-                    color: '#0d7bb5',
-                },
-                {
-                    title: 'บรรจุภัณฑ์พลาสติก',
-                    points: '+10-30',
-                    icon: 'bi-bag',
-                    color: '#0d7bb5',
-                },
-            ];
+<!-- FOOTER -->
+<footer class="py-4 text-center mt-auto">
+  <div class="container"><p class="small mb-0">&copy; 2026 GreenLoop. All rights reserved.</p></div>
+</footer>
 
-            function renderData() {
-                const featuredGrid = document.getElementById('featuredGrid');
-                if (featuredGrid) {
-                    featuredGrid.innerHTML = featured
-                        .map(
-                            (p) => `
+<!-- MODAL LOGIN -->
+<div id="loginModalOverlay" class="custom-modal-overlay">
+  <div class="custom-modal-box position-relative">
+    <button type="button" onclick="closeModal()" class="btn-close position-absolute top-0 end-0 m-3"></button>
+    <div class="text-center mb-3">
+      <i class="bi bi-shield-lock text-success display-4"></i>
+      <h4 class="fw-bold mt-2">เข้าสู่ระบบ</h4>
+    </div>
+    <form onsubmit="handleLogin(event)">
+      <div class="mb-3">
+        <label class="form-label small fw-bold">อีเมล</label>
+        <input type="email" class="form-control" value="demo@greenloop.com" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label small fw-bold">รหัสผ่าน</label>
+        <input type="password" class="form-control" value="123456" required>
+      </div>
+      <button type="submit" class="btn btn-success w-100 py-2 fw-bold">เข้าสู่ระบบทันที</button>
+    </form>
+  </div>
+</div>
+
+<!-- MODAL SIGN UP -->
+<div id="registerModalOverlay" class="custom-modal-overlay">
+  <div class="custom-modal-box position-relative">
+    <button type="button" onclick="closeRegisterModal()" class="btn-close position-absolute top-0 end-0 m-3"></button>
+    <div class="text-center mb-3">
+      <i class="bi bi-person-plus text-success display-4"></i>
+      <h4 class="fw-bold mt-1">ลงทะเบียน</h4>
+    </div>
+    <form onsubmit="handleLogin(event)">
+      <div class="mb-3">
+        <label class="form-label small fw-bold">Username</label>
+        <input type="text" class="form-control" placeholder="Username" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label small fw-bold">อีเมล</label>
+        <input type="email" class="form-control" placeholder="example@email.com" required>
+      </div>
+      <div class="row g-2 mb-3">
+        <div class="col-6">
+          <label class="form-label small fw-bold">First Name</label>
+          <input type="text" class="form-control" placeholder="ชื่อจริง" required>
+        </div>
+        <div class="col-6">
+          <label class="form-label small fw-bold">Last Name</label>
+          <input type="text" class="form-control" placeholder="นามสกุล" required>
+        </div>
+      </div>
+      <div class="mb-4">
+        <label class="form-label small fw-bold">รหัสผ่าน</label>
+        <input type="password" class="form-control" required>
+      </div>
+      <button type="submit" class="btn btn-success w-100 py-2 fw-bold">ลงทะเบียน</button>
+      <a href="#" class="small d-block mt-3 text-center text-decoration-none" onclick="closeRegisterModal(); openModal();"><i class="bi bi-box-arrow-in-right"></i> มีบัญชีแล้ว? เข้าสู่ระบบ</a>
+    </form>
+  </div>
+</div>
+
+<!-- Bootstrap Bundle JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  // MOCK DATA
+  const featured = [
+    { title: 'iPhone 12 128GB สีดำ', price: 9900, score: 82, image: 'https://placehold.co/300x200?text=iPhone+12' },
+    { title: 'Notebook Dell Inspiron 14"', price: 12500, score: 76, image: 'https://placehold.co/300x200?text=Dell+Notebook' },
+    { title: 'iPad Gen 9 64GB Wi-Fi', price: 8500, score: 88, image: 'https://placehold.co/300x200?text=iPad+Gen9' },
+    { title: 'กล้อง Canon EOS M50', price: 14900, score: 70, image: 'https://placehold.co/300x200?text=Canon+M50' },
+  ];
+
+  const recycleItems = [
+    { title: 'มือถือ / Tablet เก่า', points: '+50', icon: 'bi-phone', color: '#1e8e5a' },
+    { title: 'แบตเตอรี่ / เครื่องใช้ไฟฟ้า', points: '+50', icon: 'bi-battery-full', color: '#1e8e5a' },
+    { title: 'ขวดพลาสติก PET', points: '+10-30', icon: 'bi-droplet-half', color: '#0d7bb5' },
+    { title: 'บรรจุภัณฑ์พลาสติก', points: '+10-30', icon: 'bi-bag', color: '#0d7bb5' },
+  ];
+
+  function renderData() {
+    const featuredGrid = document.getElementById('featuredGrid');
+    if (featuredGrid) {
+      featuredGrid.innerHTML = featured.map(p => `
         <div class="col-6 col-md-3">
           <div class="card product-card h-100 position-relative">
             <span class="green-score-badge"><i class="bi bi-leaf-fill"></i> ${p.score}</span>
@@ -906,16 +429,12 @@
             </div>
           </div>
         </div>
-      `,
-                        )
-                        .join('');
-                }
+      `).join('');
+    }
 
-                const recycleGrid = document.getElementById('recycleGrid');
-                if (recycleGrid) {
-                    recycleGrid.innerHTML = recycleItems
-                        .map(
-                            (r) => `
+    const recycleGrid = document.getElementById('recycleGrid');
+    if (recycleGrid) {
+      recycleGrid.innerHTML = recycleItems.map(r => `
         <div class="col-6 col-md-3">
           <div class="card product-card h-100 text-center p-3" style="border-top:3px solid ${r.color}">
             <i class="bi ${r.icon}" style="font-size:1.8rem;color:${r.color}"></i>
@@ -923,91 +442,61 @@
             <span class="badge mt-2" style="background:${r.color}">${r.points} คะแนน</span>
           </div>
         </div>
-      `,
-                        )
-                        .join('');
-                }
-            }
+      `).join('');
+    }
+  }
 
-            function openModal() {
-                document.getElementById('loginModalOverlay').style.display =
-                    'flex';
-            }
-            function closeModal() {
-                document.getElementById('loginModalOverlay').style.display =
-                    'none';
-            }
-            function openRegisterModal() {
-                document.getElementById('registerModalOverlay').style.display =
-                    'flex';
-            }
-            function closeRegisterModal() {
-                document.getElementById('registerModalOverlay').style.display =
-                    'none';
-            }
+  function openModal() { document.getElementById('loginModalOverlay').style.display = 'flex'; }
+  function closeModal() { document.getElementById('loginModalOverlay').style.display = 'none'; }
+  function openRegisterModal() { document.getElementById('registerModalOverlay').style.display = 'flex'; }
+  function closeRegisterModal() { document.getElementById('registerModalOverlay').style.display = 'none'; }
 
-            function updateUI() {
-                const isLoggedIn =
-                    localStorage.getItem('isLoggedIn') === 'true';
-                const walletDisplay = document.getElementById('walletDisplay');
+  function updateUI() {
+    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+    const walletDisplay = document.getElementById('walletDisplay');
 
-                if (isLoggedIn) {
-                    document.getElementById('guestNav').classList.add('d-none');
-                    document
-                        .getElementById('guestContent')
-                        .classList.add('d-none');
+    if (isLoggedIn) {
+      document.getElementById('guestNav').classList.add('d-none');
+      document.getElementById('guestContent').classList.add('d-none');
+      
+      document.getElementById('userNav').classList.remove('d-none');
+      document.getElementById('userNav').classList.add('d-flex');
+      document.getElementById('userContent').classList.remove('d-none');
+      
+      if(walletDisplay) {
+        walletDisplay.classList.remove('d-none');
+        walletDisplay.classList.add('d-flex');
+      }
 
-                    document
-                        .getElementById('userNav')
-                        .classList.remove('d-none');
-                    document.getElementById('userNav').classList.add('d-flex');
-                    document
-                        .getElementById('userContent')
-                        .classList.remove('d-none');
+      renderData();
+    } else {
+      document.getElementById('userNav').classList.add('d-none');
+      document.getElementById('userNav').classList.remove('d-flex');
+      document.getElementById('userContent').classList.add('d-none');
+      
+      document.getElementById('guestNav').classList.remove('d-none');
+      document.getElementById('guestContent').classList.remove('d-none');
+      if(walletDisplay) {
+        walletDisplay.classList.add('d-none');
+        walletDisplay.classList.remove('d-flex');
+      }
+    }
+  }
 
-                    if (walletDisplay) {
-                        walletDisplay.classList.remove('d-none');
-                        walletDisplay.classList.add('d-flex');
-                    }
+  function handleLogin(e) {
+    e.preventDefault();
+    localStorage.setItem("isLoggedIn", "true");
+    closeModal();
+    closeRegisterModal();
+    updateUI();
+  }
 
-                    renderData();
-                } else {
-                    document.getElementById('userNav').classList.add('d-none');
-                    document
-                        .getElementById('userNav')
-                        .classList.remove('d-flex');
-                    document
-                        .getElementById('userContent')
-                        .classList.add('d-none');
+  function logout() {
+    localStorage.removeItem("isLoggedIn");
+    updateUI();
+  }
 
-                    document
-                        .getElementById('guestNav')
-                        .classList.remove('d-none');
-                    document
-                        .getElementById('guestContent')
-                        .classList.remove('d-none');
-                    if (walletDisplay) {
-                        walletDisplay.classList.add('d-none');
-                        walletDisplay.classList.remove('d-flex');
-                    }
-                }
-            }
-
-            function handleLogin(e) {
-                e.preventDefault();
-                localStorage.setItem('isLoggedIn', 'true');
-                closeModal();
-                closeRegisterModal();
-                updateUI();
-            }
-
-            function logout() {
-                localStorage.removeItem('isLoggedIn');
-                updateUI();
-            }
-
-            document.addEventListener('DOMContentLoaded', updateUI);
-        </script>
-        <script src="js/Index.js"></script>
-    </body>
+  document.addEventListener('DOMContentLoaded', updateUI);
+</script>
+</body>
 </html>
