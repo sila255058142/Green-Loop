@@ -15,6 +15,8 @@ function updateUI() {
         const user = JSON.parse(localStorage.getItem('user') || '{}');
         const walletBalance = Number(user.walletBalance || 0);
 
+        syncWalletFromDatabase(user);
+
         document.getElementById('guestNav').classList.add('d-none');
         document.getElementById('guestContent').classList.add('d-none');
 
@@ -48,6 +50,31 @@ function updateUI() {
             display.classList.remove('d-flex');
         });
     }
+}
+
+async function syncWalletFromDatabase(user) {
+    if (!user.id) return;
+    try {
+        const response = await fetch(
+            `api/wallet/balance.php?user_id=${user.id}`,
+        );
+        const result = await response.json();
+        if (!result.success) return;
+        user.walletBalance = result.balance;
+        user.username = result.username;
+        localStorage.setItem('user', JSON.stringify(user));
+        updateUIWalletDisplay(result.balance, result.username);
+    } catch (error) {
+        console.error('Wallet sync error:', error);
+    }
+}
+
+function updateUIWalletDisplay(balance, username) {
+    document.querySelectorAll('.walletAmount').forEach((amount) => {
+        amount.textContent = `฿${Number(balance).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    });
+    const nameDisplay = document.getElementById('userNameDisplay');
+    if (nameDisplay) nameDisplay.textContent = username || 'My Account';
 }
 
 // บันทึกข้อมูลลง Database แล้วให้ผู้ใช้เข้าสู่ระบบด้วยตนเอง

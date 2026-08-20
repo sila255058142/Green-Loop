@@ -1,59 +1,63 @@
-    /**
-     * GreenLoop - recycle-request.js
-     * Logic สำหรับฟอร์มแจ้งความประสงค์รีไซเคิล: toggle E-Waste/Plastic, toggle ที่อยู่รับของ, submit
-     * ในระบบจริงจะส่งไปยัง API PHP เช่น:
-     *   fetch('api/recycle_request.php', { method: 'POST', body: formData })
-     */
-
-    document.addEventListener('DOMContentLoaded', () => {
-
-    const ewasteRadio    = document.getElementById('typeEwaste');
-    const plasticRadio   = document.getElementById('typePlastic');
-    const ewasteSection  = document.getElementById('ewasteSection');
+document.addEventListener('DOMContentLoaded', () => {
+    const typeEwaste = document.getElementById('typeEwaste');
+    const typePlastic = document.getElementById('typePlastic');
+    const ewasteSection = document.getElementById('ewasteSection');
     const plasticSection = document.getElementById('plasticSection');
-    const pickupRadio    = document.getElementById('pickup');
-    const dropOffRadio   = document.getElementById('dropOff');
-    const addressField   = document.getElementById('addressField');
-    const form           = document.getElementById('recycleForm');
 
-    function toggleWasteType() {
-        const isEwaste = ewasteRadio.checked;
-        ewasteSection.classList.toggle('section-hidden', !isEwaste);
-        plasticSection.classList.toggle('section-hidden', isEwaste);
-    }
+    const dropOff = document.getElementById('dropOff');
+    const pickup = document.getElementById('pickup');
+    const addressField = document.getElementById('addressField');
 
-    function togglePickup() {
-        addressField.classList.toggle('section-hidden', !pickupRadio.checked);
-    }
+    // 1. สลับฟิลด์ตามประเภทขยะ
+    typeEwaste.addEventListener('change', () => {
+        ewasteSection.classList.remove('section-hidden');
+        plasticSection.classList.add('section-hidden');
+    });
 
-    if (ewasteRadio && plasticRadio) {
-        ewasteRadio.addEventListener('change', toggleWasteType);
-        plasticRadio.addEventListener('change', toggleWasteType);
-    }
+    typePlastic.addEventListener('change', () => {
+        plasticSection.classList.remove('section-hidden');
+        ewasteSection.classList.add('section-hidden');
+    });
 
-    if (pickupRadio && dropOffRadio) {
-        pickupRadio.addEventListener('change', togglePickup);
-        dropOffRadio.addEventListener('change', togglePickup);
-    }
+    // 2. สลับฟิลด์ที่อยู่ตามวิธีการส่ง
+    dropOff.addEventListener('change', () => addressField.classList.add('section-hidden'));
+    pickup.addEventListener('change', () => addressField.classList.remove('section-hidden'));
 
-    if (form) {
-        form.addEventListener('submit', (e) => {
+    // 3. จัดการ Submit Form
+    const recycleForm = document.getElementById('recycleForm');
+    recycleForm.addEventListener('submit', async (e) => {
         e.preventDefault();
 
-        const formData = new FormData(form);
-        const payload = Object.fromEntries(formData.entries());
+        // ดึงข้อมูล User จาก localStorage
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+        if (!user.id) {
+            alert('กรุณาเข้าสู่ระบบก่อนทำรายการ');
+            return;
+        }
 
-        console.log('Recycle request payload:', payload);
+        const formData = new FormData(recycleForm);
+        formData.append('user_id', user.id);
 
-        // TODO: เชื่อมกับ backend จริง เช่น
-        // fetch('api/recycle_request.php', { method: 'POST', body: formData })
-        //   .then(r => r.json())
-        //   .then(res => { if (res.success) window.location.href = 'recycle-track.html?id=' + res.request_id; });
+        try {
+            const response = await fetch('api/create_recycle_request.php', {
+                method: 'POST',
+                body: formData
+            });
 
-        alert('ส่งคำขอรีไซเคิลเรียบร้อย! ทีมงานจะติดต่อกลับเพื่อยืนยันการนัดหมาย');
-        form.reset();
-        toggleWasteType();
-        togglePickup();
-        });
-    }
+            const result = await response.json();
+
+            if (result.success) {
+                alert(result.message);
+                recycleForm.reset();
+                ewasteSection.classList.remove('section-hidden');
+                plasticSection.classList.add('section-hidden');
+                addressField.classList.add('section-hidden');
+            } else {
+                alert('เกิดข้อผิดพลาด: ' + result.message);
+            }
+        } catch (error) {
+            console.error('Error submitting recycle request:', error);
+            alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
+        }
     });
+});

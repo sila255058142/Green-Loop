@@ -21,6 +21,26 @@ document.addEventListener('DOMContentLoaded', () => {
         })}`;
     }
 
+    async function syncWallet() {
+        if (!user.id) return;
+        try {
+            const response = await fetch(
+                `api/wallet/balance.php?user_id=${user.id}`,
+            );
+            const result = await response.json();
+            if (!result.success) return;
+            user.walletBalance = result.balance;
+            user.username = result.username;
+            localStorage.setItem('user', JSON.stringify(user));
+            if (userNameDisplay)
+                userNameDisplay.textContent = result.username || 'ผู้ใช้';
+            if (walletAmount)
+                walletAmount.textContent = `฿${Number(result.balance).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        } catch (error) {
+            console.error('Wallet sync error:', error);
+        }
+    }
+
     const ITEMS_PER_PAGE = 6;
 
     const productTrack = document.getElementById('productTrack');
@@ -201,6 +221,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // โหลดสินค้าจาก Database แล้วจึงแสดงผล
+    syncWallet();
     loadProducts();
 });
 
