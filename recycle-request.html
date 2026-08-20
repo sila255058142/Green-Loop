@@ -40,6 +40,14 @@
         border:2px dashed #ced4da; border-radius:12px; padding:2rem; text-align:center; color:#868e96; cursor:pointer;
     }
     .upload-box:hover{ border-color:var(--gl-green); color:var(--gl-green-dark); }
+
+    .recycle-side{
+        border-radius:16px; overflow:hidden; min-height:100%;
+        background:
+            linear-gradient(180deg, rgba(22,104,71,.15) 0%, rgba(22,104,71,.75) 100%),
+            url('https://loremflickr.com/700/900/recycling,ewaste?lock=88') center/cover no-repeat;
+        color:#fff; display:flex; align-items:flex-end; padding:2rem;
+    }
 </style>
 </head>
 <body>
@@ -51,7 +59,18 @@
 </nav>
 
 <div class="container py-5">
-  <div class="row justify-content-center">
+  <div class="row justify-content-center g-4">
+
+    <!-- SIDE IMAGE -->
+    <div class="col-lg-4 d-none d-lg-block">
+      <div class="recycle-side">
+        <div>
+          <h4 class="fw-bold mb-2">ทิ้งอย่างถูกวิธี ได้ทั้งแต้มและช่วยโลก</h4>
+          <p class="small opacity-75 mb-0">ทุกครั้งที่คุณแจ้งรีไซเคิล E-Waste หรือพลาสติกผ่าน GreenLoop คุณกำลังช่วยลดขยะและลดผลกระทบต่อสิ่งแวดล้อม</p>
+        </div>
+      </div>
+    </div>
+
     <div class="col-lg-8">
 
       <div class="mb-4">
