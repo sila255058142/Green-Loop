@@ -4,35 +4,38 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+    let products = [];
 
-    // ตัวอย่างข้อมูลสินค้า (mock data)
-    const sampleProducts = [
-        { id: 1, title: 'iPhone 12 128GB สีดำ สภาพดี', price: 9900, condition: 'สภาพดี', category: 'mobile', image: 'https://placehold.co/300x200?text=iPhone+12' },
-        { id: 2, title: 'Notebook Dell Inspiron 14"', price: 12500, condition: 'เหมือนใหม่', category: 'notebook', image: 'https://placehold.co/300x200?text=Dell+Notebook' },
-        { id: 3, title: 'iPad Gen 9 64GB Wi-Fi', price: 8500, condition: 'สภาพดี', category: 'tablet', image: 'https://placehold.co/300x200?text=iPad+Gen9' },
-        { id: 4, title: 'กล้อง Canon EOS M50', price: 14900, condition: 'เหมือนใหม่', category: 'camera', image: 'https://placehold.co/300x200?text=Canon+M50' },
-        { id: 5, title: 'Samsung Galaxy S21', price: 7200, condition: 'พอใช้', category: 'mobile', image: 'https://placehold.co/300x200?text=Galaxy+S21' },
-        { id: 6, title: 'หูฟังไร้สาย Sony WH-1000XM4', price: 5500, condition: 'สภาพดี', category: 'accessory', image: 'https://placehold.co/300x200?text=Sony+XM4' },
-        { id: 7, title: 'หูฟังไร้สาย Sony WH-1000XM4', price: 5500, condition: 'สภาพดี', category: 'accessory', image: 'https://placehold.co/300x200?text=Sony+XM4' },
-        { id: 8, title: 'หูฟังไร้สาย Sony WH-1000XM4', price: 5500, condition: 'สภาพดี', category: 'accessory', image: 'https://placehold.co/300x200?text=Sony+XM4' },
-        { id: 9, title: 'หูฟังไร้สาย Sony WH-1000XM4', price: 5500, condition: 'สภาพดี', category: 'accessory', image: 'https://placehold.co/300x200?text=Sony+XM4' },
-    ];
+    const userNameDisplay = document.getElementById('userNameDisplay');
+    const walletAmount = document.getElementById('walletAmount');
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const balance = Number(user.walletBalance ?? user.wallet_balance ?? 0);
+
+    if (userNameDisplay) {
+        userNameDisplay.textContent = user.username || 'ผู้ใช้';
+    }
+    if (walletAmount) {
+        walletAmount.textContent = `฿${balance.toLocaleString('th-TH', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+        })}`;
+    }
 
     const ITEMS_PER_PAGE = 6;
 
-    const productTrack     = document.getElementById('productTrack');
-    const resultCount      = document.getElementById('resultCount');
-    const categoryFilters  = document.getElementById('categoryFilters');
-    const prevPageBtn      = document.getElementById('prevPageBtn');
-    const nextPageBtn      = document.getElementById('nextPageBtn');
+    const productTrack = document.getElementById('productTrack');
+    const resultCount = document.getElementById('resultCount');
+    const categoryFilters = document.getElementById('categoryFilters');
+    const prevPageBtn = document.getElementById('prevPageBtn');
+    const nextPageBtn = document.getElementById('nextPageBtn');
 
     let currentCategory = 'all';
     let currentPageIndex = 0; // 0-based
 
     function getFilteredProducts() {
         return currentCategory === 'all'
-            ? sampleProducts
-            : sampleProducts.filter(p => p.category === currentCategory);
+            ? products
+            : products.filter((p) => p.category === currentCategory);
     }
 
     function chunkIntoPages(items) {
@@ -78,7 +81,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const filtered = getFilteredProducts();
 
-        if (resultCount) resultCount.textContent = `พบ ${filtered.length} รายการ`;
+        if (resultCount)
+            resultCount.textContent = `พบ ${filtered.length} รายการ`;
 
         if (filtered.length === 0) {
             productTrack.style.transform = 'translateX(0%)';
@@ -95,15 +99,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const pages = chunkIntoPages(filtered);
-        if (currentPageIndex > pages.length - 1) currentPageIndex = pages.length - 1;
+        if (currentPageIndex > pages.length - 1)
+            currentPageIndex = pages.length - 1;
 
-        productTrack.innerHTML = pages.map(pageItems => `
+        productTrack.innerHTML = pages
+            .map(
+                (pageItems) => `
             <div class="carousel-page">
                 <div class="row g-3">
                     ${pageItems.map(renderProductCard).join('')}
                 </div>
             </div>
-        `).join('');
+        `,
+            )
+            .join('');
 
         goToPage(currentPageIndex, pages.length, true);
     }
@@ -114,7 +123,9 @@ document.addEventListener('DOMContentLoaded', () => {
         updateArrowStates(currentPageIndex, totalPages);
 
         if (!skipScroll) {
-            productTrack.closest('.carousel-shell').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            productTrack
+                .closest('.carousel-shell')
+                .scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
     }
 
@@ -138,7 +149,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (categoryFilters) {
         categoryFilters.addEventListener('click', (e) => {
             if (e.target.tagName !== 'BUTTON') return;
-            [...categoryFilters.children].forEach(btn => btn.classList.replace('btn-success', 'btn-outline-secondary'));
+            [...categoryFilters.children].forEach((btn) =>
+                btn.classList.replace('btn-success', 'btn-outline-secondary'),
+            );
             e.target.classList.replace('btn-outline-secondary', 'btn-success');
 
             currentCategory = e.target.dataset.cat;
@@ -161,8 +174,34 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // แสดงผลข้อมูลเริ่มต้น
-    renderProducts();
+    async function loadProducts() {
+        productTrack.innerHTML = `
+            <div class="carousel-page">
+                <div class="text-center text-muted py-5">กำลังโหลดสินค้า...</div>
+            </div>`;
+
+        try {
+            const response = await fetch('api/get_products.php');
+            const result = await response.json();
+
+            if (!result.success) {
+                throw new Error(result.message || 'โหลดสินค้าไม่สำเร็จ');
+            }
+
+            products = result.products || [];
+            renderProducts();
+        } catch (error) {
+            console.error('Load products error:', error);
+            productTrack.innerHTML = `
+                <div class="carousel-page">
+                    <div class="text-center text-danger py-5">ไม่สามารถโหลดสินค้าจาก Database ได้</div>
+                </div>`;
+            updateArrowStates(0, 1);
+        }
+    }
+
+    // โหลดสินค้าจาก Database แล้วจึงแสดงผล
+    loadProducts();
 });
 
 // ฟังก์ชันส่งข้อมูลการสั่งซื้อ

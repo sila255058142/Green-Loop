@@ -1,88 +1,135 @@
-    /**
-     * GreenLoop - sell.js
-     * Logic สำหรับฟอร์มลงขายสินค้า: อัปโหลด/พรีวิวรูปภาพหลายรูป (รูปแรก = รูปปก), submit ฟอร์ม
-     * ในระบบจริงจะส่งไปยัง API PHP เช่น:
-     *   fetch('api/products.php', { method: 'POST', body: formData })
-     */
-
-    document.addEventListener('DOMContentLoaded', () => {
-
-    const MAX_IMAGES = 8;
-    const uploader   = document.getElementById('imageUploader');
-    const addSlot    = document.getElementById('addImageSlot');
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('sellForm');
     const imageInput = document.getElementById('imageInput');
-    const form       = document.getElementById('sellForm');
+    const imageUploader = document.getElementById('imageUploader');
+    const addImageSlot = document.getElementById('addImageSlot');
+    const MAX_IMAGES = 8;
+    let selectedFiles = [];
 
-    let selectedFiles = []; // เก็บไฟล์รูปภาพทั้งหมดที่เลือกไว้
+    // --- Image upload / preview ---
+    imageInput.addEventListener('change', (e) => {
+        const files = Array.from(e.target.files);
+        for (const file of files) {
+            if (selectedFiles.length >= MAX_IMAGES) break;
+            if (!file.type.startsWith('image/')) continue;
+            if (file.size > 5 * 1024 * 1024) {
+                alert(`ไฟล์ "${file.name}" มีขนาดเกิน 5MB`);
+                continue;
+            }
+            selectedFiles.push(file);
+        }
+        renderPreviews();
+        imageInput.value = ''; // allow selecting the same file again
+    });
 
-    function renderImagePreviews() {
-        // ลบพรีวิวเดิมทั้งหมด (ยกเว้นปุ่ม "เพิ่มรูป")
-        [...uploader.querySelectorAll('.preview-slot')].forEach(el => el.remove());
+    function renderPreviews() {
+        imageUploader
+            .querySelectorAll('.upload-slot:not(#addImageSlot)')
+            .forEach((el) => el.remove());
 
         selectedFiles.forEach((file, index) => {
-        const url = URL.createObjectURL(file);
-        const slot = document.createElement('div');
-        slot.className = 'upload-slot preview-slot' + (index === 0 ? ' cover-slot' : '');
-        slot.innerHTML = `
-            <img src="${url}" alt="product-image-${index}">
-            <button type="button" class="remove-img" data-index="${index}" aria-label="ลบรูปนี้">
-            <i class="bi bi-x"></i>
-            </button>
-        `;
-        uploader.insertBefore(slot, addSlot);
+            const slot = document.createElement('div');
+            slot.className = 'upload-slot' + (index === 0 ? ' cover-slot' : '');
+
+            const img = document.createElement('img');
+            img.src = URL.createObjectURL(file);
+            img.alt = file.name;
+
+            const removeBtn = document.createElement('button');
+            removeBtn.type = 'button';
+            removeBtn.className = 'remove-img';
+            removeBtn.innerHTML = '&times;';
+            removeBtn.addEventListener('click', (ev) => {
+                ev.stopPropagation();
+                selectedFiles.splice(index, 1);
+                renderPreviews();
+            });
+
+            slot.appendChild(img);
+            slot.appendChild(removeBtn);
+            imageUploader.insertBefore(slot, addImageSlot);
         });
 
-        // ซ่อนปุ่ม "เพิ่มรูป" เมื่อครบจำนวนสูงสุด
-        addSlot.style.display = selectedFiles.length >= MAX_IMAGES ? 'none' : 'flex';
+        addImageSlot.style.display =
+            selectedFiles.length >= MAX_IMAGES ? 'none' : 'flex';
     }
 
-    if (imageInput) {
-        imageInput.addEventListener('change', (e) => {
-        const newFiles = Array.from(e.target.files);
-        const remainingSlots = MAX_IMAGES - selectedFiles.length;
-        selectedFiles = selectedFiles.concat(newFiles.slice(0, remainingSlots));
-        renderImagePreviews();
-        imageInput.value = ''; // reset input เพื่อให้เลือกไฟล์ซ้ำได้อีกครั้งถ้าต้องการ
-        });
-    }
-
-    if (uploader) {
-        uploader.addEventListener('click', (e) => {
-        const removeBtn = e.target.closest('.remove-img');
-        if (!removeBtn) return;
-        e.preventDefault();
-        const index = Number(removeBtn.dataset.index);
-        selectedFiles.splice(index, 1);
-        renderImagePreviews();
-        });
-    }
-
-    if (form) {
-        form.addEventListener('submit', (e) => {
+    // --- Form submit ---
+    form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
-        if (selectedFiles.length === 0) {
-            alert('กรุณาอัปโหลดรูปภาพสินค้าอย่างน้อย 1 รูป');
+        const userData = JSON.parse(localStorage.getItem('user') || 'null');
+        if (!userData || !userData.id) {
+            alert('กรุณาเข้าสู่ระบบก่อนลงขายสินค้า');
+            window.location.href = 'login.html';
             return;
         }
 
-        const formData = new FormData(form);
-        selectedFiles.forEach((file, i) => formData.append(`images[${i}]`, file));
-
-        const payload = Object.fromEntries(
-            [...formData.entries()].filter(([key]) => !key.startsWith('images['))
+        const conditionInput = form.querySelector(
+            'input[name="condition"]:checked',
         );
-        console.log('Sell item payload:', payload, 'images:', selectedFiles.length);
+        const title = form.title.value.trim();
+        const category = form.category.value;
+        const price = form.price.value;
+        const description = form.description.value.trim();
+        const agreeTerms = document.getElementById('agreeTerms');
 
-        // TODO: เชื่อมกับ backend จริง เช่น
-        // fetch('api/products.php', { method: 'POST', body: formData })
-        //   .then(r => r.json())
-        //   .then(res => { if (res.success) window.location.href = 'profile-my-listings.html'; });
+        if (
+            !title ||
+            !category ||
+            !price ||
+            Number(price) < 0 ||
+            !description ||
+            !conditionInput
+        ) {
+            alert('กรุณากรอกข้อมูลสินค้าให้ครบถ้วนและถูกต้อง');
+            return;
+        }
+        if (!agreeTerms.checked) {
+            alert('กรุณายอมรับเงื่อนไขการลงขายสินค้า');
+            return;
+        }
 
-        alert('ลงขายสินค้าสำเร็จ! รายการของคุณกำลังรอการตรวจสอบจากทีมงาน (+20 Green Point เมื่ออนุมัติ)');
-        form.reset();
-        selectedFiles = [];
-        renderImagePreviews();
-        });
-    }
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const originalBtnHtml = submitBtn.innerHTML;
+        submitBtn.disabled = true;
+        submitBtn.innerHTML =
+            '<span class="spinner-border spinner-border-sm me-1"></span> กำลังบันทึก...';
+
+        const formData = new FormData();
+        formData.append('user_id', userData.id);
+        formData.append('title', title);
+        formData.append('category', category);
+        formData.append('price', price);
+        formData.append('condition', conditionInput.value);
+        formData.append('conditionNote', form.conditionNote.value.trim());
+        formData.append('description', description);
+        selectedFiles.forEach((file) => formData.append('images[]', file));
+
+        try {
+            const res = await fetch('api/create_product.php', {
+                method: 'POST',
+                body: formData,
+            });
+            const result = await res.json();
+
+            if (result.success) {
+                alert(
+                    'ลงขายสินค้าสำเร็จ! สินค้าของคุณถูกเพิ่มเข้าสู่ตลาดมือสองแล้ว',
+                );
+                window.location.href = 'marketplace.html';
+            } else {
+                alert(
+                    result.message ||
+                        'เกิดข้อผิดพลาดในการลงขายสินค้า กรุณาลองใหม่อีกครั้ง',
+                );
+            }
+        } catch (err) {
+            console.error(err);
+            alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้ กรุณาลองใหม่อีกครั้ง');
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalBtnHtml;
+        }
     });
+});

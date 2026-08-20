@@ -1,120 +1,260 @@
-    <!DOCTYPE html>
-    <html lang="th">
+<!doctype html>
+<html lang="th">
     <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Marketplace | GreenLoop</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-    <style>
-        :root{ --gl-green:#1e8e5a; --gl-green-dark:#166847; --gl-green-light:#e8f6ee; }
-        body{ background:#f5f7f6; font-family:'Segoe UI',sans-serif; }
-        .gl-navbar{ background:var(--gl-green-dark); }
-        .gl-navbar .navbar-brand{ color:#fff; font-weight:700; }
-        .product-card{ border:none; border-radius:14px; overflow:hidden; box-shadow:0 2px 12px rgba(0,0,0,.05); transition:.15s; }
-        .product-card:hover{ transform:translateY(-4px); box-shadow:0 8px 24px rgba(0,0,0,.1); }
-        .product-img{ height:170px; object-fit:cover; width:100%; background:#e9ecef; }
-        .fav-btn{
-            position:absolute; top:.6rem; right:.6rem; background:rgba(255,255,255,.9); border:none;
-            width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center;
-        }
-        .price-tag{ color:var(--gl-green-dark); font-weight:700; font-size:1.1rem; }
-        .category-pill{ border-radius:999px; padding:.5rem 1.3rem; font-size:.9rem; }
-        #categoryFilters{ flex-wrap: wrap; }
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Marketplace | GreenLoop</title>
+        <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/css/bootstrap.min.css"
+            rel="stylesheet"
+        />
+        <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css"
+            rel="stylesheet"
+        />
+        <style>
+            :root {
+                --gl-green: #1e8e5a;
+                --gl-green-dark: #166847;
+                --gl-green-light: #e8f6ee;
+            }
+            body {
+                background: #f5f7f6;
+                font-family: 'Segoe UI', sans-serif;
+            }
+            .gl-navbar {
+                background: var(--gl-green-dark);
+            }
+            .gl-navbar .navbar-brand {
+                color: #fff;
+                font-weight: 700;
+            }
+            .product-card {
+                border: none;
+                border-radius: 14px;
+                overflow: hidden;
+                box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+                transition: 0.15s;
+                height: 100%;
+                background: #fff;
+            }
+            .product-card:hover {
+                transform: translateY(-4px);
+                box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            }
+            .product-img {
+                display: block;
+                width: 100%;
+                aspect-ratio: 4 / 3;
+                height: auto;
+                object-fit: contain;
+                object-position: center;
+                padding: 0.75rem;
+                background: #eef2f0;
+                border-bottom: 1px solid #e7ece9;
+            }
+            .fav-btn {
+                position: absolute;
+                top: 0.6rem;
+                right: 0.6rem;
+                background: rgba(255, 255, 255, 0.9);
+                border: none;
+                width: 32px;
+                height: 32px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .price-tag {
+                color: var(--gl-green-dark);
+                font-weight: 700;
+                font-size: 1.1rem;
+            }
+            .category-pill {
+                border-radius: 999px;
+                padding: 0.5rem 1.3rem;
+                font-size: 0.9rem;
+            }
+            #categoryFilters {
+                flex-wrap: wrap;
+            }
 
-        /* CAROUSEL NAVIGATION */
-        .carousel-shell{ padding: 0 3.2rem; }
-        .carousel-viewport{ overflow: hidden; }
-        .carousel-track{
-            display: flex;
-            transition: transform .45s cubic-bezier(.22,.61,.36,1);
-            will-change: transform;
-        }
-        .carousel-page{
-            flex: 0 0 100%;
-            max-width: 100%;
-        }
-        .carousel-arrow{
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 46px; height: 46px;
-            border-radius: 50%;
-            border: none;
-            background: #fff;
-            box-shadow: 0 2px 12px rgba(0,0,0,.12);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.2rem;
-            color: var(--gl-green-dark);
-            transition: all .15s ease;
-            z-index: 2;
-        }
-        .carousel-arrow:hover:not(:disabled){ background: var(--gl-green); color: #fff; box-shadow: 0 4px 16px rgba(0,0,0,.18); }
-        .carousel-arrow:disabled{ opacity: .35; cursor: default; box-shadow: none; }
-        .carousel-arrow.prev{ left: 0; }
-        .carousel-arrow.next{ right: 0; }
-    </style>
+            /* CAROUSEL NAVIGATION */
+            .carousel-shell {
+                padding: 0 3.2rem;
+            }
+            .carousel-viewport {
+                overflow: hidden;
+            }
+            .carousel-track {
+                display: flex;
+                transition: transform 0.45s cubic-bezier(0.22, 0.61, 0.36, 1);
+                will-change: transform;
+            }
+            .carousel-page {
+                flex: 0 0 100%;
+                max-width: 100%;
+            }
+            .carousel-page .row {
+                align-items: stretch;
+            }
+            .product-card .card-body {
+                min-height: 92px;
+            }
+            .carousel-arrow {
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 46px;
+                height: 46px;
+                border-radius: 50%;
+                border: none;
+                background: #fff;
+                box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.2rem;
+                color: var(--gl-green-dark);
+                transition: all 0.15s ease;
+                z-index: 2;
+            }
+            .carousel-arrow:hover:not(:disabled) {
+                background: var(--gl-green);
+                color: #fff;
+                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+            }
+            .carousel-arrow:disabled {
+                opacity: 0.35;
+                cursor: default;
+                box-shadow: none;
+            }
+            .carousel-arrow.prev {
+                left: 0;
+            }
+            .carousel-arrow.next {
+                right: 0;
+            }
+        </style>
     </head>
     <body>
+        <nav class="navbar gl-navbar navbar-dark py-3">
+            <div class="container">
+                <a class="navbar-brand" href="index.html"
+                    ><i class="bi bi-recycle"></i> GreenLoop</a
+                >
+                <div class="d-flex align-items-center gap-3 text-white ms-auto">
+                    <a href="sell.html" class="text-white text-decoration-none"
+                        ><i class="bi bi-tag"></i> For Sale</a
+                    >
+                    <a
+                        href="recycle-request.html"
+                        class="text-white text-decoration-none"
+                        ><i class="bi bi-recycle"></i> Recycle</a
+                    >
+                    <a href="#" class="text-white text-decoration-none"
+                        ><i class="bi bi-chat-dots"></i
+                    ></a>
+                    <span class="text-white text-nowrap"
+                        ><i class="bi bi-wallet2"></i>
+                        <span id="walletAmount">฿0.00</span></span
+                    >
+                    <span class="text-white text-nowrap"
+                        ><i class="bi bi-person-circle fs-5"></i>
+                        <span id="userNameDisplay">ผู้ใช้</span></span
+                    >
+                </div>
+            </div>
+        </nav>
 
-    <nav class="navbar gl-navbar navbar-dark py-3">
-    <div class="container">
-        <a class="navbar-brand" href="index.html"><i class="bi bi-recycle"></i> GreenLoop</a>
-        <div class="d-flex align-items-center gap-3 text-white ms-auto">
-        <a href="sell.html" class="text-white text-decoration-none"><i class="bi bi-tag"></i> For Sale</a>
-        <a href="recycle-request.html" class="text-white text-decoration-none"><i class="bi bi-recycle"></i> Recycle</a>
-        <a href="#" class="text-white text-decoration-none"><i class="bi bi-chat-dots"></i></a>
-        <a href="#" class="text-white text-decoration-none"><i class="bi bi-wallet2"></i> ฿1,250</a>
-        <a href="#" class="text-white text-decoration-none"><i class="bi bi-person-circle fs-5"></i></a>
+        <div class="container py-4">
+            <h5 class="fs-2 fw-bold mb-1 text-center">สินค้ามือสองทั้งหมด</h5>
+
+            <!-- CATEGORY FILTERS (horizontal) -->
+            <div
+                class="d-flex gap-2 mt-3 mb-4 justify-content-center"
+                id="categoryFilters"
+            >
+                <button class="btn category-pill btn-success" data-cat="all">
+                    ทั้งหมด
+                </button>
+                <button
+                    class="btn btn-outline-secondary category-pill"
+                    data-cat="mobile"
+                >
+                    โทรศัพท์
+                </button>
+                <button
+                    class="btn btn-outline-secondary category-pill"
+                    data-cat="notebook"
+                >
+                    Notebook
+                </button>
+                <button
+                    class="btn btn-outline-secondary category-pill"
+                    data-cat="tablet"
+                >
+                    Tablet
+                </button>
+                <button
+                    class="btn btn-outline-secondary category-pill"
+                    data-cat="camera"
+                >
+                    กล้อง
+                </button>
+                <button
+                    class="btn btn-outline-secondary category-pill"
+                    data-cat="accessory"
+                >
+                    อุปกรณ์ IT
+                </button>
+            </div>
+
+            <!-- PRODUCT CAROUSEL -->
+            <div class="carousel-shell position-relative">
+                <button
+                    class="carousel-arrow prev"
+                    id="prevPageBtn"
+                    type="button"
+                    aria-label="ก่อนหน้า"
+                >
+                    <i class="bi bi-chevron-left"></i>
+                </button>
+
+                <div class="carousel-viewport">
+                    <div class="carousel-track" id="productTrack">
+                        <!-- Pages of 6 products rendered here by JS -->
+                    </div>
+                </div>
+
+                <button
+                    class="carousel-arrow next"
+                    id="nextPageBtn"
+                    type="button"
+                    aria-label="ถัดไป"
+                >
+                    <i class="bi bi-chevron-right"></i>
+                </button>
+            </div>
         </div>
-    </div>
-    </nav>
 
-    <div class="container py-4">
-    <h5 class="fs-2 fw-bold mb-1 text-center">สินค้ามือสองทั้งหมด</h5>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/js/bootstrap.bundle.min.js"></script>
+        <script src="js/marketplace.js"></script>
+        <script>
+            // อ่านค่า cat จาก URL แล้วเลือกหมวดหมู่ให้อัตโนมัติ
+            window.addEventListener('load', () => {
+                const params = new URLSearchParams(window.location.search);
+                const cat = params.get('cat');
+                if (!cat) return;
 
-    <!-- CATEGORY FILTERS (horizontal) -->
-    <div class="d-flex gap-2 mt-3 mb-4 justify-content-center" id="categoryFilters">
-        <button class="btn category-pill btn-success" data-cat="all">ทั้งหมด</button>
-        <button class="btn btn-outline-secondary category-pill" data-cat="mobile">โทรศัพท์</button>
-        <button class="btn btn-outline-secondary category-pill" data-cat="notebook">Notebook</button>
-        <button class="btn btn-outline-secondary category-pill" data-cat="tablet">Tablet</button>
-        <button class="btn btn-outline-secondary category-pill" data-cat="camera">กล้อง</button>
-        <button class="btn btn-outline-secondary category-pill" data-cat="accessory">อุปกรณ์ IT</button>
-    </div>
-
-    <!-- PRODUCT CAROUSEL -->
-    <div class="carousel-shell position-relative">
-        <button class="carousel-arrow prev" id="prevPageBtn" type="button" aria-label="ก่อนหน้า">
-        <i class="bi bi-chevron-left"></i>
-        </button>
-
-        <div class="carousel-viewport">
-        <div class="carousel-track" id="productTrack">
-            <!-- Pages of 6 products rendered here by JS -->
-        </div>
-        </div>
-
-        <button class="carousel-arrow next" id="nextPageBtn" type="button" aria-label="ถัดไป">
-        <i class="bi bi-chevron-right"></i>
-        </button>
-    </div>
-    </div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/js/bootstrap.bundle.min.js"></script>
-    <script src="js/marketplace.js"></script>
-    <script>
-    // อ่านค่า cat จาก URL แล้วเลือกหมวดหมู่ให้อัตโนมัติ
-    window.addEventListener('load', () => {
-        const params = new URLSearchParams(window.location.search);
-        const cat = params.get('cat');
-        if (!cat) return;
-
-        const targetBtn = document.querySelector(`#categoryFilters button[data-cat="${cat}"]`);
-        if (targetBtn) {
-        targetBtn.click(); // จำลองการกดปุ่มหมวดหมู่ ให้ marketplace.js กรองสินค้าให้เอง
-        }
-    });
-    </script>
+                const targetBtn = document.querySelector(
+                    `#categoryFilters button[data-cat="${cat}"]`,
+                );
+                if (targetBtn) {
+                    targetBtn.click(); // จำลองการกดปุ่มหมวดหมู่ ให้ marketplace.js กรองสินค้าให้เอง
+                }
+            });
+        </script>
     </body>
-    </html>
+</html>

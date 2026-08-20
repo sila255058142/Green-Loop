@@ -7,9 +7,14 @@ function closeRegisterModal() {
 
 function updateUI() {
     const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-    const walletDisplay = document.getElementById('walletDisplay');
+    const walletDisplays = document.querySelectorAll('.walletDisplay');
+    const walletAmounts = document.querySelectorAll('.walletAmount');
+    const userNameDisplay = document.getElementById('userNameDisplay');
 
     if (isLoggedIn) {
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+        const walletBalance = Number(user.walletBalance || 0);
+
         document.getElementById('guestNav').classList.add('d-none');
         document.getElementById('guestContent').classList.add('d-none');
 
@@ -17,10 +22,18 @@ function updateUI() {
         document.getElementById('userNav').classList.add('d-flex');
         document.getElementById('userContent').classList.remove('d-none');
 
-        if (walletDisplay) {
-            walletDisplay.classList.remove('d-none');
-            walletDisplay.classList.add('d-flex');
-        }
+        walletDisplays.forEach((display) => {
+            display.classList.remove('d-none');
+            display.classList.add('d-flex');
+        });
+        walletAmounts.forEach((amount) => {
+            amount.textContent = `฿${walletBalance.toLocaleString('th-TH', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+            })}`;
+        });
+        if (userNameDisplay)
+            userNameDisplay.textContent = user.username || 'My Account';
 
         if (typeof renderData === 'function') renderData();
     } else {
@@ -30,16 +43,16 @@ function updateUI() {
 
         document.getElementById('guestNav').classList.remove('d-none');
         document.getElementById('guestContent').classList.remove('d-none');
-        if (walletDisplay) {
-            walletDisplay.classList.add('d-none');
-            walletDisplay.classList.remove('d-flex');
-        }
+        walletDisplays.forEach((display) => {
+            display.classList.add('d-none');
+            display.classList.remove('d-flex');
+        });
     }
 }
 
-// 🟢 เพิ่มฟังก์ชันนี้สำหรับ บันทึกข้อมูลลง Database + ล็อกอินทันที
+// บันทึกข้อมูลลง Database แล้วให้ผู้ใช้เข้าสู่ระบบด้วยตนเอง
 async function handleRegister(e) {
-    e.preventDefault(); // ป้องกันไม่ให้หน้าเว็บรีเฟรช
+    e.preventDefault();
     const form = e.target;
 
     // อ่านค่าจากฟอร์มลง Form Data
@@ -55,11 +68,15 @@ async function handleRegister(e) {
 
         if (result.success) {
             alert('ลงทะเบียนสำเร็จ!');
-            localStorage.setItem('isLoggedIn', 'true'); // เปลี่ยนสถานะเป็นล็อกอิน
             closeRegisterModal();
-            updateUI(); // อัปเดตหน้าตาเว็บทันที
+            const loginForm = document.querySelector('#loginModalOverlay form');
+            if (loginForm) {
+                loginForm.reset();
+                loginForm.elements.email.value = form.elements.email.value;
+            }
+            openModal();
         } else {
-            alert(result.message); // แสดงข้อความ error จาก PHP (เช่น อีเมลซ้ำ)
+            alert(result.message);
         }
     } catch (error) {
         console.error('Error:', error);
